@@ -1,16 +1,16 @@
-(string (
+(cfg_string (
   (name dirname)
   (prompt "Directory name")
   (default "dirname")
 ))
 
-(string (
+(cfg_string (
   (name filename)
   (prompt "File name")
   (default "filename")
 ))
 
-(string (
+(cfg_string (
   (name content)
   (prompt "Content")
   (default "Hello World!")
