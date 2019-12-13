@@ -1,0 +1,55 @@
+name: CI/CD Pipeline
+on: [push]
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      - uses: actions/checkout@v1
+      - name: Cache esy dependencies
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: _export
+          key: ${{ runner.OS }}-build-${{ hashFiles('esy.lock/index.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+      - name: Install esy
+        run: npm install -g esy@latest
+      - name: Import dependencies
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: esy import-build _export/*
+      - name: Install dependencies
+        run: esy install
+      - name: Update dune build config
+        run: esy pesy
+      - name: Build
+        run: esy build
+      - name: Check formatting
+        run: |
+          esy format
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "There are differences:"
+            git status --porcelain
+            echo "----"
+            echo ""
+            echo 'Please run `esy format` locally to fix the issues.'
+            exit 1
+          fi
+        # Run formatting check only once
+        if: matrix.os == 'ubuntu-latest'
+      - name: Run tests
+        run: esy test
+      - name: Create a NPM release
+        run: esy release
+      - name: Export dependencies
+        run: esy export-dependencies

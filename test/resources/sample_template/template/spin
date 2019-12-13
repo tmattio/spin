@@ -1,0 +1,17 @@
+(string (
+  (name dirname)
+  (prompt "Directory name")
+  (default "dirname")
+))
+
+(string (
+  (name filename)
+  (prompt "File name")
+  (default "filename")
+))
+
+(string (
+  (name content)
+  (prompt "Content")
+  (default "Hello World!")
+))
