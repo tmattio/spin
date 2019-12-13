@@ -1,6 +1,6 @@
 {
   "name": "@tmattio/spin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "OCaml and ReasonML project scaffolding.",
   "author": "Thibaut Mattio",
   "homepage": "https://github.com/tmattio/spin",
