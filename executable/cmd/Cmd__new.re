@@ -28,7 +28,7 @@ let cmd = {
   };
 
   let path = {
-    let doc = "The path of the generated project.\nLeave empty to generate at the default location (i.e. name of the project in `snake_case`)";
+    let doc = "The path of the generated project.\nLeave empty to put files into current directory by default.";
     Arg.(value & pos(1, some(string), None) & info([], ~docv="PATH", ~doc));
   };
 
