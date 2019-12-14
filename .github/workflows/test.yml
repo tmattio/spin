@@ -36,7 +36,7 @@ jobs:
         run: esy build
       - name: Check formatting
         run: |
-          esy format
+          esy fmt
           if [ -n "$(git status --porcelain)" ]; then
             echo "There are differences:"
             git status --porcelain
