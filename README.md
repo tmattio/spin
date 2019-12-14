@@ -64,13 +64,15 @@ Create a new ReasonML/Ocaml project from a template.
 
 ### `spin ls`
 
-List the official spin templates.
+List the official Spin templates.
 
 ### `spin gen GENERATOR`
 
 Generate a new component in the current project.
 
 ## Contributing
+
+We would love your help improving Spin!
 
 ### Developing
 
@@ -94,6 +96,47 @@ esy x spin.exe
 ```bash
 # Runs the "test" command in `package.json`.
 esy test
+```
+
+### Repository Structure
+
+The following snippet describes Spin's repository structure.
+
+```text
+.
+├── .github/
+|   Contains Github specific files such as actions definitions and issue templates.
+│
+├── docs/
+|   End-user documentation in Markdown format.
+│
+├── executable/
+|   Source for the spin executable's interface, its subcommands and the man page content.
+│
+├── library/
+|   Source for Spin's library. Contains most of spin's internal functionnalities.
+│
+├── test/
+|   Unit tests and integration tests for Spin.
+│
+├── dune
+|   Dune file used to define project-wide parameters.
+│
+├── dune-project
+|   Dune file used to mark the root of the project and define project-wide parameters.
+|   For the documentation of the syntax, see https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
+│
+├── LICENSE
+│
+├── package.json
+|   Esy package definition.
+|   To know more about creating Esy packages, see https://esy.sh/docs/en/configuration.html.
+│
+├── README.md
+│
+└── spin.opam
+    Opam package definition.
+    To know more about creating and publishing opam packages, see https://opam.ocaml.org/doc/Packaging.html.
 ```
 
 ## Roadmap
