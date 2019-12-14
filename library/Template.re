@@ -43,13 +43,6 @@ let parseTemplateOrigin = (s: string) =>
     raise(Errors.IncorrectTemplateName(s));
   };
 
-let createSpinConfig = (~models, destination: string) => {
-  let destination = Utils.Filename.concat(destination, ".spin");
-  let sexp = Jg_wrapper.to_sexp(models);
-  let sexpString = Sexp.to_string(sexp);
-  Stdio.Out_channel.write_all(destination, ~data=sexpString);
-};
-
 let generateFile =
     (
       ~sourceDirectory: string,
@@ -180,5 +173,5 @@ let generate = (~useDefaults=false, template: string, destination: string) => {
 
   /* Remove spin configuration file from the generated project */
   Utils.Filename.rm([Utils.Filename.concat(destination, "spin")]);
-  createSpinConfig(destination, ~models);
+  ConfigFile__Project.save({models, source: template}, ~destination);
 };
