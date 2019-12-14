@@ -63,18 +63,8 @@ let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
           fun
           | File(v) =>
             Some({
-              source:
-                Jg_template.from_string(
-                  v.source,
-                  ~models,
-                  ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-                ),
-              destination:
-                Jg_template.from_string(
-                  v.destination,
-                  ~models,
-                  ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-                ),
+              source: Jg_wrapper.from_string(v.source, ~models),
+              destination: Jg_wrapper.from_string(v.destination, ~models),
             })
           | _ => None,
       ),

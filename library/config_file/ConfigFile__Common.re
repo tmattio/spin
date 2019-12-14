@@ -65,11 +65,7 @@ let applyTemplateToCst = (cst: promptCfg, ~models): promptCfg =>
       ...cfg,
       default:
         Option.map(cfg.default, ~f=default =>
-          Jg_template.from_string(
-            default,
-            ~models,
-            ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-          )
+          Jg_wrapper.from_string(default, ~models)
         ),
     })
   | List(cfg) =>
@@ -77,11 +73,7 @@ let applyTemplateToCst = (cst: promptCfg, ~models): promptCfg =>
       ...cfg,
       default:
         Option.map(cfg.default, ~f=default =>
-          Jg_template.from_string(
-            default,
-            ~models,
-            ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-          )
+          Jg_wrapper.from_string(default, ~models)
         ),
     })
   | _ as cfg => cfg

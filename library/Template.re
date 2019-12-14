@@ -29,11 +29,7 @@ let ensureEmptyDir = (d: string) =>
       );
     } else if (!List.is_empty(Utils.Sys.ls_dir(d, ~recursive=false))) {
       raise(Errors.IncorrectDestinationPath("This directory is not empty."));
-    } else {
-      ();
     };
-  } else {
-    ();
   };
 
 let parseTemplateOrigin = (s: string) =>
@@ -47,30 +43,35 @@ let parseTemplateOrigin = (s: string) =>
     raise(Errors.IncorrectTemplateName(s));
   };
 
-let generateFile = (~template: string, ~destination: string, ~models, f) => {
+let createSpinConfig = (~models, destination: string) => {
+  let destination = Utils.Filename.concat(destination, ".spin");
+  let sexp = Jg_wrapper.to_sexp(models);
+  let sexpString = Sexp.to_string(sexp);
+  Stdio.Out_channel.write_all(destination, ~data=sexpString);
+};
+
+let generateFile =
+    (
+      ~sourceDirectory: string,
+      ~destinationDirectory: string,
+      ~models,
+      sourceFile,
+    ) => {
+  let data =
+    Stdio.In_channel.read_all(sourceFile) |> Jg_wrapper.from_string(~models);
+
   let dest =
-    f
-    |> Jg_template.from_string(
-         ~models,
-         ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-       )
-    |> String.substr_replace_first(~pattern=template, ~with_=destination);
+    sourceFile
+    |> Jg_wrapper.from_string(~models)
+    |> String.substr_replace_first(
+         ~pattern=sourceDirectory,
+         ~with_=destinationDirectory,
+       );
 
   let parent_dir = Utils.Filename.dirname(dest);
   Utils.Filename.mkdir(parent_dir, ~parent=true);
-  Utils.Filename.cp([f], dest);
-  dest;
-};
-
-let replaceContent = (~models, f) => {
-  let data =
-    Jg_template.from_file(
-      f,
-      ~models,
-      ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-    );
-
-  Stdio.Out_channel.write_all(f, ~data);
+  Utils.Filename.cp([sourceFile], dest);
+  Stdio.Out_channel.write_all(dest, ~data);
 };
 
 let generate = (~useDefaults=false, template: string, destination: string) => {
@@ -87,9 +88,12 @@ let generate = (~useDefaults=false, template: string, destination: string) => {
     fun
     | [] => ()
     | [f, ...fs] => {
-        let generatedFile =
-          generateFile(f, ~template=templatePath, ~destination, ~models);
-        replaceContent(generatedFile, ~models);
+        generateFile(
+          f,
+          ~sourceDirectory=templatePath,
+          ~destinationDirectory=destination,
+          ~models,
+        );
         loop(fs);
       };
 
@@ -100,7 +104,12 @@ let generate = (~useDefaults=false, template: string, destination: string) => {
       <Pastel> {" in " ++ destination} </Pastel>
     </Pastel>,
   );
-  Utils.Sys.ls_dir(templatePath) |> loop;
+  let templatePathRegex = templatePath;
+  let ignoreFiles =
+    List.map(templateConfig.ignoreFiles, ~f=file => {
+      Utils.Filename.concat(templatePathRegex, file)
+    });
+  Utils.Sys.ls_dir(templatePath, ~ignore_files=ignoreFiles) |> loop;
   Console.log(
     <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
   );
@@ -155,22 +164,12 @@ let generate = (~useDefaults=false, template: string, destination: string) => {
       ~f=el => {
         Console.log(
           <Pastel color=Pastel.Blue bold=true>
-            {"\n    "
-             ++ Jg_template.from_string(
-                  el.name,
-                  ~models,
-                  ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-                )}
+            {"\n    " ++ Jg_wrapper.from_string(el.name, ~models)}
           </Pastel>,
         );
         Console.log(
           <Pastel>
-            {"      "
-             ++ Jg_template.from_string(
-                  el.description,
-                  ~models,
-                  ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-                )}
+            {"      " ++ Jg_wrapper.from_string(el.description, ~models)}
           </Pastel>,
         );
       },
@@ -181,4 +180,5 @@ let generate = (~useDefaults=false, template: string, destination: string) => {
 
   /* Remove spin configuration file from the generated project */
   Utils.Filename.rm([Utils.Filename.concat(destination, "spin")]);
+  createSpinConfig(destination, ~models);
 };

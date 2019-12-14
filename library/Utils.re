@@ -10,24 +10,56 @@ module String = {
   };
 };
 
+module Bool = {
+  let rec all_true =
+    fun
+    | [] => true
+    | [false, ...rest] => false
+    | [true, ...rest] => all_true(rest);
+
+  let rec any_true =
+    fun
+    | [] => false
+    | [true, ...rest] => true
+    | [false, ...rest] => any_true(rest);
+};
+
 module Sys = {
-  let ls_dir = (~recursive=true, directory) =>
+  let ls_dir =
+      (~recursive=true, ~ignore_files: option(list(string))=?, directory) => {
+    let ignore_file = f => {
+      Option.map(ignore_files, ~f=patterns => {
+        Bool.any_true(
+          List.map(
+            patterns,
+            ~f=pattern => {
+              let regexp = Str.regexp(pattern);
+              Str.string_match(regexp, f, 0);
+            },
+          ),
+        )
+      })
+      |> Option.value(~default=false);
+    };
+
     if (recursive) {
       let rec loop = result =>
         fun
-        | [f, ...fs] when Caml.Sys.is_directory(f) =>
+        | [f, ...fs] when Caml.Sys.is_directory(f) && !ignore_file(f) =>
           Caml.Sys.readdir(f)
           |> Array.to_list
           |> List.map(~f=Caml.Filename.concat(f))
           |> List.append(fs)
           |> loop(result)
-        | [f, ...fs] => loop([f, ...result], fs)
+        | [f, ...fs] when !ignore_file(f) => loop([f, ...result], fs)
+        | [f, ...fs] => loop(result, fs)
         | [] => result;
 
       loop([], [directory]) |> List.rev;
     } else {
       Caml.Sys.readdir(directory) |> Array.to_list;
     };
+  };
 
   let rename = Caml.Sys.rename;
 

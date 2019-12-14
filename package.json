@@ -102,7 +102,7 @@
   },
   "scripts": {
     "pesy": "bash -c 'env PESY_MODE=update pesy'",
-    "format": "bash -c 'find library test executable -name '*.re' | xargs esy refmt --in-place'",
+    "fmt": "dune build @fmt --auto-promote --root .",
     "test": "esy x test-runner.exe",
     "watch": "esy dune build --root . --only-packages spin --watch"
   }
