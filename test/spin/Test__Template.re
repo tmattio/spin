@@ -13,7 +13,7 @@ describe("Test Template", ({test, describe, _}) => {
       Utils.Filename.join([dest, "dirname", "filename.txt"]);
     let generatedConf = Utils.Filename.join([dest, ".spin"]);
 
-    expect.equal([generatedConf, generatedFile], generatedFiles);
+    expect.list([generatedConf, generatedFile]).toEqual(generatedFiles);
 
     let generatedContent = Stdio.In_channel.read_all(generatedFile);
     expect.equal("Hello World!", generatedContent);
@@ -67,6 +67,6 @@ describe("Test Template", ({test, describe, _}) => {
       Utils.Filename.concat(dest, "this_one_matches_but_condition_is_false"),
       Utils.Filename.concat(dest, "f.dont_ignore_me"),
     ];
-    expect.equal(expected, generatedFiles);
+    expect.list(expected).toEqual(generatedFiles);
   });
 });
