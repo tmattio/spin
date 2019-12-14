@@ -30,7 +30,9 @@ describe("Test Template", ({test, describe, _}) => {
     expect.list([
       Sexp.List([
         Sexp.Atom("Source"),
-        Sexp.Atom("test/resources/sample_template"),
+        Sexp.Atom(
+          Utils.Filename.join(["test", "resources", "sample_template"]),
+        ),
       ]),
       Sexp.List([
         Sexp.Atom("Cfg_str"),
