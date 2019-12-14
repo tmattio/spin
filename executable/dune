@@ -1,21 +1,14 @@
+
 ; !!!! This dune file is generated from the package.json file by pesy. If you modify it by hand
 ; !!!! your changes will be undone! Instead, edit the package.json and then rerun 'esy pesy' at the project root.
 ; !!!! If you want to stop using pesy and manage this file by hand, change package.json's 'esy.build' command to: refmterr dune build -p  @tmattio/spin
-
 (executable
- ; The entrypoint module
- (name SpinApp) ;  From package.json main field
-                ; The name of the executable (runnable via esy x spin.exe) 
- (public_name spin.exe) ;  From package.json name field
- (libraries base cmdliner lwt.unix console.lib pastel.lib spin.lib) ;  From package.json require field (array of strings)
- (flags
-  (-open Base))
- ;  From package.json flags field
- (preprocess
-  (pps lwt_ppx ppx_let))
- ; From package.json preprocess field
- )
-
-(include_subdirs unqualified)
-
-;  From package.json includeSubdirs field
+   ; The entrypoint module
+   (name SpinApp)  ;  From package.json main field
+   ; The name of the executable (runnable via esy x spin.exe) 
+   (public_name spin.exe)  ;  From package.json name field
+   (libraries  base cmdliner lwt.unix console.lib pastel.lib spin.lib ) ;  From package.json require field (array of strings)
+   (flags ( -open Base )) ;  From package.json flags field
+   (preprocess ( pps lwt_ppx ppx_let ))  ; From package.json preprocess field
+)
+(include_subdirs unqualified) ;  From package.json includeSubdirs field

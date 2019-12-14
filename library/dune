@@ -1,22 +1,14 @@
+
 ; !!!! This dune file is generated from the package.json file by pesy. If you modify it by hand
 ; !!!! your changes will be undone! Instead, edit the package.json and then rerun 'esy pesy' at the project root.
 ; !!!! If you want to stop using pesy and manage this file by hand, change package.json's 'esy.build' command to: refmterr dune build -p  @tmattio/spin
-
 (library
- ; The namespace that other packages/libraries will access this library through
- (name Spin)
- ; Other libraries list this name in their package.json 'require' field to use this library.
- (public_name spin.lib)
- (libraries base console.lib pastel.lib lwt.unix str stdio sexplib jingoo
-   fileutils)
- (flags
-  (-open Base))
- ; From package.json flags field
- (preprocess
-  (pps lwt_ppx ppx_let ppx_sexp_conv))
- ; From package.json preprocess field
- )
-
-(include_subdirs unqualified)
-
-; From package.json includeSubdirs field
+   ; The namespace that other packages/libraries will access this library through
+   (name Spin)
+   ; Other libraries list this name in their package.json 'require' field to use this library.
+   (public_name spin.lib)
+   (libraries  base console.lib pastel.lib lwt.unix str stdio sexplib jingoo fileutils )
+   (flags ( -open Base ))  ; From package.json flags field
+   (preprocess ( pps lwt_ppx ppx_let ppx_sexp_conv ))  ; From package.json preprocess field
+)
+(include_subdirs unqualified)  ; From package.json includeSubdirs field
