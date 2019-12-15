@@ -11,4 +11,4 @@ export SPIN_CACHE_DIR=$TEMP_DIR/cache
 cp "$DIR/../_build/default/executable/SpinApp.exe" "$TEMP_DIR/spin"
 cd "$TEMP_DIR"
 
-termtosvg -c "$DIR/demo.sh" "$DIR/../docs/demo.svg" -t window_frame
+termtosvg -c "$DIR/demo.sh" "$DIR/../docs/demo.svg" -t window_frame -g 100x24 -m 10

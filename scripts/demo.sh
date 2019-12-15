@@ -12,6 +12,11 @@ function type() {
 type 'spin ls'
 spin ls
 
+sleep 2
+echo ""
+
+clear
+
 type 'spin new cli my-cli --default'
 printf 'My CLI\n' | spin new cli my-cli --default
 
