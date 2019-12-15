@@ -1,7 +1,7 @@
 open Cmdliner;
 open Spin;
 
-let run = (~generator) => {
+let run = (~generator, ()) => {
   switch (generator) {
   | None =>
     let config = Generators.getProjectConfig();
@@ -35,7 +35,8 @@ let cmd = {
     );
   };
 
-  let runCommand = generator => Lwt_main.run(run(~generator));
+  let runCommand = generator =>
+    run(~generator) |> Errors.handleErrors |> Lwt_main.run;
 
   (
     Term.(const(runCommand) $ generator),

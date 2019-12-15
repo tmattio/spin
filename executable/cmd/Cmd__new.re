@@ -1,17 +1,11 @@
 open Cmdliner;
 open Spin;
 
-let run = (~template, ~path, ~useDefaults) => {
+let run = (~template: string, ~path, ~useDefaults, ()) => {
   let path = Option.value(path, ~default=".");
-
-  {
-    () => {
-      TemplateOfficial.ensureDownloaded();
-      Template.generate(template, path, ~useDefaults);
-    };
-  }
-  |> Errors.handleErrors;
-
+  TemplateOfficial.ensureDownloaded();
+  let source = Source.ofString(template);
+  Template.generate(source, path, ~useDefaults);
   Lwt.return();
 };
 
@@ -38,7 +32,7 @@ let cmd = {
   };
 
   let runCommand = (template, path, useDefaults) =>
-    Lwt_main.run(run(~template, ~path, ~useDefaults));
+    run(~template, ~path, ~useDefaults) |> Errors.handleErrors |> Lwt_main.run;
 
   (
     Term.(const(runCommand) $ template $ path $ useDefaults),
