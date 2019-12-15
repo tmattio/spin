@@ -4,11 +4,9 @@
 
 > Project scaffolding tool and set of templates for Reason and OCaml.
 
-<div align="center">
-  <img src="./docs/demo.svg" alt="Demo">
-</div>
+![Demo](./docs/demo.svg)
 
-<br />
+## Features
 
 🚀 Quickly start new projects that are ready for the real world.
 
@@ -31,7 +29,13 @@ Finally, another characteristic of Elixir and RoR ecosystems that I envy: all th
 ### Using Homebrew (macOS)
 
 ```bash
-brew install tmattio/tap/spin
+brew install https://raw.githubusercontent.com/tmattio/spin/master/scripts/install.rb
+```
+
+### Using Chocolatey (Windows)
+
+```bash
+choco install
 ```
 
 ### Using npm
@@ -45,7 +49,7 @@ npm -g install @tmattio/spin
 ### Using a script
 
 ```bash
-curl -fsSL https://github.com/tmattio/spin/raw/master/scripts/install.sh | bash
+curl -fsSL https://github.com/tmattio/spin/raw/master/dist/install.sh | bash
 ```
 
 ## Templates
