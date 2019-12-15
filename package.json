@@ -94,6 +94,7 @@
   "devDependencies": {
     "@opam/merlin": "*",
     "@opam/odoc": "*",
+    "@opam/utop": "*",
     "refmterr": "*",
     "pesy": "*"
   },
@@ -104,6 +105,8 @@
     "pesy": "bash -c 'env PESY_MODE=update pesy'",
     "fmt": "bash -c 'find library test executable -name '*.re' | xargs esy refmt --in-place'",
     "test": "esy x test-runner.exe",
-    "watch": "esy dune build --root . --only-packages spin --watch"
+    "watch": "esy dune build --root . --only-packages spin --watch",
+    "doc": "esy dune build @doc",
+    "utop": "esy dune utop library -- -implicit-bindings"
   }
 }
