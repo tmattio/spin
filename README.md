@@ -76,6 +76,10 @@ Create a new ReasonML/Ocaml project from a template.
 
 List the official Spin templates.
 
+### `spin gen`
+
+List the generators available for the current project.
+
 ### `spin gen GENERATOR`
 
 Generate a new component in the current project.
