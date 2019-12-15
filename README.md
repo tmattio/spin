@@ -2,11 +2,13 @@
 
 [![Actions Status](https://github.com/tmattio/spin/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/tmattio/spin/actions)
 
-Project scaffolding tool and set of templates for Reason and OCaml.
+> Project scaffolding tool and set of templates for Reason and OCaml.
 
 <div align="center">
   <img src="./docs/demo.svg" alt="Demo">
 </div>
+
+<br />
 
 🚀 Quickly start new projects that are ready for the real world.
 
