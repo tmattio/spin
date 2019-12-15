@@ -4,6 +4,10 @@
 
 Project scaffolding tool and set of templates for Reason and OCaml.
 
+<div align="center">
+  <img src="./docs/demo.svg" alt="Demo">
+</div>
+
 🚀 Quickly start new projects that are ready for the real world.
 
 ❤️ Have a great developer experience when developping with Reason/OCaml.
