@@ -8,6 +8,6 @@
    ; The name of the executable (runnable via esy x test-runner.exe) 
    (public_name test-runner.exe)  ;  From package.json name field
    (libraries  spin.lib rely.lib ) ;  From package.json require field (array of strings)
-   (flags ( -open Base )) ;  From package.json flags field
+   (flags ( -open Base -linkall -g )) ;  From package.json flags field
 )
 (include_subdirs unqualified) ;  From package.json includeSubdirs field
