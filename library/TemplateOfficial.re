@@ -17,7 +17,7 @@ let ensureDownloaded = () =>
     );
   };
 
-let list = () => {
+let all = () => {
   Caml.Sys.readdir(path)
   |> Array.to_list
   |> List.filter(~f=el =>
@@ -31,6 +31,3 @@ let list = () => {
        }
      );
 };
-
-let isOfficialTemplate = (s: string): bool =>
-  list() |> List.exists(~f=el => String.equal(s, el));

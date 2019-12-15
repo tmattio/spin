@@ -19,9 +19,10 @@ module Make = (C: ConfigFile) => {
 
   type t = C.t;
 
-  let parse = (~useDefaults=false, ~models=[], filepath: string): t => {
-    let configFile = Utils.Filename.concat(filepath, C.path);
-    configFile
+  let path = dirname => Utils.Filename.concat(dirname, C.path);
+
+  let parse = (~useDefaults=false, ~models=[], dirname: string): t => {
+    path(dirname)
     |> Sexp.load_sexps
     |> List.map(~f=C.cst_of_sexp)
     |> C.t_of_cst(~useDefaults, ~models);
@@ -31,3 +32,4 @@ module Make = (C: ConfigFile) => {
 module Doc = Make(ConfigFile__Doc);
 module Generators = Make(ConfigFile__Generators);
 module Template = Make(ConfigFile__Template);
+module Project = Make(ConfigFile__Project);

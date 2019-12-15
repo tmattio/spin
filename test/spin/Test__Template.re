@@ -5,7 +5,9 @@ describe("Test Template", ({test, describe, _}) => {
   test("generate", ({expect, _}) => {
     let dest = TestUtils.get_tempdir("generate");
     let source =
-      Utils.Filename.join(["test", "resources", "sample_template"]);
+      Source.LocalDir(
+        Utils.Filename.join(["test", "resources", "sample_template"]),
+      );
     Template.generate(source, dest, ~useDefaults=true);
 
     let generatedFiles = Utils.Sys.ls_dir(dest);
@@ -22,7 +24,9 @@ describe("Test Template", ({test, describe, _}) => {
   test("generate configuration", ({expect, _}) => {
     let dest = TestUtils.get_tempdir("generate_config");
     let source =
-      Utils.Filename.join(["test", "resources", "sample_template"]);
+      Source.LocalDir(
+        Utils.Filename.join(["test", "resources", "sample_template"]),
+      );
     Template.generate(source, dest, ~useDefaults=true);
 
     let generatedConfContent =
@@ -58,7 +62,9 @@ describe("Test Template", ({test, describe, _}) => {
   test("ignore files", ({expect, _}) => {
     let dest = TestUtils.get_tempdir("ignore_files");
     let source =
-      Utils.Filename.join(["test", "resources", "template_with_ignores"]);
+      Source.LocalDir(
+        Utils.Filename.join(["test", "resources", "template_with_ignores"]),
+      );
     Template.generate(source, dest, ~useDefaults=true);
 
     let generatedFiles = Utils.Sys.ls_dir(dest);
