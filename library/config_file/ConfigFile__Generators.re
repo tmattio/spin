@@ -22,7 +22,7 @@ type t = {
   files: list(file),
 };
 
-let path = Utils.Filename.concat("generators", "spin");
+let path = "spin";
 
 let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
   let newModels =

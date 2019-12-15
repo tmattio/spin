@@ -57,7 +57,9 @@ module Sys = {
 
       loop([], [directory]) |> List.rev;
     } else {
-      Caml.Sys.readdir(directory) |> Array.to_list;
+      Caml.Sys.readdir(directory)
+      |> Array.to_list
+      |> List.map(~f=Caml.Filename.concat(directory));
     };
   };
 

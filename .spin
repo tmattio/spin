@@ -1,0 +1,1 @@
+(source /Users/tmattio/Workspaces/spin-templates/cli)

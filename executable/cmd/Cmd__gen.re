@@ -4,9 +4,17 @@ open Spin;
 let run = (~generator) => {
   switch (generator) {
   | None =>
+    let config = Generators.getProjectConfig();
+    let source = Source.ofString(config.source);
+    let generators = Generators.listGenerators(source);
+
     Console.log(
       <Pastel> "The generators available for this project are:" </Pastel>,
-    )
+    );
+
+    List.iter(generators, ~f=el =>
+      Console.log(<Pastel> {"- " ++ el.name} </Pastel>)
+    );
 
   | Some(generator) =>
     Console.log(

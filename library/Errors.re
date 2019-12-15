@@ -2,6 +2,8 @@ exception MissingEnvVar(string);
 exception IncorrectDestinationPath(string);
 exception IncorrectTemplateName(string);
 exception ConfigFileSyntaxError;
+exception CurrentDirectoryNotASpinProject;
+exception GeneratorDoesNotExist(string);
 
 let handleErrors = fn =>
   try(fn()) {
@@ -39,6 +41,20 @@ let handleErrors = fn =>
       </Pastel>,
     );
     Caml.exit(204);
+  | CurrentDirectoryNotASpinProject =>
+    Console.error(
+      <Pastel>
+        "You need to be inside a Spin project to run this command, but the current directory is not in a Spin project.\nA Spin project contains a file `.spin` at its root."
+      </Pastel>,
+    );
+    Caml.exit(205);
+  | GeneratorDoesNotExist(name) =>
+    Console.error(
+      <Pastel color=Pastel.Red>
+        "😱  This generator does not exist, you can list the generators of the current project with the command `spin gen`."
+      </Pastel>,
+    );
+    Caml.exit(205);
   | _ as exn =>
     Console.log(
       <Pastel color=Pastel.Red>
@@ -60,5 +76,9 @@ let all = () => [
   {doc: "on incorrect template destination path.", exit_code: 202},
   {doc: "on incorrect template names.", exit_code: 203},
   {doc: "on syntax error in the spin configuration file.", exit_code: 204},
+  {
+    doc: "on project commands executed outside of a Spin project.",
+    exit_code: 205,
+  },
   {doc: "on other exceptions.", exit_code: 299},
 ];
