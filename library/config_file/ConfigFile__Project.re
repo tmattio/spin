@@ -14,7 +14,22 @@ type t = {
   source: string,
 };
 
+type doc = {source: string};
+
 let path = ".spin";
+
+let doc_of_cst = (cst: list(cst)): doc => {
+  {
+    source:
+      ConfigFile__CstUtils.getUniqueExn(
+        cst,
+        ~f=
+          fun
+          | Source(v) => Some(v)
+          | _ => None,
+      ),
+  };
+};
 
 let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
   let newModels =
@@ -33,17 +48,9 @@ let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
         | Source(_) => None,
     );
 
-  {
-    source:
-      ConfigFile__CstUtils.getUniqueExn(
-        cst,
-        ~f=
-          fun
-          | Source(v) => Some(v)
-          | _ => None,
-      ),
-    models: newModels,
-  };
+  let doc = doc_of_cst(cst);
+
+  {source: doc.source, models: newModels};
 };
 
 let cst_of_t = (~models, t: t): list(cst) => {

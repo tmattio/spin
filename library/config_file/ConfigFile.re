@@ -1,5 +1,6 @@
 module type ConfigFile = {
   type t;
+  type doc;
   type cst;
 
   let path: string;
@@ -12,12 +13,14 @@ module type ConfigFile = {
       list(cst)
     ) =>
     t;
+  let doc_of_cst: list(cst) => doc;
 };
 
 module Make = (C: ConfigFile) => {
   open Sexplib;
 
   type t = C.t;
+  type doc = C.doc;
 
   let path = dirname => Utils.Filename.concat(dirname, C.path);
 
@@ -26,6 +29,13 @@ module Make = (C: ConfigFile) => {
     |> Sexp.load_sexps
     |> List.map(~f=C.cst_of_sexp)
     |> C.t_of_cst(~useDefaults, ~models);
+  };
+
+  let parse_doc = (dirname: string): doc => {
+    path(dirname)
+    |> Sexp.load_sexps
+    |> List.map(~f=C.cst_of_sexp)
+    |> C.doc_of_cst;
   };
 };
 

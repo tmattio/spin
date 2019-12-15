@@ -30,6 +30,10 @@ type t = {
 
 let path = Utils.Filename.concat("template", "spin");
 
+type doc = unit;
+
+let doc_of_cst = (cst: list(cst)): doc => ();
+
 let t_of_cst = (~useDefaults, ~models, cst: list(cst)) => {
   let newModels =
     ConfigFile__CstUtils.get(

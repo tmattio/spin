@@ -63,6 +63,24 @@ module Sys = {
     };
   };
 
+  let get_parent_file = (make_path: string => string) => {
+    let rec loop = el => {
+      switch (el) {
+      | "/"
+      | "." => None
+      | dirname =>
+        let f = make_path(dirname);
+        if (FileUtil.test(FileUtil.Exists, f)) {
+          Some(f);
+        } else {
+          loop(Caml.Filename.dirname(el));
+        };
+      };
+    };
+
+    loop(Caml.Sys.getcwd());
+  };
+
   let rename = Caml.Sys.rename;
 
   let exec =
