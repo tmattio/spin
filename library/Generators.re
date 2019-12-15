@@ -22,11 +22,10 @@ let listGenerators = (source: Source.t): list(ConfigFile.Generators.t) => {
 
   Utils.Sys.ls_dir(~recursive=false, generatorsDir)
   |> List.filter(~f=el => {
-       print_endline(el);
        Utils.Filename.test(
          Utils.Filename.Exists,
          Utils.Filename.concat(el, "spin"),
-       );
+       )
      })
   |> List.map(~f=ConfigFile.Generators.parse);
 };
