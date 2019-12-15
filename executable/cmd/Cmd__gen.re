@@ -9,11 +9,17 @@ let run = (~generator, ()) => {
     let generators = Generators.listGenerators(source);
 
     Console.log(
-      <Pastel> "The generators available for this project are:" </Pastel>,
+      <Pastel> "The generators available for this project are:\n" </Pastel>,
     );
 
-    List.iter(generators, ~f=el =>
-      Console.log(<Pastel> {"- " ++ el.name} </Pastel>)
+    List.iter(
+      generators,
+      ~f=el => {
+        Console.log(
+          <Pastel color=Pastel.Blue bold=true> {"    " ++ el.name} </Pastel>,
+        );
+        Console.log(<Pastel> {"      " ++ el.description ++ "\n"} </Pastel>);
+      },
     );
 
   | Some(generator) =>

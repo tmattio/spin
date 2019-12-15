@@ -1,8 +1,14 @@
-let gitClone = (repo, ~destination) => {
+let gitClone = (~destination, ~branch=?, repo) => {
+  let args =
+    switch (branch) {
+    | Some(branch) => [|"clone", "-b", branch, repo, destination|]
+    | None => [|"clone", repo, destination|]
+    };
+
   let%lwt result =
     Utils.Sys.exec(
       "git",
-      ~args=[|"clone", repo, destination|],
+      ~args,
       ~stdout=Lwt_process.(`Dev_null),
       ~stderr=Lwt_process.(`Dev_null),
     );

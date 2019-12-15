@@ -20,7 +20,9 @@ let ofString = (s: string) =>
     LocalDir(s);
   } else if (Vcs.isGitUrl(s)) {
     Git(s);
-  } else if (TemplateOfficial.all() |> List.exists(~f=String.equal(s))) {
+  } else if (List.exists(TemplateOfficial.all(), ~f=el =>
+               String.equal(s, el.name)
+             )) {
     Official(s);
   } else {
     raise(Errors.IncorrectTemplateName(s));

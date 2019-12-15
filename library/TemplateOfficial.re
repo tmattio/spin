@@ -1,6 +1,8 @@
 let path =
   Utils.Filename.concat(Config.SPIN_CACHE_DIR.get(), "spin-templates");
 
+let branch = "template/cli";
+
 let url = "git@github.com:tmattio/spin-templates.git";
 let ensureDownloaded = () =>
   if (Utils.Filename.test(Utils.Filename.Is_dir, path)) {
@@ -11,13 +13,13 @@ let ensureDownloaded = () =>
     );
   } else {
     Console.log(<Pastel> "📡  Downloading official templates." </Pastel>);
-    let _ = Lwt_main.run(Vcs.gitClone(url, path));
+    let _ = Lwt_main.run(Vcs.gitClone(url, ~destination=path, ~branch));
     Console.log(
       <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
     );
   };
 
-let all = () => {
+let all = (): list(ConfigFile.Doc.doc) => {
   Caml.Sys.readdir(path)
   |> Array.to_list
   |> List.filter(~f=el =>
@@ -29,5 +31,8 @@ let all = () => {
        | '_' => false
        | _ => true
        }
+     )
+  |> List.map(~f=el =>
+       ConfigFile.Doc.parse_doc(Utils.Filename.concat(path, el))
      );
 };
