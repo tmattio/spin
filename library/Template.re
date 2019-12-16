@@ -1,26 +1,5 @@
 open Jingoo;
 
-type templateOrigin =
-  | Name(string)
-  | Git(string)
-  | LocalDir(string);
-
-let originToLocalPath =
-  fun
-  | Name(s) => Utils.Filename.concat(TemplateOfficial.path, s)
-  | LocalDir(s) => s
-  | Git(s) => {
-      let tempdir = Utils.Sys.get_tempdir("spin-template");
-      let _ = Vcs.gitClone(s, ~destination=tempdir);
-      tempdir;
-    };
-
-let exists = (template: string): bool => {
-  let spinFile = Utils.Filename.concat(template, "template");
-  let spinFile = Utils.Filename.concat(spinFile, "spin");
-  Utils.Filename.test(Utils.Filename.Exists, spinFile);
-};
-
 let ensureEmptyDir = (d: string) =>
   if (Utils.Filename.test(Utils.Filename.Exists, d)) {
     if (Utils.Filename.test(Utils.Filename.Is_file, d)) {
@@ -29,56 +8,38 @@ let ensureEmptyDir = (d: string) =>
       );
     } else if (!List.is_empty(Utils.Sys.ls_dir(d, ~recursive=false))) {
       raise(Errors.IncorrectDestinationPath("This directory is not empty."));
-    } else {
-      ();
     };
-  } else {
-    ();
   };
 
-let parseTemplateOrigin = (s: string) =>
-  if (exists(s)) {
-    LocalDir(s);
-  } else if (Vcs.isGitUrl(s)) {
-    Git(s);
-  } else if (TemplateOfficial.isOfficialTemplate(s)) {
-    Name(s);
-  } else {
-    raise(Errors.IncorrectTemplateName(s));
-  };
+let generateFile =
+    (
+      ~sourceDirectory: string,
+      ~destinationDirectory: string,
+      ~models,
+      sourceFile,
+    ) => {
+  let data =
+    Stdio.In_channel.read_all(sourceFile) |> Jg_wrapper.from_string(~models);
 
-let generateFile = (~template: string, ~destination: string, ~models, f) => {
   let dest =
-    f
-    |> Jg_template.from_string(
-         ~models,
-         ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-       )
-    |> String.substr_replace_first(~pattern=template, ~with_=destination);
+    sourceFile
+    |> Jg_wrapper.from_string(~models)
+    |> String.substr_replace_first(
+         ~pattern=sourceDirectory,
+         ~with_=destinationDirectory,
+       );
 
   let parent_dir = Utils.Filename.dirname(dest);
   Utils.Filename.mkdir(parent_dir, ~parent=true);
-  Utils.Filename.cp([f], dest);
-  dest;
+  Utils.Filename.cp([sourceFile], dest);
+  Stdio.Out_channel.write_all(dest, ~data);
 };
 
-let replaceContent = (~models, f) => {
-  let data =
-    Jg_template.from_file(
-      f,
-      ~models,
-      ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-    );
-
-  Stdio.Out_channel.write_all(f, ~data);
-};
-
-let generate = (~useDefaults=false, template: string, destination: string) => {
+let generate = (~useDefaults=false, source: Source.t, destination: string) => {
   let () = ensureEmptyDir(destination);
 
-  let origin = template |> parseTemplateOrigin |> originToLocalPath;
+  let origin = Source.toLocalPath(source);
   let templatePath = Utils.Filename.concat(origin, "template");
-
   let templateConfig = ConfigFile.Template.parse(origin, ~useDefaults);
   let models = templateConfig.models;
   let docConfig = ConfigFile.Doc.parse(origin, ~models, ~useDefaults);
@@ -87,9 +48,12 @@ let generate = (~useDefaults=false, template: string, destination: string) => {
     fun
     | [] => ()
     | [f, ...fs] => {
-        let generatedFile =
-          generateFile(f, ~template=templatePath, ~destination, ~models);
-        replaceContent(generatedFile, ~models);
+        generateFile(
+          f,
+          ~sourceDirectory=templatePath,
+          ~destinationDirectory=destination,
+          ~models,
+        );
         loop(fs);
       };
 
@@ -100,7 +64,12 @@ let generate = (~useDefaults=false, template: string, destination: string) => {
       <Pastel> {" in " ++ destination} </Pastel>
     </Pastel>,
   );
-  Utils.Sys.ls_dir(templatePath) |> loop;
+  let templatePathRegex = templatePath;
+  let ignoreFiles =
+    List.map(templateConfig.ignoreFiles, ~f=file => {
+      Utils.Filename.concat(templatePathRegex, file)
+    });
+  Utils.Sys.ls_dir(templatePath, ~ignore_files=ignoreFiles) |> loop;
   Console.log(
     <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
   );
@@ -155,22 +124,12 @@ let generate = (~useDefaults=false, template: string, destination: string) => {
       ~f=el => {
         Console.log(
           <Pastel color=Pastel.Blue bold=true>
-            {"\n    "
-             ++ Jg_template.from_string(
-                  el.name,
-                  ~models,
-                  ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-                )}
+            {"\n    " ++ Jg_wrapper.from_string(el.name, ~models)}
           </Pastel>,
         );
         Console.log(
           <Pastel>
-            {"      "
-             ++ Jg_template.from_string(
-                  el.description,
-                  ~models,
-                  ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-                )}
+            {"      " ++ Jg_wrapper.from_string(el.description, ~models)}
           </Pastel>,
         );
       },
@@ -181,4 +140,8 @@ let generate = (~useDefaults=false, template: string, destination: string) => {
 
   /* Remove spin configuration file from the generated project */
   Utils.Filename.rm([Utils.Filename.concat(destination, "spin")]);
+  ConfigFile__Project.save(
+    {models, source: Source.toString(source)},
+    ~destination,
+  );
 };

@@ -1,5 +1,7 @@
-(dirs (:standard \ node_modules \ _esy))
+(dirs
+ (:standard \ node_modules \ _esy))
 
 (env
-  (dev
-    (flags (:standard -warn-error -A))))
+ (dev
+  (flags
+   (:standard -warn-error -A))))

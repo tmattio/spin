@@ -9,8 +9,15 @@ type postInstall = {
 };
 
 [@deriving of_sexp]
+type ignore = {
+  files: list(string),
+  condition: string,
+};
+
+[@deriving of_sexp]
 type cst =
   | Post_install(postInstall)
+  | Ignore(ignore)
   | Cfg_string(ConfigFile__Common.stringCfg)
   | Cfg_list(ConfigFile__Common.listCfg)
   | Cfg_confirm(ConfigFile__Common.confirmCfg);
@@ -18,9 +25,14 @@ type cst =
 type t = {
   models: list((string, Jg_types.tvalue)),
   postInstalls: list(postInstall),
+  ignoreFiles: list(string),
 };
 
 let path = Utils.Filename.concat("template", "spin");
+
+type doc = unit;
+
+let doc_of_cst = (cst: list(cst)): doc => ();
 
 let t_of_cst = (~useDefaults, ~models, cst: list(cst)) => {
   let newModels =
@@ -47,5 +59,17 @@ let t_of_cst = (~useDefaults, ~models, cst: list(cst)) => {
           | Post_install(v) => Some(v)
           | _ => None,
       ),
+    ignoreFiles:
+      ConfigFile__CstUtils.get(
+        cst,
+        ~f=
+          fun
+          | Ignore(v) => {
+              let evaluated = Jg_wrapper.from_string(v.condition, ~models);
+              Bool.of_string(evaluated) ? Some(v.files) : None;
+            }
+          | _ => None,
+      )
+      |> Caml.List.flatten,
   };
 };

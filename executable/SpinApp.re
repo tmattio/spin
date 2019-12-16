@@ -2,6 +2,7 @@ open Cmdliner;
 
 let defaultCmd = {
   let doc = "Scaffold new ReasonML/OCaml projects.";
+
   (
     Term.(ret(const(_ => `Help((`Pager, None))) $ const())),
     Term.info(
@@ -25,4 +26,4 @@ let argv =
        }
      );
 
-let _ = Term.eval_choice(defaultCmd, Cmd.all, ~argv) |> Term.exit;
+let _ = Term.exit @@ Term.eval_choice(defaultCmd, Cmd.all, ~argv);

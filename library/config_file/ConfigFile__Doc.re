@@ -26,9 +26,11 @@ type t = {
   tutorial: option(string),
 };
 
+type doc = t;
+
 let path = "spin";
 
-let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
+let doc_of_cst = (cst: list(cst)): doc => {
   name:
     ConfigFile__CstUtils.getUniqueExn(
       cst,
@@ -70,3 +72,5 @@ let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
         | _ => None,
     ),
 };
+
+let t_of_cst = (~useDefaults, ~models, cst: list(cst)) => doc_of_cst(cst);

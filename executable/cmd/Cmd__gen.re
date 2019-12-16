@@ -1,17 +1,33 @@
 open Cmdliner;
 open Spin;
 
-let run = (~generator) => {
+let run = (~generator, ()) => {
   switch (generator) {
   | None =>
-    Console.log(
-      <Pastel> "The generators available for this project are:" </Pastel>,
-    )
+    let config = Generators.getProjectConfig();
+    let source = Source.ofString(config.source);
+    let generators =
+      Generators.listGenerators(source)
+      |> List.map(~f=ConfigFile.Generators.parse_doc);
 
-  | Some(generator) =>
     Console.log(
-      <Pastel> {"Generating a new moduel with " ++ generator} </Pastel>,
-    )
+      <Pastel> "The generators available for this project are:\n" </Pastel>,
+    );
+
+    List.iter(
+      generators,
+      ~f=el => {
+        Console.log(
+          <Pastel color=Pastel.Blue bold=true> {"    " ++ el.name} </Pastel>,
+        );
+        Console.log(<Pastel> {"      " ++ el.description ++ "\n"} </Pastel>);
+      },
+    );
+
+  | Some(generatorName) =>
+    let config = Generators.getProjectConfig();
+    let source = Source.ofString(config.source);
+    Generators.generate(generatorName, ~source);
   };
 
   Lwt.return();
@@ -27,7 +43,8 @@ let cmd = {
     );
   };
 
-  let runCommand = generator => Lwt_main.run(run(~generator));
+  let runCommand = generator =>
+    run(~generator) |> Errors.handleErrors |> Lwt_main.run;
 
   (
     Term.(const(runCommand) $ generator),

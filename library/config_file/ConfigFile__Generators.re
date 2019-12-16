@@ -22,23 +22,14 @@ type t = {
   files: list(file),
 };
 
-let path = Utils.Filename.concat("generators", "spin");
+type doc = {
+  name: string,
+  description: string,
+};
 
-let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
-  let newModels =
-    ConfigFile__CstUtils.get(
-      cst,
-      ~f=
-        fun
-        | Cfg_string(v) => Some(ConfigFile__Common.String(v))
-        | Cfg_list(v) => Some(ConfigFile__Common.List(v))
-        | Cfg_confirm(v) => Some(ConfigFile__Common.Confirm(v))
-        | _ => None,
-    )
-    |> ConfigFile__Common.promptConfigs(~useDefaults);
+let path = "spin";
 
-  let models = List.concat([models, newModels]);
-
+let doc_of_cst = (cst: list(cst)): doc => {
   {
     name:
       ConfigFile__CstUtils.getUniqueExn(
@@ -56,6 +47,29 @@ let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
           | Description(v) => Some(v)
           | _ => None,
       ),
+  };
+};
+
+let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
+  let newModels =
+    ConfigFile__CstUtils.get(
+      cst,
+      ~f=
+        fun
+        | Cfg_string(v) => Some(ConfigFile__Common.String(v))
+        | Cfg_list(v) => Some(ConfigFile__Common.List(v))
+        | Cfg_confirm(v) => Some(ConfigFile__Common.Confirm(v))
+        | _ => None,
+    )
+    |> ConfigFile__Common.promptConfigs(~useDefaults);
+
+  let models = List.concat([models, newModels]);
+
+  let doc = doc_of_cst(cst);
+
+  {
+    name: doc.name,
+    description: doc.description,
     files:
       ConfigFile__CstUtils.get(
         cst,
@@ -63,18 +77,8 @@ let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
           fun
           | File(v) =>
             Some({
-              source:
-                Jg_template.from_string(
-                  v.source,
-                  ~models,
-                  ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-                ),
-              destination:
-                Jg_template.from_string(
-                  v.destination,
-                  ~models,
-                  ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-                ),
+              source: Jg_wrapper.from_string(v.source, ~models),
+              destination: Jg_wrapper.from_string(v.destination, ~models),
             })
           | _ => None,
       ),

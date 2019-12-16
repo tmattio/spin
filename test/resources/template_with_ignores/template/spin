@@ -1,0 +1,20 @@
+(cfg_string (
+  (name val)
+  (prompt "Value")
+  (default "wrong")
+))
+
+(ignore (
+  (files (.*\.ignore_me))
+  (condition true)
+))
+
+(ignore (
+  (files (ignore_this_one_too))
+  (condition "{{ val == 'wrong' }}")
+))
+
+(ignore (
+  (files (this_one_matches_but_condition_is_false))
+  (condition "{{ val != 'wrong' }}")
+))

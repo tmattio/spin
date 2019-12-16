@@ -21,7 +21,9 @@
         "rely.lib"
       ],
       "flags": [
-        "-open Base"
+        "-open Base",
+        "-linkall",
+        "-g"
       ],
       "includeSubdirs": "unqualified",
       "main": "TestRunner",
@@ -94,6 +96,7 @@
   "devDependencies": {
     "@opam/merlin": "*",
     "@opam/odoc": "*",
+    "@opam/utop": "*",
     "refmterr": "*",
     "pesy": "*"
   },
@@ -102,8 +105,10 @@
   },
   "scripts": {
     "pesy": "bash -c 'env PESY_MODE=update pesy'",
-    "format": "bash -c 'find library test executable -name '*.re' | xargs esy refmt --in-place'",
+    "fmt": "esy dune build @fmt --auto-promote",
     "test": "esy x test-runner.exe",
-    "watch": "esy dune build --root . --only-packages spin --watch"
+    "watch": "esy dune build --root . --only-packages spin --watch",
+    "doc": "esy dune build @doc",
+    "utop": "esy dune utop library -- -implicit-bindings"
   }
 }
