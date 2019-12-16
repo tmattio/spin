@@ -19,17 +19,3 @@ clear
 
 type 'spin new cli my-cli --default'
 printf 'My CLI\n' | spin new cli my-cli --default
-
-sleep 2
-echo ""
-
-clear
-
-type 'cd my-cli'
-cd my-cli
-
-type 'esy x my-cli.exe hello John'
-esy x my-cli.exe hello John
-
-sleep 2
-echo ""
