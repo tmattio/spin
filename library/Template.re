@@ -94,13 +94,9 @@ let generate = (~useDefaults=false, source: Source.t, destination: string) => {
           )
           |> Lwt_main.run;
 
-        switch (el.description) {
-        | Some(description) =>
-          Console.log(
-            <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
-          )
-        | None => ()
-        };
+        Console.log(
+          <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
+        );
       },
     )
   };
