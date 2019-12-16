@@ -90,6 +90,7 @@ let generate = (~useDefaults=false, source: Source.t, destination: string) => {
             el.command,
             ~args=el.args |> Array.of_list,
             ~dir=destination,
+            ~stdout=`Dev_null,
           )
           |> Lwt_main.run;
 
