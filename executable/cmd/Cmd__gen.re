@@ -6,7 +6,9 @@ let run = (~generator, ()) => {
   | None =>
     let config = Generators.getProjectConfig();
     let source = Source.ofString(config.source);
-    let generators = Generators.listGenerators(source);
+    let generators =
+      Generators.listGenerators(source)
+      |> List.map(~f=ConfigFile.Generators.parse_doc);
 
     Console.log(
       <Pastel> "The generators available for this project are:\n" </Pastel>,
@@ -22,10 +24,10 @@ let run = (~generator, ()) => {
       },
     );
 
-  | Some(generator) =>
-    Console.log(
-      <Pastel> {"Generating a new moduel with " ++ generator} </Pastel>,
-    )
+  | Some(generatorName) =>
+    let config = Generators.getProjectConfig();
+    let source = Source.ofString(config.source);
+    Generators.generate(generatorName, ~source);
   };
 
   Lwt.return();
