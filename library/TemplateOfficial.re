@@ -1,7 +1,7 @@
 let path =
   Utils.Filename.concat(Config.SPIN_CACHE_DIR.get(), "spin-templates");
 
-let branch = "template/cli";
+let branch = "next";
 
 let url = "git@github.com:tmattio/spin-templates.git";
 let ensureDownloaded = () =>
