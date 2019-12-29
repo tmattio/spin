@@ -1,4 +1,8 @@
 let gitClone = (~destination, ~branch=?, repo) => {
+  Console.log(
+    <Pastel> {"📡  Downloading " ++ repo ++ " to " ++ destination} </Pastel>,
+  );
+
   let args =
     switch (branch) {
     | Some(branch) => [|"clone", "-b", branch, repo, destination|]
@@ -17,10 +21,12 @@ let gitClone = (~destination, ~branch=?, repo) => {
   };
 };
 
+/* Inspired from the reges "((git|ssh|http(s)?)|(git@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(\.git)(/)?".
+   Source: https://stackoverflow.com/questions/2514859/regular-expression-for-git-repository */
 let isGitUrl = value => {
   let regexp =
     Str.regexp(
-      "\\(\\(git|ssh|file|https?\\):\\(//\\)?\\)|\\(\\w+@[\\w\\.]+\\)",
+      "\\(\\(git\\|ssh\\|http\\(s\\)?\\)\\|\\(git@[a-zA-Z0-9_\\.-]+\\)\\)\\(:\\(//\\)?\\)\\([[a-zA-Z0-9_\\.@:/~-]+\\)\\(\\.git\\)\\(/\\)?",
     );
   Str.string_match(regexp, value, 0);
 };

@@ -1,10 +1,14 @@
 open Cmdliner;
 open Spin;
 
-let run = (~template: option(string), ~path: option(string), ~useDefaults, ()) => {
+let run =
+    (~template: option(string), ~path: option(string), ~useDefaults, ()) => {
   let path = Option.value(path, ~default=".");
-  TemplateOfficial.ensureDownloaded();
-  let source = Option.map(template, Source.ofString) |> Option.value(~default=Source.Git("https://github.com/tmattio/spin-minimal.git"))
+  let source =
+    Option.map(template, Source.ofString)
+    |> Option.value(
+         ~default=Source.Git("https://github.com/tmattio/spin-minimal.git"),
+       );
   Template.generate(source, path, ~useDefaults);
   Lwt.return();
 };
@@ -15,9 +19,7 @@ let cmd = {
   let template = {
     let doc = "The template to use to generate the project. Can be the name of an official template or a git repository.\nDefaults to the minimal official template.";
     Arg.(
-      value
-      & pos(0, some(string), None)
-      & info([], ~docv="TEMPLATE", ~doc)
+      value & pos(0, some(string), None) & info([], ~docv="TEMPLATE", ~doc)
     );
   };
 

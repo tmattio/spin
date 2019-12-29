@@ -11,7 +11,7 @@ let toLocalPath: t => local =
   | LocalDir(s) => s
   | Git(s) => {
       let tempdir = Utils.Sys.get_tempdir("spin");
-      let _ = Vcs.gitClone(s, ~destination=tempdir);
+      let _ = Lwt_main.run(Vcs.gitClone(s, ~destination=tempdir));
       tempdir;
     };
 
@@ -20,12 +20,14 @@ let ofString = (s: string) =>
     LocalDir(s);
   } else if (Vcs.isGitUrl(s)) {
     Git(s);
-  } else if (List.exists(TemplateOfficial.all(), ~f=el =>
-               String.equal(s, el.name)
-             )) {
-    Official(s);
   } else {
-    raise(Errors.IncorrectTemplateName(s));
+    TemplateOfficial.ensureDownloaded();
+    let templates = TemplateOfficial.all();
+    if (List.exists(templates, ~f=el => String.equal(s, el.name))) {
+      Official(s);
+    } else {
+      raise(Errors.IncorrectTemplateName(s));
+    };
   };
 
 let toString =
