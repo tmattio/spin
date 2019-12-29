@@ -17,6 +17,8 @@ let modulify = value => {
 let snake_case = value =>
   value
   |> Str.global_replace(Str.regexp("\\([^_A-Z]\\)\\([A-Z]\\)"), "\\1_\\2")
+  |> Str.global_replace(Str.regexp("-"), "_")
+  |> Str.global_replace(Str.regexp(" "), "_")
   |> String.lowercase;
 
 let camel_case = value => {
