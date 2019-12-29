@@ -182,7 +182,7 @@ let list =
 
   let opt =
     choices
-    |> List.findi(~f=(i, _) => i == choice)
+    |> List.findi(~f=(i, _) => i == choice - 1)
     |> Option.map(~f=((_, el)) => el);
 
   Option.value_exn(opt);
