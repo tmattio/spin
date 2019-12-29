@@ -9,22 +9,24 @@ let slugify = value => {
 
 let modulify = value => {
   value
-  |> Str.global_replace(Str.regexp(" "), "_")
-  |> Str.global_replace(Str.regexp("-"), "_")
-  |> String.uppercase;
+  |> String.substr_replace_all(~pattern="-", ~with_="_")
+  |> String.substr_replace_all(~pattern=" ", ~with_="_")
+  |> String.capitalize;
 };
 
 let snake_case = value =>
   value
+  |> String.substr_replace_all(~pattern="-", ~with_="_")
+  |> String.substr_replace_all(~pattern=" ", ~with_="_")
   |> Str.global_replace(Str.regexp("\\([^_A-Z]\\)\\([A-Z]\\)"), "\\1_\\2")
   |> String.lowercase;
 
 let camel_case = value => {
   value
-  |> Str.global_substitute(Str.regexp("^\\([a-z]\\)\\|[_-]\\([a-z]\\)"), s =>
+  |> Str.global_substitute(Str.regexp("^\\([a-z]\\)\\|[_\\-]\\([a-z]\\)"), s =>
        String.uppercase(Str.matched_string(s))
      )
-  |> Str.global_replace(Str.regexp("[_-]"), "");
+  |> Str.global_replace(Str.regexp("[_\\-]"), "");
 };
 
 let jg_string_fn = (~kwargs=?, ~defaults=?, fn, value) => {
@@ -42,18 +44,10 @@ let filters = [
 
 let from_string =
     (s: string, ~models: list((string, Jg_types.tvalue))): string => {
-  Jg_template.from_string(
-    s,
-    ~models,
-    ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-  );
+  Jg_template.from_string(s, ~models, ~env={...Jg_types.std_env, filters});
 };
 
 let from_file =
     (f: string, ~models: list((string, Jg_types.tvalue))): string => {
-  Jg_template.from_file(
-    f,
-    ~models,
-    ~env={...Jg_types.std_env, filters: TemplateFilter.filters},
-  );
+  Jg_template.from_file(f, ~models, ~env={...Jg_types.std_env, filters});
 };
