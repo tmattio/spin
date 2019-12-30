@@ -1,8 +1,21 @@
-# Spin
+<h1 align="center">
+	Spin
+</h1>
 
-[![Actions Status](https://github.com/tmattio/spin/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/tmattio/spin/actions)
+<p align="center">
+  <span>Project scaffolding tool and set of templates for Reason and OCaml.</span>
+</p>
 
-> Project scaffolding tool and set of templates for Reason and OCaml.
+<p align="center">
+  <a href="https://github.com/tmattio/spin/actions">
+    <img src="https://github.com/tmattio/spin/workflows/CI/CD%20Pipeline/badge.svg" alt="Build Status" />
+  </a>
+  <a href="https://badge.fury.io/js/%40tmattio%2Fspin">
+    <img src="https://badge.fury.io/js/%40tmattio%2Fspin.svg" alt="npm version" />
+  </a>
+</p>
+
+---
 
 <div align="center">
   <img src="./docs/demo.svg" alt="Demo">
