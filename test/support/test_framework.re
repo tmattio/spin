@@ -1,13 +1,12 @@
 open Spin;
 
-let projectDir = Caml.Sys.getcwd();
-let tmpDir = Utils.Filename.concat(projectDir, ".tmp");
+let tmpDir = Utils.Filename.concat(Caml.Sys.getcwd(), ".tmp");
 
 include Rely.Make({
   let config =
     Rely.TestFrameworkConfig.initialize({
-      snapshotDir: Caml.Filename.concat(Caml.Sys.getcwd(), "_snapshots"),
-      projectDir: Caml.Sys.getcwd(),
+      snapshotDir: "test/_snapshots",
+      projectDir: "",
     });
 });
 
