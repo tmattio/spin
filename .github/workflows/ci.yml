@@ -133,6 +133,54 @@ jobs:
           mv binaries/windows/spin.exe bin/spin-win-x64.exe
           mv binaries/linux/spin.exe bin/spin-linux-x64.exe
 
+      - name: Create Github release
+        if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload spin-darwin-x64.exe to Github release 
+        if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
+        id: upload-release-asset-darwin-x64
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: bin/spin-darwin-x64.exe
+          asset_name: spin-darwin-x64.exe
+          asset_content_type: binary/octet-stream
+
+      - name: Upload spin-win-x64.exe to Github release 
+        if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
+        id: upload-release-asset-win-x64
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: bin/spin-win-x64.exe
+          asset_name: spin-win-x64.exe
+          asset_content_type: binary/octet-stream
+
+      - name: Upload spin-linux-x64.exe to Github release 
+        if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
+        id: upload-release-asset-linux-x64
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: bin/spin-linux-x64.exe
+          asset_name: spin-linux-x64.exe
+          asset_content_type: binary/octet-stream
+
       - name: Publish
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
         run: npm publish
