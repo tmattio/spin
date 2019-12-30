@@ -26,4 +26,4 @@ let argv =
        }
      );
 
-let _ = Term.exit @@ Term.eval_choice(defaultCmd, Cmd.all, ~argv);
+let _ = Term.exit @@ Term.eval_choice(defaultCmd, Commands.all, ~argv);
