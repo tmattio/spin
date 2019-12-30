@@ -7,7 +7,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "bin": {
+    "spin": "spin.exe"
+  },
   "scripts": {
-    "postinstall": "node scripts/release-postinstall.js"
+    "preinstall": "node scripts/release-preinstall.js"
   }
 }

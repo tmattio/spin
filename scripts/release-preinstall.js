@@ -25,11 +25,6 @@ if (!supported) {
   console.error("on the " + arch + " architecture.");
 }
 
-if (!fs.existsSync("spin")) {
-  copyFileSync(filename, "spin");
-  fs.chmodSync("spin", 0755);
-}
-
 if (!fs.existsSync("spin.exe")) {
   copyFileSync(filename, "spin.exe");
   fs.chmodSync("spin.exe", 0755);
