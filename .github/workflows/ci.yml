@@ -77,14 +77,10 @@ jobs:
         shell: bash
         run: |
           # from https://stackoverflow.com/a/24848739/617787
-          s=$(pwd); d=$(dirname $(esy x which spin));
+          s=$(pwd); d=$(dirname $(esy x which spin.exe));
           while [ "${d#$s/}" == "${d}" ]
           do s=$(dirname $s);b="../${b}"; done; 
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            ESY__BINARY_PATH=${b}${d#$s/}/spin.exe
-          else
-            ESY__BINARY_PATH=${b}${d#$s/}/spin
-          fi
+          ESY__BINARY_PATH=${b}${d#$s/}/spin.exe
           echo "ESY__BINARY_PATH: $ESY__BINARY_PATH"
           echo "##[set-output name=path;]$ESY__BINARY_PATH"
 
@@ -133,9 +129,9 @@ jobs:
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
         run: |
           mkdir -p bin
-          mv binaries/darwin/spin bin/spin-darwin-x64.exe
+          mv binaries/darwin/spin.exe bin/spin-darwin-x64.exe
           mv binaries/windows/spin.exe bin/spin-win-x64.exe
-          mv binaries/linux/spin bin/spin-linux-x64.exe
+          mv binaries/linux/spin.exe bin/spin-linux-x64.exe
 
       - name: Publish
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
