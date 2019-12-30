@@ -28,7 +28,7 @@ if [ -d ".git" ]; then
     bump "bin/package.re"
     git add .
     git commit -m "Bump to ${version}"
-    git tag -a "${output}"
+    git tag -a "${output}" -m "${version}"
     git push origin --tags
   else
     echo "Please commit staged files prior to bumping"
