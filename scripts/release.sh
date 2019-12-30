@@ -25,14 +25,14 @@ if [ -d ".git" ]; then
   changes=$(git status --porcelain)
 
   if [ -z "${changes}" ]; then
-    bump "executable/Package.re"
+    bump "bin/package.re"
     git add .
     git commit -m "Bump to ${version}"
-    git tag -a "${output}" -m "${version}"
+    git tag -a "${output}"
     git push origin --tags
   else
     echo "Please commit staged files prior to bumping"
   fi
 else
-  bump "executable/Package.re"
+  bump "bin/package.re"
 fi
