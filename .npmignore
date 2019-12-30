@@ -1,0 +1,6 @@
+*
+!bin/*.exe
+!scripts/release-postinstall.js
+!LICENSE
+!package.json
+!README.md
