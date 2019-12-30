@@ -2,9 +2,7 @@
 	Spin
 </h1>
 
-<p align="center">
-  <span>Project scaffolding tool and set of templates for Reason and OCaml.</span>
-</p>
+<h4 align="center">Project scaffolding tool and set of templates for Reason and OCaml.</h4>
 
 <p align="center">
   <a href="https://github.com/tmattio/spin/actions">
@@ -15,13 +13,21 @@
   </a>
 </p>
 
----
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#why">Why</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#templates">Templates</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#contributing">Contributing</a> •
+  <a href="#roadmap">Roadmap</a>
+</p>
 
 <div align="center">
   <img src="./docs/demo.svg" alt="Demo">
 </div>
 
-<br />
+## Features
 
 🚀 Quickly start new projects that are ready for the real world.
 
