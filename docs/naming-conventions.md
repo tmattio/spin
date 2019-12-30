@@ -20,4 +20,6 @@ The fact is, however, that changing Reason syntax to snake case seemed like a le
 - On the same vein, Reason native projects use OCaml's standard library, which uses snake case
 - Some Reason projects chosed not to follow the camel case conventions, one such example is morph.
 
-Admittedly, I would personally prefer to use camel case, but consistency is the more important to me.
+Admittedly, I would personally prefer to use camel case, but consistency was more important to me.
+
+Ultimately, nothing is set in stone, and if it appears that using a different naming conventions seems better in the future, nothing is preventing us from changing it!
