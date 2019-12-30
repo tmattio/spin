@@ -1,7 +1,0 @@
-(dirs
- (:standard \ node_modules \ _esy))
-
-(env
- (dev
-  (flags
-   (:standard -warn-error -A))))
