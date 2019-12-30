@@ -8,7 +8,7 @@
     "access": "public"
   },
   "bin": {
-    "spin": "spin.exe"
+    "spin": "bin/spin.exe"
   },
   "scripts": {
     "preinstall": "node scripts/release-preinstall.js"

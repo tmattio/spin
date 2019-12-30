@@ -26,8 +26,8 @@ if (!supported) {
 }
 
 if (!fs.existsSync("spin.exe")) {
-  copyFileSync(filename, "spin.exe");
-  fs.chmodSync("spin.exe", 0755);
+  copyFileSync(filename, "bin/spin.exe");
+  fs.chmodSync("bin/spin.exe", 0755);
 }
 
 function copyFileSync(source, dest) {
