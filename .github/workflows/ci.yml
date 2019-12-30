@@ -67,9 +67,6 @@ jobs:
       - name: Run tests
         run: esy test
 
-      - name: Create a NPM release
-        run: esy release
-
       - name: Export dependencies
         run: esy export-dependencies
 
