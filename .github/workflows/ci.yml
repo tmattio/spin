@@ -96,7 +96,7 @@ jobs:
           path: ${{ steps.esy_binary_path.outputs.path }}
 
   publish:
-    needs: test_and_build
+    needs: build
     if: github.event_name != 'pull_request'
     name: Publish
     runs-on: ubuntu-latest
