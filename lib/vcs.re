@@ -10,11 +10,7 @@ let git_clone = (~destination, ~branch=?, repo) => {
     };
 
   let%lwt result =
-    Utils.Sys.exec(
-      "git",
-      ~args,
-      ~stdout=Lwt_process.(`Dev_null),
-    );
+    Utils.Sys.exec("git", ~args, ~stdout=Lwt_process.(`Dev_null));
   try(result |> Lwt.return) {
   | _ => Lwt.fail_with("Error while cloning the repository")
   };

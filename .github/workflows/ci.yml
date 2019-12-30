@@ -52,7 +52,7 @@ jobs:
 
       - name: Check formatting
         run: |
-          esy fmt
+          esy format
           if [ -n "$(git status --porcelain)" ]; then
             echo "There are differences:"
             git status --porcelain
