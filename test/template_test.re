@@ -5,30 +5,39 @@ describe("Test Template", ({test, describe, _}) => {
   test("generate", ({expect, _}) => {
     let dest = Test_utils.get_tempdir("generate");
     let source =
-      Source.LocalDir(
+      Source.Local_dir(
         Utils.Filename.join(["test", "resources", "sample_template"]),
       );
-    Template.generate(source, dest, ~useDefaults=true);
+    Template.generate(source, dest, ~use_defaults=true);
 
-    let generatedFiles = Utils.Sys.ls_dir(dest);
-    let generatedFile =
+    let generated_files =
+      Utils.Sys.ls_dir(dest) |> List.sort(~compare=String.compare);
+    let expected_content_filepath =
       Utils.Filename.join([dest, "dirname", "filename.txt"]);
-    let generatedConf = Utils.Filename.join([dest, ".spin"]);
+    let expected_conf_filepath = Utils.Filename.join([dest, ".spin"]);
 
-    expect.list([generatedConf, generatedFile]).toEqual(generatedFiles);
+    let expected =
+      expect.list(
+        [expected_content_filepath, expected_conf_filepath]
+        |> List.sort(~compare=String.compare),
+      );
 
-    let generatedContent = Stdio.In_channel.read_all(generatedFile);
-    expect.equal("Hello World!", generatedContent);
+    expected.toEqual(generated_files);
+
+    let generated_content =
+      Stdio.In_channel.read_all(expected_content_filepath);
+    let expected = expect.string("Hello World!");
+    expected.toEqual(generated_content);
   });
 
   test("generate configuration", ({expect, _}) => {
     let dest = Test_utils.get_tempdir("generate_configuration");
     let source =
-      Source.LocalDir(
+      Source.Local_dir(
         Utils.Filename.join(["test", "resources", "sample_template"]),
       );
 
-    Template.generate(source, dest, ~useDefaults=true);
+    Template.generate(source, dest, ~use_defaults=true);
 
     let generatedConfContent =
       Sexplib.Sexp.load_sexps(Utils.Filename.join([dest, ".spin"]));
@@ -64,12 +73,12 @@ describe("Test Template", ({test, describe, _}) => {
   test("ignore files", ({expect, _}) => {
     let dest = Test_utils.get_tempdir("ignore_files");
     let source =
-      Source.LocalDir(
+      Source.Local_dir(
         Utils.Filename.join(["test", "resources", "template_with_ignores"]),
       );
-    Template.generate(source, dest, ~useDefaults=true);
+    Template.generate(source, dest, ~use_defaults=true);
 
-    let generatedFiles =
+    let generated_files =
       Utils.Sys.ls_dir(dest) |> List.sort(~compare=String.compare);
     let expected =
       expect.list(
@@ -83,6 +92,6 @@ describe("Test Template", ({test, describe, _}) => {
         ]
         |> List.sort(~compare=String.compare),
       );
-    expected.toEqual(generatedFiles);
+    expected.toEqual(generated_files);
   });
 });

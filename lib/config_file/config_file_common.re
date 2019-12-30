@@ -1,7 +1,7 @@
 open Jingoo;
 
 [@deriving of_sexp]
-type stringCfg = {
+type string_cfg = {
   name: string,
   prompt: string,
   [@sexp.option]
@@ -9,7 +9,7 @@ type stringCfg = {
 };
 
 [@deriving of_sexp]
-type listCfg = {
+type list_cfg = {
   name: string,
   prompt: string,
   values: list(string),
@@ -18,20 +18,20 @@ type listCfg = {
 };
 
 [@deriving of_sexp]
-type confirmCfg = {
+type confirm_cfg = {
   name: string,
   prompt: string,
   [@sexp.option]
   default: option(bool),
 };
 
-type promptCfg =
-  | String(stringCfg)
-  | List(listCfg)
-  | Confirm(confirmCfg);
+type prompt_cfg =
+  | String(string_cfg)
+  | List(list_cfg)
+  | Confirm(confirm_cfg);
 
-let promptConfig = (~useDefaults=false, cfg) => {
-  switch (useDefaults, cfg) {
+let promptConfig = (~use_defaults=false, cfg) => {
+  switch (use_defaults, cfg) {
   | (true, String({name, default: Some(default)}))
   | (true, List({name, default: Some(default)})) => (
       name,
@@ -58,7 +58,7 @@ let promptConfig = (~useDefaults=false, cfg) => {
   };
 };
 
-let applyTemplateToCst = (cst: promptCfg, ~models): promptCfg =>
+let apply_template_to_cst = (cst: prompt_cfg, ~models): prompt_cfg =>
   switch (cst) {
   | String(cfg) =>
     String({
@@ -79,12 +79,12 @@ let applyTemplateToCst = (cst: promptCfg, ~models): promptCfg =>
   | _ as cfg => cfg
   };
 
-let promptConfigs = (~useDefaults=false, configs: list(promptCfg)) =>
+let prompt_configs = (~use_defaults=false, configs: list(prompt_cfg)) =>
   List.fold(
     configs,
     ~init=[],
     ~f=(acc, el) => {
-      let el = applyTemplateToCst(el, ~models=acc);
-      [promptConfig(el, ~useDefaults), ...acc];
+      let el = apply_template_to_cst(el, ~models=acc);
+      [promptConfig(el, ~use_defaults), ...acc];
     },
   );

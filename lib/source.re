@@ -1,37 +1,37 @@
 type t =
   | Official(string)
   | Git(string)
-  | LocalDir(string);
+  | Local_dir(string);
 
 type local = string;
 
-let toLocalPath: t => local =
+let to_local_path: t => local =
   fun
   | Official(s) => Utils.Filename.concat(Template_official.path, s)
-  | LocalDir(s) => s
+  | Local_dir(s) => s
   | Git(s) => {
       let tempdir = Utils.Sys.get_tempdir("spin");
-      let _ = Lwt_main.run(Vcs.gitClone(s, ~destination=tempdir));
+      let _ = Lwt_main.run(Vcs.git_clone(s, ~destination=tempdir));
       tempdir;
     };
 
-let ofString = (s: string) =>
+let of_string = (s: string) =>
   if (Utils.Filename.test(Utils.Filename.Exists, s)) {
-    LocalDir(s);
-  } else if (Vcs.isGitUrl(s)) {
+    Local_dir(s);
+  } else if (Vcs.is_git_url(s)) {
     Git(s);
   } else {
-    Template_official.ensureDownloaded();
+    Template_official.ensure_downloaded();
     let templates = Template_official.all();
     if (List.exists(templates, ~f=el => String.equal(s, el.name))) {
       Official(s);
     } else {
-      raise(Errors.IncorrectTemplateName(s));
+      raise(Errors.Incorrect_template_name(s));
     };
   };
 
-let toString =
+let to_string =
   fun
   | Official(s) => s
   | Git(s) => s
-  | LocalDir(s) => s;
+  | Local_dir(s) => s;

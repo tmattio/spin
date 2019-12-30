@@ -1,7 +1,7 @@
 open Jingoo;
 
 [@deriving of_sexp]
-type postInstall = {
+type post_install = {
   command: string,
   args: list(string),
   [@sexp.option]
@@ -16,16 +16,16 @@ type ignore = {
 
 [@deriving of_sexp]
 type cst =
-  | Post_install(postInstall)
+  | Post_install(post_install)
   | Ignore(ignore)
-  | Cfg_string(Config_file_common.stringCfg)
-  | Cfg_list(Config_file_common.listCfg)
-  | Cfg_confirm(Config_file_common.confirmCfg);
+  | Cfg_string(Config_file_common.string_cfg)
+  | Cfg_list(Config_file_common.list_cfg)
+  | Cfg_confirm(Config_file_common.confirm_cfg);
 
 type t = {
   models: list((string, Jg_types.tvalue)),
-  postInstalls: list(postInstall),
-  ignoreFiles: list(string),
+  post_installs: list(post_install),
+  ignore_files: list(string),
 };
 
 let path = Utils.Filename.concat("template", "spin");
@@ -34,8 +34,8 @@ type doc = unit;
 
 let doc_of_cst = (cst: list(cst)): doc => ();
 
-let t_of_cst = (~useDefaults, ~models, cst: list(cst)) => {
-  let newModels =
+let t_of_cst = (~use_defaults, ~models, cst: list(cst)) => {
+  let new_models =
     Config_file_cst_utils.get(
       cst,
       ~f=
@@ -45,13 +45,13 @@ let t_of_cst = (~useDefaults, ~models, cst: list(cst)) => {
         | Cfg_confirm(v) => Some(Config_file_common.Confirm(v))
         | _ => None,
     )
-    |> Config_file_common.promptConfigs(~useDefaults);
+    |> Config_file_common.prompt_configs(~use_defaults);
 
-  let models = List.concat([models, newModels]);
+  let models = List.concat([models, new_models]);
 
   {
     models,
-    postInstalls:
+    post_installs:
       Config_file_cst_utils.get(
         cst,
         ~f=
@@ -59,7 +59,7 @@ let t_of_cst = (~useDefaults, ~models, cst: list(cst)) => {
           | Post_install(v) => Some(v)
           | _ => None,
       ),
-    ignoreFiles:
+    ignore_files:
       Config_file_cst_utils.get(
         cst,
         ~f=

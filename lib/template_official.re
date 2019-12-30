@@ -5,16 +5,16 @@ let branch = "next";
 
 let url = "git@github.com:tmattio/spin-templates.git";
 
-let ensureDownloaded = () =>
+let ensure_downloaded = () =>
   if (Utils.Filename.test(Utils.Filename.Is_dir, path)) {
     Console.log(<Pastel> "📡  Updating official templates." </Pastel>);
-    let _ = Lwt_main.run(Vcs.gitPull(path));
+    let _ = Lwt_main.run(Vcs.git_pull(path));
     Console.log(
       <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
     );
   } else {
     Console.log(<Pastel> "📡  Downloading official templates." </Pastel>);
-    let _ = Lwt_main.run(Vcs.gitClone(url, ~destination=path, ~branch));
+    let _ = Lwt_main.run(Vcs.git_clone(url, ~destination=path, ~branch));
     Console.log(
       <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
     );

@@ -5,7 +5,7 @@ type command = {
 };
 
 [@deriving of_sexp]
-type startingCommand = {
+type starting_command = {
   command: string,
   args: list(string),
 };
@@ -15,14 +15,14 @@ type cst =
   | Name(string)
   | Description(string)
   | Command(command)
-  | Starting_command(startingCommand)
+  | Starting_command(starting_command)
   | Tutorial(string);
 
 type t = {
   name: string,
   description: string,
   commands: list(command),
-  startingCommand: option(startingCommand),
+  starting_command: option(starting_command),
   tutorial: option(string),
 };
 
@@ -32,7 +32,7 @@ let path = "spin";
 
 let doc_of_cst = (cst: list(cst)): doc => {
   name:
-    Config_file_cst_utils.getUniqueExn(
+    Config_file_cst_utils.get_unique_exn(
       cst,
       ~f=
         fun
@@ -40,7 +40,7 @@ let doc_of_cst = (cst: list(cst)): doc => {
         | _ => None,
     ),
   description:
-    Config_file_cst_utils.getUniqueExn(
+    Config_file_cst_utils.get_unique_exn(
       cst,
       ~f=
         fun
@@ -55,8 +55,8 @@ let doc_of_cst = (cst: list(cst)): doc => {
         | Command(v) => Some(v)
         | _ => None,
     ),
-  startingCommand:
-    Config_file_cst_utils.getUnique(
+  starting_command:
+    Config_file_cst_utils.get_unique(
       cst,
       ~f=
         fun
@@ -64,7 +64,7 @@ let doc_of_cst = (cst: list(cst)): doc => {
         | _ => None,
     ),
   tutorial:
-    Config_file_cst_utils.getUnique(
+    Config_file_cst_utils.get_unique(
       cst,
       ~f=
         fun
@@ -73,4 +73,4 @@ let doc_of_cst = (cst: list(cst)): doc => {
     ),
 };
 
-let t_of_cst = (~useDefaults, ~models, cst: list(cst)) => doc_of_cst(cst);
+let t_of_cst = (~use_defaults, ~models, cst: list(cst)) => doc_of_cst(cst);

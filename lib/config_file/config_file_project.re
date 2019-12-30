@@ -21,7 +21,7 @@ let path = ".spin";
 let doc_of_cst = (cst: list(cst)): doc => {
   {
     source:
-      Config_file_cst_utils.getUniqueExn(
+      Config_file_cst_utils.get_unique_exn(
         cst,
         ~f=
           fun
@@ -31,7 +31,7 @@ let doc_of_cst = (cst: list(cst)): doc => {
   };
 };
 
-let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
+let t_of_cst = (~use_defaults, ~models, cst: list(cst)): t => {
   let newModels =
     Config_file_cst_utils.get(
       cst,
@@ -82,9 +82,9 @@ let cst_of_t = (~models, t: t): list(cst) => {
 
 let save = (data: t, ~destination: string) => {
   let destination = Utils.Filename.concat(destination, path);
-  let sexpString =
+  let sexp_string =
     cst_of_t(data, ~models=data.models)
     |> List.map(~f=cst => cst |> sexp_of_cst |> Sexp.to_string)
     |> Utils.String.join(~sep="\n");
-  Stdio.Out_channel.write_all(destination, ~data=sexpString);
+  Stdio.Out_channel.write_all(destination, ~data=sexp_string);
 };

@@ -4,10 +4,10 @@ open Spin;
 let run = (~generator, ()) => {
   switch (generator) {
   | None =>
-    let config = Generators.getProjectConfig();
-    let source = Source.ofString(config.source);
+    let config = Generators.get_project_config();
+    let source = Source.of_string(config.source);
     let generators =
-      Generators.listGenerators(source)
+      Generators.list(source)
       |> List.map(~f=Config_file.Generators.parse_doc);
 
     Console.log(
@@ -25,8 +25,8 @@ let run = (~generator, ()) => {
     );
 
   | Some(generatorName) =>
-    let config = Generators.getProjectConfig();
-    let source = Source.ofString(config.source);
+    let config = Generators.get_project_config();
+    let source = Source.of_string(config.source);
     Generators.generate(generatorName, ~source);
   };
 
@@ -44,7 +44,7 @@ let cmd = {
   };
 
   let runCommand = generator =>
-    run(~generator) |> Errors.handleErrors |> Lwt_main.run;
+    run(~generator) |> Errors.handle_errors |> Lwt_main.run;
 
   (
     Term.(const(runCommand) $ generator),

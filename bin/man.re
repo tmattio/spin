@@ -15,7 +15,7 @@ let version = Package.version;
 
 let envs =
   Spin.Config.all
-  |> Spin.Errors.handleErrors
+  |> Spin.Errors.handle_errors
   |> List.map(~f=el =>
        Spin.Config.(
          Term.env_info(

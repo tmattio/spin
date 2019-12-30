@@ -1,4 +1,4 @@
-type variableDoc('t) = {
+type variable_doc('t) = {
   name: string,
   doc: string,
   default: string,
@@ -17,19 +17,19 @@ module EnvVar =
        ) => {
   include M;
   let optValue = Sys.getenv(name) |> Option.map(~f=parse);
-  let getOpt = () => optValue;
-  let get = () => getOpt() |> Option.value(~default);
-  let docInfo = {name, doc, default: unparse(default)};
+  let get_opt = () => optValue;
+  let get = () => get_opt() |> Option.value(~default);
+  let doc_info = {name, doc, default: unparse(default)};
 };
 
-let getenvExn = name => {
+let getenv_exn = name => {
   let fn = () => {
     switch (Sys.getenv(name)) {
     | Some(env) => env
-    | _ => raise(Errors.MissingEnvVar(name))
+    | _ => raise(Errors.Missing_env_var(name))
     };
   };
-  Errors.handleErrors(fn);
+  Errors.handle_errors(fn);
 };
 
 module SPIN_CACHE_DIR =
@@ -42,12 +42,12 @@ module SPIN_CACHE_DIR =
     let default = {
       let home =
         switch (Caml.Sys.os_type) {
-        | "Unix" => getenvExn("HOME")
-        | _ => getenvExn("APPDATA")
+        | "Unix" => getenv_exn("HOME")
+        | _ => getenv_exn("APPDATA")
         };
       let cacheDir = Utils.Filename.concat(home, ".cache");
       Utils.Filename.concat(cacheDir, "spin");
     };
   });
 
-let all = () => [SPIN_CACHE_DIR.docInfo];
+let all = () => [SPIN_CACHE_DIR.doc_info];

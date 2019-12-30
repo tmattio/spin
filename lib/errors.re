@@ -1,13 +1,13 @@
-exception MissingEnvVar(string);
-exception IncorrectDestinationPath(string);
-exception IncorrectTemplateName(string);
-exception Config_fileSyntaxError;
-exception CurrentDirectoryNotASpinProject;
-exception GeneratorDoesNotExist(string);
+exception Missing_env_var(string);
+exception Incorrect_destination_path(string);
+exception Incorrect_template_name(string);
+exception Config_file_syntax_error;
+exception Current_directory_not_a_spin_project;
+exception Generator_does_not_exist(string);
 
-let handleErrors = fn =>
+let handle_errors = fn =>
   try(fn()) {
-  | MissingEnvVar(name) =>
+  | Missing_env_var(name) =>
     Console.error(
       <Pastel color=Pastel.Red>
         {"😱  Ooops, it seems you don't have an environment variable named \""
@@ -16,14 +16,14 @@ let handleErrors = fn =>
       </Pastel>,
     );
     Caml.exit(201);
-  | IncorrectDestinationPath(reason) =>
+  | Incorrect_destination_path(reason) =>
     Console.error(
       <Pastel color=Pastel.Red>
         {"😱  Can't generate the template at this destination: " ++ reason}
       </Pastel>,
     );
     Caml.exit(202);
-  | IncorrectTemplateName(name) =>
+  | Incorrect_template_name(name) =>
     Console.error(
       <Pastel color=Pastel.Red>
         {"😱  The template \""
@@ -34,21 +34,21 @@ let handleErrors = fn =>
       </Pastel>,
     );
     Caml.exit(203);
-  | Config_fileSyntaxError =>
+  | Config_file_syntax_error =>
     Console.error(
       <Pastel color=Pastel.Red>
         "😱  There is a syntax error in one of the configuration file. I can't generate your project."
       </Pastel>,
     );
     Caml.exit(204);
-  | CurrentDirectoryNotASpinProject =>
+  | Current_directory_not_a_spin_project =>
     Console.error(
       <Pastel>
         "You need to be inside a Spin project to run this command, but the current directory is not in a Spin project.\nA Spin project contains a file `.spin` at its root."
       </Pastel>,
     );
     Caml.exit(205);
-  | GeneratorDoesNotExist(name) =>
+  | Generator_does_not_exist(name) =>
     Console.error(
       <Pastel color=Pastel.Red>
         "😱  This generator does not exist, you can list the generators of the current project with the command `spin gen`."

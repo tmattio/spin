@@ -4,45 +4,47 @@ let ensureEmptyDir = (d: string) =>
   if (Utils.Filename.test(Utils.Filename.Exists, d)) {
     if (Utils.Filename.test(Utils.Filename.Is_file, d)) {
       raise(
-        Errors.IncorrectDestinationPath("This path is not a directory."),
+        Errors.Incorrect_destination_path("This path is not a directory."),
       );
     } else if (!List.is_empty(Utils.Sys.ls_dir(d, ~recursive=false))) {
-      raise(Errors.IncorrectDestinationPath("This directory is not empty."));
+      raise(
+        Errors.Incorrect_destination_path("This directory is not empty."),
+      );
     };
   };
 
 let generateFile =
     (
-      ~sourceDirectory: string,
-      ~destinationDirectory: string,
+      ~source_directory: string,
+      ~destination_directory: string,
       ~models,
-      sourceFile,
+      source_file,
     ) => {
   let data =
-    Stdio.In_channel.read_all(sourceFile) |> Jg_wrapper.from_string(~models);
+    Stdio.In_channel.read_all(source_file) |> Jg_wrapper.from_string(~models);
 
   let dest =
-    sourceFile
+    source_file
     |> Jg_wrapper.from_string(~models)
     |> String.substr_replace_first(
-         ~pattern=sourceDirectory,
-         ~with_=destinationDirectory,
+         ~pattern=source_directory,
+         ~with_=destination_directory,
        );
 
   let parent_dir = Utils.Filename.dirname(dest);
   Utils.Filename.mkdir(parent_dir, ~parent=true);
-  Utils.Filename.cp([sourceFile], dest);
+  Utils.Filename.cp([source_file], dest);
   Stdio.Out_channel.write_all(dest, ~data);
 };
 
-let generate = (~useDefaults=false, source: Source.t, destination: string) => {
+let generate = (~use_defaults=false, source: Source.t, destination: string) => {
   let () = ensureEmptyDir(destination);
 
-  let origin = Source.toLocalPath(source);
-  let templatePath = Utils.Filename.concat(origin, "template");
-  let templateConfig = Config_file.Template.parse(origin, ~useDefaults);
-  let models = templateConfig.models;
-  let docConfig = Config_file.Doc.parse(origin, ~models, ~useDefaults);
+  let origin = Source.to_local_path(source);
+  let template_path = Utils.Filename.concat(origin, "template");
+  let template_config = Config_file.Template.parse(origin, ~use_defaults);
+  let models = template_config.models;
+  let doc_config = Config_file.Doc.parse(origin, ~models, ~use_defaults);
 
   let rec loop =
     fun
@@ -50,8 +52,8 @@ let generate = (~useDefaults=false, source: Source.t, destination: string) => {
     | [f, ...fs] => {
         generateFile(
           f,
-          ~sourceDirectory=templatePath,
-          ~destinationDirectory=destination,
+          ~source_directory=template_path,
+          ~destination_directory=destination,
           ~models,
         );
         loop(fs);
@@ -60,25 +62,25 @@ let generate = (~useDefaults=false, source: Source.t, destination: string) => {
   Console.log(
     <Pastel>
       <Pastel> "\n🏗️  Creating a new " </Pastel>
-      <Pastel color=Pastel.Blue bold=true> {docConfig.name} </Pastel>
+      <Pastel color=Pastel.Blue bold=true> {doc_config.name} </Pastel>
       <Pastel> {" in " ++ destination} </Pastel>
     </Pastel>,
   );
-  let templatePathRegex = templatePath;
-  let ignoreFiles =
-    List.map(templateConfig.ignoreFiles, ~f=file => {
-      Utils.Filename.concat(templatePathRegex, file)
+  let template_path_regex = template_path;
+  let ignore_files =
+    List.map(template_config.ignore_files, ~f=file => {
+      Utils.Filename.concat(template_path_regex, file)
     });
-  Utils.Sys.ls_dir(templatePath, ~ignore_files=ignoreFiles) |> loop;
+  Utils.Sys.ls_dir(template_path, ~ignore_files) |> loop;
   Console.log(
     <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
   );
 
-  switch (templateConfig.postInstalls) {
+  switch (template_config.post_installs) {
   | [] => ()
-  | postInstalls =>
+  | post_installs =>
     List.iter(
-      postInstalls,
+      post_installs,
       el => {
         switch (el.description) {
         | Some(description) => Console.log(<Pastel> description </Pastel>)
@@ -112,7 +114,7 @@ let generate = (~useDefaults=false, source: Source.t, destination: string) => {
     </Pastel>,
   );
 
-  switch (docConfig.commands) {
+  switch (doc_config.commands) {
   | [] => ()
   | commands =>
     Console.log(
@@ -142,7 +144,7 @@ let generate = (~useDefaults=false, source: Source.t, destination: string) => {
   /* Remove spin configuration file from the generated project */
   Utils.Filename.rm([Utils.Filename.concat(destination, "spin")]);
   Config_file_project.save(
-    {models, source: Source.toString(source)},
+    {models, source: Source.to_string(source)},
     ~destination,
   );
 };

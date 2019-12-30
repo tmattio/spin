@@ -8,7 +8,7 @@ module type Config_file = {
   let cst_of_sexp: Sexp.t => cst;
   let t_of_cst:
     (
-      ~useDefaults: bool,
+      ~use_defaults: bool,
       ~models: list((string, Jingoo.Jg_types.tvalue)),
       list(cst)
     ) =>
@@ -24,11 +24,11 @@ module Make = (C: Config_file) => {
 
   let path = dirname => Utils.Filename.concat(dirname, C.path);
 
-  let parse = (~useDefaults=false, ~models=[], dirname: string): t => {
+  let parse = (~use_defaults=false, ~models=[], dirname: string): t => {
     path(dirname)
     |> Sexp.load_sexps
     |> List.map(~f=C.cst_of_sexp)
-    |> C.t_of_cst(~useDefaults, ~models);
+    |> C.t_of_cst(~use_defaults, ~models);
   };
 
   let parse_doc = (dirname: string): doc => {

@@ -1,4 +1,4 @@
-let getProjectRoot = () => {
+let get_project_root = () => {
   let root =
     Config_file.Project.path
     |> Utils.Sys.get_parent_file
@@ -6,23 +6,23 @@ let getProjectRoot = () => {
 
   switch (root) {
   | Some(f) => f
-  | None => raise(Errors.CurrentDirectoryNotASpinProject)
+  | None => raise(Errors.Current_directory_not_a_spin_project)
   };
 };
 
-let getProjectConfig = () => {
-  getProjectRoot() |> Config_file.Project.parse;
+let get_project_config = () => {
+  get_project_root() |> Config_file.Project.parse;
 };
 
-let getProjectDoc = () => {
-  getProjectRoot() |> Config_file.Project.parse_doc;
+let get_project_doc = () => {
+  get_project_root() |> Config_file.Project.parse_doc;
 };
 
-let listGenerators = (source: Source.t) => {
-  let localPath = Source.toLocalPath(source);
-  let generatorsDir = Utils.Filename.concat(localPath, "generators");
+let list = (source: Source.t) => {
+  let localPath = Source.to_local_path(source);
+  let generators_dir = Utils.Filename.concat(localPath, "generators");
 
-  Utils.Sys.ls_dir(~recursive=false, generatorsDir)
+  Utils.Sys.ls_dir(~recursive=false, generators_dir)
   |> List.filter(~f=el => {
        Utils.Filename.test(
          Utils.Filename.Exists,
@@ -31,8 +31,8 @@ let listGenerators = (source: Source.t) => {
      });
 };
 
-let getGenerator = (name, ~source: Source.t) => {
-  let generators = listGenerators(source);
+let get_generator = (name, ~source: Source.t) => {
+  let generators = list(source);
   switch (
     List.find(
       generators,
@@ -43,11 +43,11 @@ let getGenerator = (name, ~source: Source.t) => {
     )
   ) {
   | Some(v) => v
-  | None => raise(Errors.GeneratorDoesNotExist(name))
+  | None => raise(Errors.Generator_does_not_exist(name))
   };
 };
 
-let generateFile = (~destination: string, ~models, source) => {
+let generate_file = (~destination: string, ~models, source) => {
   let source = Jg_wrapper.from_string(source, ~models);
   let destination = Jg_wrapper.from_string(destination, ~models);
 
@@ -59,24 +59,24 @@ let generateFile = (~destination: string, ~models, source) => {
   Stdio.Out_channel.write_all(destination, ~data);
 };
 
-let generate = (~useDefaults=false, ~source: Source.t, name) => {
-  let generatorPath = getGenerator(name, ~source);
-  let projectRoot = getProjectRoot();
-  let projectConfig = getProjectConfig();
+let generate = (~use_defaults=false, ~source: Source.t, name) => {
+  let generator_path = get_generator(name, ~source);
+  let project_root = get_project_root();
+  let project_config = get_project_config();
   let generator =
     Config_file.Generators.parse(
-      generatorPath,
-      ~useDefaults,
-      ~models=projectConfig.models,
+      generator_path,
+      ~use_defaults,
+      ~models=project_config.models,
     );
 
   let rec loop =
     fun
     | [] => ()
     | [(f: Config_file_generators.file), ...fs] => {
-        generateFile(
-          Utils.Filename.concat(generatorPath, f.source),
-          ~destination=Utils.Filename.concat(projectRoot, f.destination),
+        generate_file(
+          Utils.Filename.concat(generator_path, f.source),
+          ~destination=Utils.Filename.concat(project_root, f.destination),
           ~models=generator.models,
         );
         loop(fs);

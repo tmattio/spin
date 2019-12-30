@@ -10,9 +10,9 @@ type file = {
 type cst =
   | Name(string)
   | Description(string)
-  | Cfg_string(Config_file_common.stringCfg)
-  | Cfg_list(Config_file_common.listCfg)
-  | Cfg_confirm(Config_file_common.confirmCfg)
+  | Cfg_string(Config_file_common.string_cfg)
+  | Cfg_list(Config_file_common.list_cfg)
+  | Cfg_confirm(Config_file_common.confirm_cfg)
   | File(file);
 
 type t = {
@@ -32,7 +32,7 @@ let path = "spin";
 let doc_of_cst = (cst: list(cst)): doc => {
   {
     name:
-      Config_file_cst_utils.getUniqueExn(
+      Config_file_cst_utils.get_unique_exn(
         cst,
         ~f=
           fun
@@ -40,7 +40,7 @@ let doc_of_cst = (cst: list(cst)): doc => {
           | _ => None,
       ),
     description:
-      Config_file_cst_utils.getUniqueExn(
+      Config_file_cst_utils.get_unique_exn(
         cst,
         ~f=
           fun
@@ -50,7 +50,7 @@ let doc_of_cst = (cst: list(cst)): doc => {
   };
 };
 
-let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
+let t_of_cst = (~use_defaults, ~models, cst: list(cst)): t => {
   let newModels =
     Config_file_cst_utils.get(
       cst,
@@ -61,7 +61,7 @@ let t_of_cst = (~useDefaults, ~models, cst: list(cst)): t => {
         | Cfg_confirm(v) => Some(Config_file_common.Confirm(v))
         | _ => None,
     )
-    |> Config_file_common.promptConfigs(~useDefaults);
+    |> Config_file_common.prompt_configs(~use_defaults);
 
   let models = List.concat([models, newModels]);
 
