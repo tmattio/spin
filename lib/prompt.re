@@ -17,7 +17,7 @@ let rec read =
   };
 
   Stdio.Out_channel.flush(Stdio.stdout);
-  let userInput = Stdio.In_channel.input_line(Stdio.stdin);
+  let user_input = Stdio.In_channel.input_line(Stdio.stdin);
 
   let validate = s => {
     let s = String.strip(s);
@@ -30,10 +30,10 @@ let rec read =
       : validate(s);
   };
 
-  switch (userInput) {
+  switch (user_input) {
   | None => read(prompt, ~validate, ~default?)
-  | Some(userInput) =>
-    switch (validate(userInput)) {
+  | Some(user_input) =>
+    switch (validate(user_input)) {
     | Ok(result) => result
     | Error(error) =>
       Stdio.Out_channel.print_endline(
@@ -61,7 +61,7 @@ let number =
     (
       ~validate: option('a => Result.t('a, string))=?,
       ~default: option(('a, string))=?,
-      ~convFn: string => 'a,
+      ~conv_fn: string => 'a,
       ~bold: bool=true,
       ~error: string,
       prompt: string,
@@ -69,7 +69,7 @@ let number =
     : 'a => {
   let validate = s => {
     let result =
-      try(Result.Ok(convFn(s))) {
+      try(Result.Ok(conv_fn(s))) {
       | _ => Result.Error(error)
       };
 
@@ -94,7 +94,7 @@ let int =
     Option.map(default, ~f=default => (default, Int.to_string(default)));
   number(
     prompt,
-    ~convFn=Int.of_string,
+    ~conv_fn=Int.of_string,
     ~error="Enter an integer.",
     ~default?,
     ~validate?,
@@ -114,7 +114,7 @@ let float =
     Option.map(default, ~f=default => (default, Float.to_string(default)));
   number(
     prompt,
-    ~convFn=Float.of_string,
+    ~conv_fn=Float.of_string,
     ~error="Enter a decimal.",
     ~default?,
     ~validate?,

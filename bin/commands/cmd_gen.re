@@ -24,10 +24,10 @@ let run = (~generator, ()) => {
       },
     );
 
-  | Some(generatorName) =>
+  | Some(generator_name) =>
     let config = Generators.get_project_config();
     let source = Source.of_string(config.source);
-    Generators.generate(generatorName, ~source);
+    Generators.generate(generator_name, ~source);
   };
 
   Lwt.return();

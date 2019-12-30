@@ -1,6 +1,6 @@
 open Jingoo;
 
-let ensureEmptyDir = (d: string) =>
+let ensure_dir_is_empty = (d: string) =>
   if (Utils.Filename.test(Utils.Filename.Exists, d)) {
     if (Utils.Filename.test(Utils.Filename.Is_file, d)) {
       raise(
@@ -13,7 +13,7 @@ let ensureEmptyDir = (d: string) =>
     };
   };
 
-let generateFile =
+let generate_file =
     (
       ~source_directory: string,
       ~destination_directory: string,
@@ -38,7 +38,7 @@ let generateFile =
 };
 
 let generate = (~use_defaults=false, source: Source.t, destination: string) => {
-  let () = ensureEmptyDir(destination);
+  let () = ensure_dir_is_empty(destination);
 
   let origin = Source.to_local_path(source);
   let template_path = Utils.Filename.concat(origin, "template");
@@ -50,7 +50,7 @@ let generate = (~use_defaults=false, source: Source.t, destination: string) => {
     fun
     | [] => ()
     | [f, ...fs] => {
-        generateFile(
+        generate_file(
           f,
           ~source_directory=template_path,
           ~destination_directory=destination,

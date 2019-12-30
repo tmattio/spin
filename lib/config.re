@@ -16,8 +16,8 @@ module EnvVar =
          },
        ) => {
   include M;
-  let optValue = Sys.getenv(name) |> Option.map(~f=parse);
-  let get_opt = () => optValue;
+  let opt_value = Sys.getenv(name) |> Option.map(~f=parse);
+  let get_opt = () => opt_value;
   let get = () => get_opt() |> Option.value(~default);
   let doc_info = {name, doc, default: unparse(default)};
 };
@@ -45,8 +45,8 @@ module SPIN_CACHE_DIR =
         | "Unix" => getenv_exn("HOME")
         | _ => getenv_exn("APPDATA")
         };
-      let cacheDir = Utils.Filename.concat(home, ".cache");
-      Utils.Filename.concat(cacheDir, "spin");
+      let cache_dir = Utils.Filename.concat(home, ".cache");
+      Utils.Filename.concat(cache_dir, "spin");
     };
   });
 
