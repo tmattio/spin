@@ -22,41 +22,43 @@ describe("Test Template", ({test, describe, _}) => {
   });
 
   test("generate configuration", ({expect, _}) => {
-    let dest = Test_utils.get_tempdir("generate_config");
+    let dest = Test_utils.get_tempdir("generate_configuration");
     let source =
       Source.LocalDir(
         Utils.Filename.join(["test", "resources", "sample_template"]),
       );
+
     Template.generate(source, dest, ~useDefaults=true);
 
     let generatedConfContent =
       Sexplib.Sexp.load_sexps(Utils.Filename.join([dest, ".spin"]));
-    expect.list([
-      Sexp.List([
-        Sexp.Atom("Source"),
-        Sexp.Atom(
-          Utils.Filename.join(["test", "resources", "sample_template"]),
-        ),
-      ]),
-      Sexp.List([
-        Sexp.Atom("Cfg_str"),
-        Sexp.Atom("dirname"),
-        Sexp.Atom("dirname"),
-      ]),
-      Sexp.List([
-        Sexp.Atom("Cfg_str"),
-        Sexp.Atom("filename"),
-        Sexp.Atom("filename"),
-      ]),
-      Sexp.List([
-        Sexp.Atom("Cfg_str"),
-        Sexp.Atom("content"),
-        Sexp.Atom("Hello World!"),
-      ]),
-    ]).
-      toEqual(
-      generatedConfContent,
-    );
+
+    let expected =
+      expect.list([
+        Sexp.List([
+          Sexp.Atom("Source"),
+          Sexp.Atom(
+            Utils.Filename.join(["test", "resources", "sample_template"]),
+          ),
+        ]),
+        Sexp.List([
+          Sexp.Atom("Cfg_str"),
+          Sexp.Atom("dirname"),
+          Sexp.Atom("dirname"),
+        ]),
+        Sexp.List([
+          Sexp.Atom("Cfg_str"),
+          Sexp.Atom("filename"),
+          Sexp.Atom("filename"),
+        ]),
+        Sexp.List([
+          Sexp.Atom("Cfg_str"),
+          Sexp.Atom("content"),
+          Sexp.Atom("Hello World!"),
+        ]),
+      ]);
+
+    expected.toEqual(generatedConfContent);
   });
 
   test("ignore files", ({expect, _}) => {
@@ -67,12 +69,20 @@ describe("Test Template", ({test, describe, _}) => {
       );
     Template.generate(source, dest, ~useDefaults=true);
 
-    let generatedFiles = Utils.Sys.ls_dir(dest);
-    let expected = [
-      Utils.Filename.concat(dest, ".spin"),
-      Utils.Filename.concat(dest, "this_one_matches_but_condition_is_false"),
-      Utils.Filename.concat(dest, "f.dont_ignore_me"),
-    ];
-    expect.list(expected).toEqual(generatedFiles);
+    let generatedFiles =
+      Utils.Sys.ls_dir(dest) |> List.sort(~compare=String.compare);
+    let expected =
+      expect.list(
+        [
+          Utils.Filename.concat(dest, ".spin"),
+          Utils.Filename.concat(
+            dest,
+            "this_one_matches_but_condition_is_false",
+          ),
+          Utils.Filename.concat(dest, "f.dont_ignore_me"),
+        ]
+        |> List.sort(~compare=String.compare),
+      );
+    expected.toEqual(generatedFiles);
   });
 });

@@ -1,7 +1,7 @@
-open Spin;
+/** Initialize the test framework.
 
-let tmpDir = Utils.Filename.concat(Caml.Sys.getcwd(), ".tmp");
-
+    Here we are specifying where snapshots should be stored as well as
+    the root directory of your project for the formatting of terminal output. */
 include Rely.Make({
   let config =
     Rely.TestFrameworkConfig.initialize({
@@ -9,16 +9,3 @@ include Rely.Make({
       projectDir: "",
     });
 });
-
-let run = args => {
-  let arguments =
-    args |> Array.append([|"./_build/default/bin/spin_app.exe"|]);
-  let env =
-    Unix.environment()
-    |> Array.append([|
-         Printf.sprintf("%s=%s", Spin.Config.SPIN_CACHE_DIR.name, tmpDir),
-       |]);
-  let result =
-    Lwt_process.pread_chars(~env, ("", arguments)) |> Lwt_stream.to_string;
-  Lwt_main.run(result);
-};
