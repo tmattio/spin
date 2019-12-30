@@ -4,6 +4,7 @@ let path =
 let branch = "next";
 
 let url = "git@github.com:tmattio/spin-templates.git";
+
 let ensureDownloaded = () =>
   if (Utils.Filename.test(Utils.Filename.Is_dir, path)) {
     Console.log(<Pastel> "📡  Updating official templates." </Pastel>);

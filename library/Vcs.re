@@ -14,7 +14,6 @@ let gitClone = (~destination, ~branch=?, repo) => {
       "git",
       ~args,
       ~stdout=Lwt_process.(`Dev_null),
-      ~stderr=Lwt_process.(`Dev_null),
     );
   try(result |> Lwt.return) {
   | _ => Lwt.fail_with("Error while cloning the repository")
@@ -37,7 +36,6 @@ let gitPull = repo => {
       "git",
       ~args=[|"-C", repo, "pull"|],
       ~stdout=Lwt_process.(`Dev_null),
-      ~stderr=Lwt_process.(`Dev_null),
     );
   try(result |> Lwt.return) {
   | _ => Lwt.fail_with("Error while pulling the repository")
