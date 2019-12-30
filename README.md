@@ -70,9 +70,13 @@ Will create a new React application in the directory `./my_app/`
 
 ## Usage
 
-### `spin new TEMPLATE [PATH]`
+### `spin new [TEMPLATE] [PATH]`
 
 Create a new ReasonML/Ocaml project from a template.
+
+PATH defaults to the current working directory.
+
+Using `spin new` alone will generate a minimal native project in the current working directory.
 
 ### `spin ls`
 
@@ -92,11 +96,43 @@ We would love your help improving Spin!
 
 ### Developing
 
+You need Esy, you can install the latest version from [npm](https://npmjs.com):
+
 ```bash
-npm install -g esy
-git clone git@github.com:tmattio/spin.git
-esy install
-esy build
+yarn global add esy@latest
+# Or
+npm install -g esy@latest
+```
+
+> NOTE: Make sure `esy --version` returns at least `0.5.8` for this project to build.
+
+Then run the `esy` command from this project root to install and build depenencies.
+
+```bash
+esy
+```
+
+Now you can run your editor within the environment (which also includes merlin):
+
+```bash
+esy $EDITOR
+esy vim
+```
+
+Alternatively you can try [vim-reasonml](https://github.com/jordwalke/vim-reasonml)
+which loads esy project environments automatically.
+
+After you make some changes to source code, you can re-run project's build
+again with the same simple `esy` command.
+
+```bash
+esy
+```
+
+This project uses [Dune](https://dune.build/) as a build system, and Pesy to generate Dune's configuration files. If you change the `buildDirs` configuration in `package.json`, you will have to regenerate the configuration files using:
+
+```bash
+esy pesy
 ```
 
 ### Running Binary
@@ -104,14 +140,43 @@ esy build
 After building the project, you can run the main binary that is produced.
 
 ```bash
-esy x spin.exe
+esy start
 ```
 
 ### Running Tests
 
+You can test compiled executable (runs `scripts.tests` specified in `package.json`):
+
 ```bash
-# Runs the "test" command in `package.json`.
 esy test
+```
+
+### Building documentation
+
+Documentation for the libraries in the project can be generated with:
+
+```bash
+esy doc
+open-cli $(esy doc-path)
+```
+
+This assumes you have a command like [open-cli](https://github.com/sindresorhus/open-cli) installed on your system.
+
+> NOTE: On macOS, you can use the system command `open`, for instance `open $(esy doc-path)`
+
+### Creating release builds
+
+`esy` allows creating prebuilt binary packages for your current platform, with no dependencies:
+
+```bash
+esy release
+```
+
+This creates a directory `_release` containing a ready-to-publish npm package. You can go to this directory and execute `npm publish`:
+
+```bash
+cd _release
+npm publish
 ```
 
 ### Repository Structure
@@ -126,18 +191,18 @@ The following snippet describes Spin's repository structure.
 ├── docs/
 |   End-user documentation in Markdown format.
 │
-├── executable/
-|   Source for the spin executable's interface, its subcommands and the man page content.
+├── bin/
+|   Source for Spin's binary. This links to the library defined in `lib/`.
 │
-├── library/
-|   Source for Spin's library. Contains most of spin's internal functionnalities.
+├── lib/
+|   Source for Spin's library. Contains Spin's core functionnalities.
 │
 ├── test/
 |   Unit tests and integration tests for Spin.
 │
-├── dune
-|   Dune file used to define project-wide parameters.
-│
+├── test_runner/
+|   Source for the test runner's binary.
+|
 ├── dune-project
 |   Dune file used to mark the root of the project and define project-wide parameters.
 |   For the documentation of the syntax, see https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
@@ -160,7 +225,7 @@ The following snippet describes Spin's repository structure.
 - Add more templates
   - **data-science** - Data Science workflow.
   - **desktop** - Native UI application using Revery.
-  - **graphql-api** - HTTP server that serves a GraphQL API.
+  - **graphl-api** - HTTP server that serves a GraphQL API.
   - **rest-api** - HTTP server that serves a REST API.
   - **react-components** - React component library with Storybook.
   - **bs-bindings** - Bucklescript bindings to Javascript libraries.
