@@ -159,7 +159,7 @@ let list =
   let prompt = "Choose from (" ++ range ++ ")";
   let validate = i =>
     if (i >= 1 && i <= length) {
-      Result.Ok(i - 1);
+      Result.Ok(i);
     } else {
       Result.Error(
         "Choose a number between 1 and " ++ Int.to_string(length),
