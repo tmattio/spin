@@ -4,6 +4,9 @@
   "description": "OCaml and ReasonML project scaffolding.",
   "author": "Thibaut Mattio",
   "homepage": "https://github.com/tmattio/spin",
+  "publishConfig": {
+    "access": "public"
+  },
   "esy": {
     "build": "dune build --root . --only-packages spin",
     "buildDev": "pesy",
@@ -109,6 +112,7 @@
     "test": "esy x test-runner.exe",
     "watch": "esy dune build --root . --only-packages spin --watch",
     "doc": "esy dune build @doc",
-    "utop": "esy dune utop library -- -implicit-bindings"
+    "utop": "esy dune utop library -- -implicit-bindings",
+    "postinstall": "node scripts/release-postinstall.js"
   }
 }
