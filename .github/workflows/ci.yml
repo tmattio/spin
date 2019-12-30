@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
+        # TODO(tmattio) - Fix windows build
         # os: [ubuntu-latest, macos-latest, windows-latest]
         os: [ubuntu-latest, macos-latest]
     steps:
@@ -118,19 +119,25 @@ jobs:
           name: macos-latest
           path: binaries/darwin
 
-      - name: Download windows artifacts
-        if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
-        uses: actions/download-artifact@master
-        with:
-          name: windows-latest
-          path: binaries/windows
+      # TODO(tmattio) - Fix windows build
+      # - name: Download windows artifacts
+      #   if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
+      #   uses: actions/download-artifact@master
+      #   with:
+      #     name: windows-latest
+      #     path: binaries/windows
 
       - name: Move artifacts
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
+        # TODO(tmattio) - Fix windows build
+        # run: |
+        #   mkdir -p bin
+        #   mv binaries/darwin/spin.exe bin/spin-darwin-x64.exe
+        #   mv binaries/windows/spin.exe bin/spin-win-x64.exe
+        #   mv binaries/linux/spin.exe bin/spin-linux-x64.exe
         run: |
           mkdir -p bin
           mv binaries/darwin/spin.exe bin/spin-darwin-x64.exe
-          mv binaries/windows/spin.exe bin/spin-win-x64.exe
           mv binaries/linux/spin.exe bin/spin-linux-x64.exe
 
       - name: Upload spin-darwin-x64.exe to Github release 
@@ -145,17 +152,18 @@ jobs:
           asset_name: spin-darwin-x64.exe
           asset_content_type: binary/octet-stream
 
-      - name: Upload spin-win-x64.exe to Github release 
-        if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
-        id: upload-release-asset-win-x64
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: bin/spin-win-x64.exe
-          asset_name: spin-win-x64.exe
-          asset_content_type: binary/octet-stream
+      # TODO(tmattio) - Fix windows build
+      # - name: Upload spin-win-x64.exe to Github release 
+      #   if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
+      #   id: upload-release-asset-win-x64
+      #   uses: actions/upload-release-asset@v1.0.1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: bin/spin-win-x64.exe
+      #     asset_name: spin-win-x64.exe
+      #     asset_content_type: binary/octet-stream
 
       - name: Upload spin-linux-x64.exe to Github release 
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && success()
