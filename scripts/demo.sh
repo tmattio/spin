@@ -3,9 +3,9 @@
 set -e
 
 function type() {
-  blue=$(tput setaf 2)
+  green=$(tput setaf 2)
   normal=$(tput sgr0)
-  printf "%s" "${blue}➜  ${normal}"
+  printf "%s" "${green}➜  ${normal}"
   echo "$*" | pv -qL $((10 + (-2 + RANDOM % 5)))
 }
 
