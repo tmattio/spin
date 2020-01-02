@@ -44,7 +44,7 @@ download_spin() {
   if [ "$RELEASE" == "latest" ]; then
     URL=https://github.com/tmattio/spin/releases/latest/download/$FILENAME.zip
   else
-    URL=https://github.com/tmattio/spin/releases/download/$RELEASE/$FILENAME.zip
+    URL=https://github.com/tmattio/spin/releases/download/v$RELEASE/$FILENAME.zip
   fi
 
   DOWNLOAD_DIR=$(mktemp -d)
@@ -60,7 +60,7 @@ download_spin() {
   fi
 
   unzip -q "$DOWNLOAD_DIR/$FILENAME.zip" -d "$DOWNLOAD_DIR"
-  mv "$DOWNLOAD_DIR/$FILENAME/spin" "$INSTALL_DIR/spin"
+  mv "$DOWNLOAD_DIR/spin" "$INSTALL_DIR/spin"
   chmod u+x "$INSTALL_DIR/spin"
 }
 
