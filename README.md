@@ -53,11 +53,11 @@ Finally, another characteristic of Elixir and RoR ecosystems that I envy: all th
 brew install https://raw.githubusercontent.com/tmattio/spin/master/scripts/spin.rb
 ```
 
-### Using Chocolatey (Windows)
+<!-- ### Using Chocolatey (Windows)
 
 ```bash
 choco install
-```
+``` -->
 
 ### Using npm
 
