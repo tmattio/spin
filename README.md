@@ -50,7 +50,7 @@ Finally, another characteristic of Elixir and RoR ecosystems that I envy: all th
 ### Using Homebrew (macOS)
 
 ```bash
-brew install https://raw.githubusercontent.com/tmattio/spin/master/scripts/install.rb
+brew install https://raw.githubusercontent.com/tmattio/spin/master/scripts/spin.rb
 ```
 
 ### Using Chocolatey (Windows)
