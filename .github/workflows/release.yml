@@ -1,0 +1,160 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # TODO(tmattio) - Fix windows build
+        # os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Install esy
+        run: npm install -g @esy-nightly/esy@latest
+
+      - name: Install dependencies
+        run: esy install
+
+      - name: Build
+        run: esy build
+
+      - name: Run tests
+        run: esy test
+
+      - name: Get Esy binary path
+        id: esy_binary_path
+        shell: bash
+        run: |
+          # from https://stackoverflow.com/a/24848739/617787
+          s=$(pwd); d=$(dirname $(esy x which spin.exe));
+          while [ "${d#$s/}" == "${d}" ]
+          do s=$(dirname $s);b="../${b}"; done; 
+          ESY__BINARY_PATH=${b}${d#$s/}/spin.exe
+          echo "ESY__BINARY_PATH: $ESY__BINARY_PATH"
+          echo "##[set-output name=path;]$ESY__BINARY_PATH"
+
+      - name: Upload artifacts for ${{ matrix.os }}
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ matrix.os }}
+          path: ${{ steps.esy_binary_path.outputs.path }}
+
+  publish:
+    needs: build
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Download linux artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: ubuntu-latest
+          path: binaries/linux
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: macos-latest
+          path: binaries/darwin
+
+      # TODO(tmattio) - Fix windows build
+      # - name: Download windows artifacts
+      #   uses: actions/download-artifact@master
+      #   with:
+      #     name: windows-latest
+      #     path: binaries/windows
+
+      - name: Move artifacts for NPM
+        run: |
+          mkdir -p bin
+          cp binaries/darwin/spin.exe bin/spin-darwin-x64.exe
+          # TODO(tmattio) - Fix windows build
+          # cp binaries/windows/spin.exe bin/spin-win-x64.exe
+          cp binaries/linux/spin.exe bin/spin-linux-x64.exe
+
+      - name: Create archives for Github release
+        run: |
+          mkdir -p gh-release-darwin-x64
+          cp binaries/darwin/spin.exe gh-release-darwin-x64/spin
+          cd gh-release-darwin-x64
+          zip -r ../spin-darwin-x64.zip .
+          cd ..
+
+          # TODO(tmattio) - Fix windows build
+          # mkdir -p gh-release-win-x64
+          # cp binaries/darwin/spin.exe gh-release-win-x64/spin
+          # cd gh-release-win-x64
+          # zip -r ../spin-win-x64.zip .
+          # cd ..
+
+          mkdir -p gh-release-linux-x64
+          cp binaries/darwin/spin.exe gh-release-linux-x64/spin
+          cd gh-release-linux-x64
+          zip -r ../spin-linux-x64.zip .
+          cd ..
+
+      - name: Create Github release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload spin-darwin-x64.zip to Github release 
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: spin-darwin-x64.zip
+          asset_name: spin-darwin-x64.zip
+          asset_content_type: application/gzip
+
+      # TODO(tmattio) - Fix windows build
+      # - name: Upload spin-win-x64.zip to Github release 
+      #   uses: actions/upload-release-asset@v1.0.1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: spin-win-x64.zip
+      #     asset_name: spin-win-x64.zip
+      #     asset_content_type: application/gzip
+
+      - name: Upload spin-linux-x64.zip to Github release 
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: spin-linux-x64.zip
+          asset_name: spin-linux-x64.zip
+          asset_content_type: application/gzip
+
+      - name: Publish NPM package
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

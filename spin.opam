@@ -1,0 +1,15 @@
+opam-version: "2.0"
+name: "spin"
+description: ""
+synopsis: ""
+version: "0.1.0"
+maintainer: "Thibaut Mattio <thibaut.mattio@gmail.com>"
+authors: [
+  "Thibaut Mattio <thibaut.mattio@gmail.com>"
+]
+homepage: "https://github.com/tmattio/spin"
+bug-reports: "https://github.com/tmattio/spin/issues"
+license: "MIT"
+dev-repo: "git+https://github.com/tmattio/spin.git"
+build: []
+depends: []

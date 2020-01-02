@@ -1,5 +1,12 @@
 name: Continuous Integration
-on: [push]
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
@@ -7,12 +14,17 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        # TODO(tmattio) - Fix windows build
+        # os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
     steps:
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 10
       - uses: actions/checkout@v1
+
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
       - name: Cache esy dependencies
         uses: actions/cache@v1
         id: cache
@@ -23,20 +35,23 @@ jobs:
             ${{ runner.OS }}-build-${{ env.cache-name }}-
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
+
       - name: Install esy
-        run: npm install -g esy@latest
+        run: npm install -g @esy-nightly/esy@latest
+
       - name: Import dependencies
         if: steps.cache.outputs.cache-hit == 'true'
         run: esy import-build _export/*
+
       - name: Install dependencies
         run: esy install
-      - name: Update dune build config
-        run: esy pesy
+
       - name: Build
         run: esy build
+
       - name: Check formatting
         run: |
-          esy fmt
+          esy format
           if [ -n "$(git status --porcelain)" ]; then
             echo "There are differences:"
             git status --porcelain
@@ -47,9 +62,9 @@ jobs:
           fi
         # Run formatting check only once
         if: matrix.os == 'ubuntu-latest'
+
       - name: Run tests
         run: esy test
-      - name: Create a NPM release
-        run: esy release
+
       - name: Export dependencies
         run: esy export-dependencies
