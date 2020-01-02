@@ -123,7 +123,7 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload spin-darwin-x64.exe to Github release 
+      - name: Upload spin-darwin-x64.zip to Github release 
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -134,7 +134,7 @@ jobs:
           asset_content_type: application/gzip
 
       # TODO(tmattio) - Fix windows build
-      # - name: Upload spin-win-x64.exe to Github release 
+      # - name: Upload spin-win-x64.zip to Github release 
       #   uses: actions/upload-release-asset@v1.0.1
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -144,7 +144,7 @@ jobs:
       #     asset_name: spin-win-x64.zip
       #     asset_content_type: application/gzip
 
-      - name: Upload spin-linux-x64.exe to Github release 
+      - name: Upload spin-linux-x64.zip to Github release 
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
