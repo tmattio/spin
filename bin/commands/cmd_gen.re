@@ -43,11 +43,11 @@ let cmd = {
     );
   };
 
-  let runCommand = generator =>
+  let run_command = generator =>
     run(~generator) |> Errors.handle_errors |> Lwt_main.run;
 
   (
-    Term.(const(runCommand) $ generator),
+    Term.(const(run_command) $ generator),
     Term.info(
       "gen",
       ~doc,

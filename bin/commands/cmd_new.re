@@ -33,13 +33,13 @@ let cmd = {
     Arg.(value & flag & info(["default"], ~doc));
   };
 
-  let runCommand = (template, path, use_defaults) =>
+  let run_command = (template, path, use_defaults) =>
     run(~template, ~path, ~use_defaults)
     |> Errors.handle_errors
     |> Lwt_main.run;
 
   (
-    Term.(const(runCommand) $ template $ path $ use_defaults),
+    Term.(const(run_command) $ template $ path $ use_defaults),
     Term.info(
       "new",
       ~doc,

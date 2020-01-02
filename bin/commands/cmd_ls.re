@@ -22,10 +22,10 @@ let run = () => {
 
 let cmd = {
   let doc = "List the official spin templates";
-  let runCommand = () => run |> Errors.handle_errors |> Lwt_main.run;
+  let run_command = () => run |> Errors.handle_errors |> Lwt_main.run;
 
   (
-    Term.(app(const(runCommand), const())),
+    Term.(app(const(run_command), const())),
     Term.info(
       "ls",
       ~doc,
