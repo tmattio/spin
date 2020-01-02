@@ -95,16 +95,16 @@ jobs:
         run: |
           mkdir -p gh-release-darwin-x64
           cp binaries/darwin/spin.exe gh-release-darwin-x64/spin
-          zip -r spin-darwin-x64.zip gh-release-darwin-x64
+          zip -r spin-darwin-x64.zip gh-release-darwin-x64/*
 
           # TODO(tmattio) - Fix windows build
           # mkdir -p gh-release-win-x64
           # cp binaries/darwin/spin.exe gh-release-win-x64/spin
-          # zip -r spin-win-x64.zip gh-release-win-x64
+          # zip -r spin-win-x64.zip gh-release-win-x64/*
 
           mkdir -p gh-release-linux-x64
           cp binaries/darwin/spin.exe gh-release-linux-x64/spin
-          zip -r spin-linux-x64.zip gh-release-linux-x64
+          zip -r spin-linux-x64.zip gh-release-linux-x64/*
 
       - name: Create Github release
         id: create_release
