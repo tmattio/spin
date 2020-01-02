@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/tmattio/spin/actions">
-    <img src="https://github.com/tmattio/spin/workflows/CI/CD%20Pipeline/badge.svg" alt="Build Status" />
+    <img src="https://github.com/tmattio/spin/workflows/Continuous%20Integration/badge.svg" alt="Build Status" />
   </a>
   <a href="https://badge.fury.io/js/%40tmattio%2Fspin">
     <img src="https://badge.fury.io/js/%40tmattio%2Fspin.svg" alt="npm version" />
