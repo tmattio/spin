@@ -249,5 +249,10 @@ The following snippet describes Spin's repository structure.
   - **rest-api** - HTTP server that serves a REST API.
   - **react-components** - React component library with Storybook.
   - **bs-bindings** - Bucklescript bindings to Javascript libraries.
+- Support more CI/CD
+  - Gitlab
+  - Azure
+  - Google Build
+  - Bitbucket Pipeline
 - Create infrastructure of generated projects (i.e. generate terraform code)
 - Write tutorials for the templates (e.g. Add user authentication for graphql-api)
