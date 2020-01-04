@@ -41,7 +41,7 @@
 ### Using Homebrew (macOS)
 
 ```bash
-brew install https://raw.githubusercontent.com/tmattio/spin/master/scripts/spin.rb
+brew install https://raw.githubusercontent.com/tmattio/spin/master/scripts/tmattio-spin.rb
 ```
 
 <!-- ### Using Chocolatey (Windows)
@@ -61,7 +61,7 @@ npm -g install @tmattio/spin
 ### Using a script
 
 ```bash
-curl -fsSL https://github.com/tmattio/spin/raw/master/dist/install.sh | bash
+curl -fsSL https://github.com/tmattio/spin/raw/master/scripts/install.sh | bash
 ```
 
 ## Templates
