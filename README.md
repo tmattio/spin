@@ -89,13 +89,11 @@ Will create a new React application in the directory `./my_app/`
 
 ## Usage
 
-### `spin new [TEMPLATE] [PATH]`
+### `spin new TEMPLATE [PATH]`
 
 Create a new ReasonML/Ocaml project from a template.
 
-PATH defaults to the current working directory.
-
-Using `spin new` alone will generate a minimal native project in the current working directory.
+`PATH` defaults to the current working directory.
 
 ### `spin ls`
 

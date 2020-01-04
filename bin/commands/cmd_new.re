@@ -1,14 +1,9 @@
 open Cmdliner;
 open Spin;
 
-let run =
-    (~template: option(string), ~path: option(string), ~use_defaults, ()) => {
+let run = (~template: string, ~path: option(string), ~use_defaults, ()) => {
   let path = Option.value(path, ~default=".");
-  let source =
-    Option.map(template, Source.of_string)
-    |> Option.value(
-         ~default=Source.Git("https://github.com/tmattio/spin-minimal.git"),
-       );
+  let source = Source.of_string(template);
   Template.generate(source, path, ~use_defaults);
   Lwt.return();
 };
@@ -17,9 +12,11 @@ let cmd = {
   let doc = "Create a new ReasonML/Ocaml project from a template";
 
   let template = {
-    let doc = "The template to use to generate the project. Can be the name of an official template or a git repository.\nDefaults to the minimal official template.";
+    let doc = "The template to use to generate the project. Can be the name of an official template or a git repository.";
     Arg.(
-      value & pos(0, some(string), None) & info([], ~docv="TEMPLATE", ~doc)
+      required
+      & pos(0, some(string), None)
+      & info([], ~docv="TEMPLATE", ~doc)
     );
   };
 

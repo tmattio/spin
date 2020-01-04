@@ -1,8 +1,4 @@
 let git_clone = (~destination, ~branch=?, repo) => {
-  Console.log(
-    <Pastel> {"📡  Downloading " ++ repo ++ " to " ++ destination} </Pastel>,
-  );
-
   let args =
     switch (branch) {
     | Some(branch) => [|"clone", "-b", branch, repo, destination|]

@@ -11,6 +11,9 @@ let to_local_path: t => local =
   | Local_dir(s) => s
   | Git(s) => {
       let tempdir = Utils.Sys.get_tempdir("spin");
+      Console.log(
+        <Pastel> {"📡  Downloading " ++ s ++ " to " ++ tempdir} </Pastel>,
+      );
       let _ = Lwt_main.run(Vcs.git_clone(s, ~destination=tempdir));
       tempdir;
     };
