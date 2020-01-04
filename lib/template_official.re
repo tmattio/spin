@@ -1,9 +1,9 @@
 let path =
   Utils.Filename.concat(Config.SPIN_CACHE_DIR.get(), "spin-templates");
 
-let branch = "next";
+let branch = "master";
 
-let url = "git@github.com:tmattio/spin-templates.git";
+let url = "https://github.com/tmattio/spin-templates.git";
 
 let ensure_downloaded = () =>
   if (Utils.Filename.test(Utils.Filename.Is_dir, path)) {
