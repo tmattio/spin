@@ -1,5 +1,5 @@
 class Spin < Formula
-  VERSION = '0.4.0'
+  VERSION = '0.4.1'
   desc 'Project scaffolding tool and set of templates for Reason and OCaml.'
   homepage 'https://github.com/tmattio/spin'
   url "https://github.com/tmattio/spin/releases/download/v#{VERSION}/spin-darwin-x64.zip"
