@@ -107,7 +107,7 @@ jobs:
           # cd ..
 
           mkdir -p gh-release-linux-x64
-          cp binaries/darwin/spin.exe gh-release-linux-x64/spin
+          cp binaries/linux/spin.exe gh-release-linux-x64/spin
           cd gh-release-linux-x64
           zip -r ../spin-linux-x64.zip .
           cd ..
