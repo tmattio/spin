@@ -4,15 +4,14 @@
   "description": "Project scaffolding tool and set of templates for Reason and OCaml.",
   "author": "Thibaut Mattio",
   "homepage": "https://github.com/tmattio/spin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tmattio/spin.git"
+  },
   "esy": {
     "build": "dune build -p #{self.name}",
     "buildDev": "refmterr dune build -p #{self.name}",
-    "buildsInSource": "_build",
-    "release": {
-      "bin": {
-        "spin": "spin.exe"
-      }
-    }
+    "buildsInSource": "_build"
   },
   "buildDirs": {
     "test": {
@@ -109,7 +108,7 @@
     "@opam/merlin": "*",
     "@opam/odoc": "*",
     "@opam/utop": "*",
-    "@pesy/esy-pesy": "esy/pesy#5c6e1c3",
+    "@pesy/esy-pesy": "0.1.0-alpha.5",
     "refmterr": "*"
   },
   "resolutions": {

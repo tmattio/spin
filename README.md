@@ -23,7 +23,7 @@
 </p>
 
 <div align="center">
-  <img src="./docs/demo.svg" alt="Demo">
+  <img src="docs/demo.svg" alt="Demo">
 </div>
 
 ## Features

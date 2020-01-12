@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const package = require("../package.json");
 
-const filesToCopy = ["LICENSE", "README.md", path.join("docs", "demo.svg")];
+const filesToCopy = ["LICENSE", "README.md"];
 
 function exec(cmd) {
   console.log(`exec: ${cmd}`);
@@ -56,8 +56,9 @@ const pkgJson = {
   version: package.version,
   description: package.description,
   homepage: package.homepage,
+  repository: package.repository,
   scripts: {
-    postinstall: "node ./postinstall.js"
+    postinstall: "node postinstall.js"
   },
   bin: {
     spin: "spin.exe"

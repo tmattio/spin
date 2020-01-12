@@ -1,5 +1,5 @@
 {
-  "checksum": "d79c911b11ce4dbd6a8e84d4964fa286",
+  "checksum": "ef80b1027c9c4419f917104e03317351",
   "root": "spin@link-dev:./package.json",
   "node": {
     "spin@link-dev:./package.json": {
@@ -28,8 +28,7 @@
         "@esy-ocaml/reason@3.5.2@d41d8cd9"
       ],
       "devDependencies": [
-        "refmterr@3.3.0@d41d8cd9",
-        "@pesy/esy-pesy@github:esy/pesy#5c6e1c3@d41d8cd9",
+        "refmterr@3.3.0@d41d8cd9", "@pesy/esy-pesy@0.1.0-alpha.5@d41d8cd9",
         "@opam/utop@opam:2.4.3@5dd230c9", "@opam/odoc@opam:1.4.2@11b715bb",
         "@opam/merlin@opam:3.3.3@d653b06a"
       ]
@@ -140,13 +139,15 @@
       ],
       "devDependencies": []
     },
-    "@pesy/esy-pesy@github:esy/pesy#5c6e1c3@d41d8cd9": {
-      "id": "@pesy/esy-pesy@github:esy/pesy#5c6e1c3@d41d8cd9",
+    "@pesy/esy-pesy@0.1.0-alpha.5@d41d8cd9": {
+      "id": "@pesy/esy-pesy@0.1.0-alpha.5@d41d8cd9",
       "name": "@pesy/esy-pesy",
-      "version": "github:esy/pesy#5c6e1c3",
+      "version": "0.1.0-alpha.5",
       "source": {
         "type": "install",
-        "source": [ "github:esy/pesy#5c6e1c3" ]
+        "source": [
+          "archive:https://registry.npmjs.org/@pesy/esy-pesy/-/esy-pesy-0.1.0-alpha.5.tgz#sha1:281010866403cbb100a0223161b70bd2f79932c4"
+        ]
       },
       "overrides": [],
       "dependencies": [
@@ -159,7 +160,7 @@
         "@opam/cmdliner@opam:1.0.4@93208aac",
         "@esy-ocaml/reason@3.5.2@d41d8cd9"
       ],
-      "devDependencies": [ "ocaml@4.8.1000@d41d8cd9" ]
+      "devDependencies": []
     },
     "@opam/zed@opam:2.0.4@f9f7c80f": {
       "id": "@opam/zed@opam:2.0.4@f9f7c80f",
