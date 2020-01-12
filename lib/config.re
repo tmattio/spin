@@ -38,7 +38,7 @@ module SPIN_CACHE_DIR =
     let parse = Utils.Filename.ensure_trailing;
     let unparse = Utils.Filename.ensure_trailing;
     let name = "SPIN_CACHE_DIR";
-    let doc = "The directory where the templates and other cached data is stored.";
+    let doc = "The directory where the cached data is stored.";
     let default = {
       let home =
         switch (Caml.Sys.os_type) {
