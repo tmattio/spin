@@ -1,6 +1,6 @@
 {
   "name": "spin",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Project scaffolding tool and set of templates for Reason and OCaml.",
   "author": "Thibaut Mattio",
   "homepage": "https://github.com/tmattio/spin",
