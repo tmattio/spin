@@ -87,16 +87,16 @@ jobs:
         run: |
           cd _release/platform-darwin-x64
           zip -r ../../spin-darwin-x64.zip .
-          cd ..
+          cd ../..
 
           cd _release/platform-linux-x64
           zip -r ../../spin-linux-x64.zip .
-          cd ..
+          cd ../..
 
           # TODO(tmattio) - Fix windows build
           # cd _release/platform-windows-x64
           # zip -r ../../spin-windows-x64.zip .
-          # cd ..
+          # cd ../..
 
 
       - name: Create Github release
