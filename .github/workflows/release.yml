@@ -21,9 +21,38 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install esy
         run: npm install -g @esy-nightly/esy@latest
+
+      - name: Get esy store path
+        id: esy_cache_path
+        shell: bash
+        run: |
+          # COMPUTE THE ESY INSTALL CACHE LOCATION AHEAD OF TIME
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            THE_ESY__CACHE_INSTALL_PATH=$HOME/.esy/3_/i
+            THE_ESY__CACHE_INSTALL_PATH=$( cygpath --mixed --absolute "$THE_ESY__CACHE_INSTALL_PATH")
+          else
+            DESIRED_LEN="86"
+            HOME_ESY3="$HOME/.esy/3"
+            HOME_ESY3_LEN=${#HOME_ESY3}
+            NUM_UNDERS=$(echo "$(($DESIRED_LEN-$HOME_ESY3_LEN))")
+            UNDERS=$(printf "%-${NUM_UNDERS}s" "_")
+            UNDERS="${UNDERS// /_}"
+            THE_ESY__CACHE_INSTALL_PATH=${HOME_ESY3}${UNDERS}/i  
+          fi
+          echo "THE_ESY__CACHE_INSTALL_PATH: $THE_ESY__CACHE_INSTALL_PATH"
+          echo "##[set-output name=path;]$THE_ESY__CACHE_INSTALL_PATH"
+
+      - name: Restore esy cache
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.esy_cache_path.outputs.path }}
+          key: esy-${{ runner.OS }}-${{ hashFiles('**/index.json') }}
+          restore-keys: |
+            esy-${{ runner.OS }}-
 
       - name: Install dependencies
         run: esy install
@@ -64,6 +93,9 @@ jobs:
         with:
           node-version: 12.x
 
+      - name: Make NPM release skeleton
+        run: node scripts/release-make-skeleton.js
+
       - name: Download linux artifacts
         uses: actions/download-artifact@master
         with:
@@ -97,7 +129,6 @@ jobs:
           # cd _release/platform-windows-x64
           # zip -r ../../spin-windows-x64.zip .
           # cd ../..
-
 
       - name: Create Github release
         id: create_release
@@ -140,9 +171,6 @@ jobs:
       #     asset_path: spin-windows-x64.zip
       #     asset_name: spin-windows-x64.zip
       #     asset_content_type: application/gzip
-
-      - name: Make NPM release skeleton
-        run: node scripts/release-make-skeleton.js
 
       - name: Publish NPM package
         working-directory: ./_release
