@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.4.5] - 2020-11-01
+## [0.4.6] - 2020-11-01
 
 ### Changed
 
@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix a wrong exit code when calling a generator that does not exist.
 - Rename Homebrew formula to prevent duplication with existing `spin` formula.
 - Fix installation from NPM using `yarn`
+
+## ~~0.4.5 - 2020-11-0~~
+
+This release has been unpublished.
 
 ## ~~0.4.4 - 2020-11-0~~
 
@@ -57,8 +61,8 @@ This release has been unpublished.
 - Install with Homebrew.
 - Install with a bash script.
 
-[Unreleased]: https://github.com/tmattio/spin/compare/v0.4.5...HEAD
-[0.4.5]: https://github.com/tmattio/spin/compare/v0.4.2...v0.4.5
+[Unreleased]: https://github.com/tmattio/spin/compare/v0.4.6...HEAD
+[0.4.6]: https://github.com/tmattio/spin/compare/v0.4.2...v0.4.6
 [0.4.2]: https://github.com/tmattio/spin/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/tmattio/spin/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/tmattio/spin/releases/tag/v0.4.0

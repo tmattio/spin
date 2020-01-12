@@ -56,6 +56,7 @@ const pkgJson = {
   version: package.version,
   description: package.description,
   homepage: package.homepage,
+  license: package.license,
   repository: package.repository,
   scripts: {
     postinstall: "node postinstall.js"

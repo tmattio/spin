@@ -1,10 +1,10 @@
-<h1 align="center">
+<h1 style="text-align: center">
 	Spin
 </h1>
 
-<h4 align="center">Project scaffolding tool and set of templates for Reason and OCaml.</h4>
+<h4 style="text-align: center">Project scaffolding tool and set of templates for Reason and OCaml.</h4>
 
-<p align="center">
+<p style="text-align: center">
   <a href="https://github.com/tmattio/spin/actions">
     <img src="https://github.com/tmattio/spin/workflows/Continuous%20Integration/badge.svg" alt="Build Status" />
   </a>
@@ -13,7 +13,7 @@
   </a>
 </p>
 
-<p align="center">
+<p style="text-align: center">
   <a href="#features">Features</a> •
   <a href="#installation">Installation</a> •
   <a href="#templates">Templates</a> •
@@ -22,8 +22,8 @@
   <a href="#roadmap">Roadmap</a>
 </p>
 
-<div align="center">
-  <img src="docs/demo.svg" alt="Demo">
+<div style="text-align: center">
+  <img src="https://raw.githubusercontent.com/tmattio/spin/master/docs/demo.svg?sanitize=true" alt="Demo">
 </div>
 
 ## Features

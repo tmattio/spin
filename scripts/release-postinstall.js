@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const fs = require("fs");
+const path = require("path");
 const cp = require("child_process");
 const fs = require("fs");
 
@@ -10,7 +10,7 @@ const binariesToCopy = [
   "spin.exe"
 ];
 
-function arch() {
+function find_arch() {
   // The running binary is 64-bit, so the OS is clearly 64-bit.
   if (process.arch === "x64") {
     return "x64";
@@ -71,7 +71,7 @@ const copyPlatformBinaries = platformPath => {
   });
 };
 
-const arch = arch();
+const arch = find_arch();
 
 const platformPath = "platform-" + platform + "-" + arch;
 const supported = fs.existsSync(platformPath);

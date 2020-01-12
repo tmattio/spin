@@ -4,6 +4,7 @@
   "description": "Project scaffolding tool and set of templates for Reason and OCaml.",
   "author": "Thibaut Mattio",
   "homepage": "https://github.com/tmattio/spin",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/tmattio/spin.git"
