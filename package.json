@@ -11,6 +11,7 @@
     "spin": "bin/spin.exe"
   },
   "scripts": {
-    "preinstall": "node scripts/release-preinstall.js"
+    "preinstall": "node scripts/release-preinstall.js",
+    "postinstall": "yarn --check-files --ignore-scripts"
   }
 }
