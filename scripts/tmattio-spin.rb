@@ -1,4 +1,4 @@
-class Spin < Formula
+class TmattioSpin < Formula
   VERSION = '0.4.2'
   desc 'Project scaffolding tool and set of templates for Reason and OCaml.'
   homepage 'https://github.com/tmattio/spin'

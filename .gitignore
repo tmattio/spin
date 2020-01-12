@@ -1,12 +1,11 @@
 npm-debug.log
 .merlin
 yarn-error.log
-node_modules
 node_modules/
-_build
-_generated
-_release
-_export
+_build/
+_generated/
+_release/
+_export/
 _esy/
 spin.install
 .DS_Store

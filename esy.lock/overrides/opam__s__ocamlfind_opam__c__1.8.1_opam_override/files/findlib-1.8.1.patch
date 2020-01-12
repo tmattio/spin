@@ -463,7 +463,7 @@
 +++ ./src/findlib/Makefile
 @@ -90,6 +90,7 @@
  	cat findlib_config.mlp | \
- 	        $(SH) $(TOP)/tools/patch '@Config_file@' '$(OCAMLFIND_CONF)' | \
+ 	        $(SH) $(TOP)/tools/patch '@CONFIGFILE@' '$(OCAMLFIND_CONF)' | \
  	        $(SH) $(TOP)/tools/patch '@STDLIB@' '$(OCAML_CORE_STDLIB)' | \
 +			$(SH) $(TOP)/tools/patch '@EXEC_SUFFIX@' '$(EXEC_SUFFIX)' | \
  		sed -e 's;@AUTOLINK@;$(OCAML_AUTOLINK);g' \

@@ -1,6 +1,0 @@
-*
-!bin/*.exe
-!scripts/release-preinstall.js
-!LICENSE
-!package.json
-!README.md

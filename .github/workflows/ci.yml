@@ -17,13 +17,14 @@ jobs:
         # TODO(tmattio) - Fix windows build
         # os: [ubuntu-latest, macos-latest, windows-latest]
         os: [ubuntu-latest, macos-latest]
+        node-version: [12.x]
     steps:
       - uses: actions/checkout@v1
 
-      - name: Use Node.js 12.x
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: 12.x
+          node-version: ${{ matrix.node-version }}
 
       - name: Cache esy dependencies
         uses: actions/cache@v1
@@ -50,18 +51,7 @@ jobs:
         run: esy build
 
       - name: Check formatting
-        run: |
-          esy format
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "There are differences:"
-            git status --porcelain
-            echo "----"
-            echo ""
-            echo 'Please run `esy format` locally to fix the issues.'
-            exit 1
-          fi
-        # Run formatting check only once
-        if: matrix.os == 'ubuntu-latest'
+        run: esy dune build @fmt
 
       - name: Run tests
         run: esy test

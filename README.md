@@ -15,7 +15,6 @@
 
 <p align="center">
   <a href="#features">Features</a> •
-  <a href="#why">Why</a> •
   <a href="#installation">Installation</a> •
   <a href="#templates">Templates</a> •
   <a href="#usage">Usage</a> •
@@ -24,7 +23,7 @@
 </p>
 
 <div align="center">
-  <img src="./docs/demo.svg" alt="Demo">
+  <img src="docs/demo.svg" alt="Demo">
 </div>
 
 ## Features
@@ -37,20 +36,12 @@
 
 🔌 Establish a convention for projects organizations to make it easy to get into new projects.
 
-## Why?
-
-Reason and OCaml are by far my favourite languages! I've also worked on Elixir projects and saw with my own eyes how productive (and happy!) you can be with great toolings. I wish I had the best of both worlds: working with Reason and Ocaml and having a tooling worthy of Ruby-on-Rails.
-
-On another hand, I spend a large part of my time working on deployment pipelines, databases, micro-service communication, etc. It's hard to see how this aligns with the value of the product I work on, especially when it seems that I am doing the same things over and over again. I wanted to reduce the time I spend on this kind of thing.
-
-Finally, another characteristic of Elixir and RoR ecosystems that I envy: all the projects have the same structure and use the same conventions. This is very powerful, and they achieve this by having official real-world templates. I hope Reason and OCaml communities will come to this one day, but of course, the community adoption of Spin is outside of my control, all I can do is build great templates that people enjoy! 😁
-
 ## Installation
 
 ### Using Homebrew (macOS)
 
 ```bash
-brew install https://raw.githubusercontent.com/tmattio/spin/master/scripts/spin.rb
+brew install https://raw.githubusercontent.com/tmattio/spin/master/scripts/tmattio-spin.rb
 ```
 
 <!-- ### Using Chocolatey (Windows)
@@ -70,22 +61,34 @@ npm -g install @tmattio/spin
 ### Using a script
 
 ```bash
-curl -fsSL https://github.com/tmattio/spin/raw/master/dist/install.sh | bash
+curl -fsSL https://github.com/tmattio/spin/raw/master/scripts/install.sh | bash
 ```
 
 ## Templates
 
-Anyone can create new Spin templates, but we provide official templates for a lot of use cases.
-
-You can see the list of official templates [here](https://github.com/tmattio/spin-templates) or by using `spin ls`.
-
 You can generate a new project using a template with `spin new`. For instance:
 
 ```bash
-spin new react my_app
+spin new native my_app
 ```
 
-Will create a new React application in the directory `./my_app/`
+Will create a new native application in the directory `./my_app/`
+
+Anyone can create new Spin templates, but we provide official templates for a lot of use cases. The official templates for each type of applications are listed below.
+
+### Templates for native applications
+
+- **[native](https://github.com/tmattio/spin-templates/tree/master/native)** - A native project containing the minimum viable configurations.
+- **[cli](https://github.com/tmattio/spin-templates/tree/master/cli)** - Native command line interface.
+
+### Templates for web applications
+
+- **[react](https://github.com/tmattio/spin-templates/tree/master/react)** - React Single-Page-Application in Reason.
+
+### Templates for hybrid applications
+
+- **[lib](https://github.com/tmattio/spin-templates/tree/master/lib)** - A library to be used in native or web applications.
+- **[ppx](https://github.com/tmattio/spin-templates/tree/master/ppx)** - A PPX library to be used in native or web applications.
 
 ## Usage
 
@@ -246,5 +249,10 @@ The following snippet describes Spin's repository structure.
   - **rest-api** - HTTP server that serves a REST API.
   - **react-components** - React component library with Storybook.
   - **bs-bindings** - Bucklescript bindings to Javascript libraries.
+- Support more CI/CD
+  - Gitlab
+  - Azure
+  - Google Build
+  - Bitbucket Pipeline
 - Create infrastructure of generated projects (i.e. generate terraform code)
 - Write tutorials for the templates (e.g. Add user authentication for graphql-api)
