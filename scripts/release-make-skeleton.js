@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const package = require('../package.json');
 
+const filesToCopy = ["LICENSE", "README.md", path.join("docs", "demo.svg")];
+
 function exec(cmd) {
   console.log(`exec: ${cmd}`);
   return execSync(cmd).toString();
@@ -28,7 +30,6 @@ const dst = path.resolve(path.join(__dirname, '..', '_release'));
 removeSync(dst);
 mkdirpSync(dst);
 
-const filesToCopy = ['LICENSE', 'README.md'];
 
 for (const file of filesToCopy) {
   const p = path.join(dst, file);
