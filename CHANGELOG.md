@@ -19,11 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename Homebrew formula to prevent duplication with existing `spin` formula.
 - Fix installation from NPM using `yarn`
 
-## 0.4.4 - 2020-11-01
+## ~~0.4.4 - 2020-11-0~~
 
 This release has been unpublished.
 
-## 0.4.3 - 2020-11-01
+## ~~0.4.3 - 2020-11-01~~
 
 This release has been unpublished.
 
