@@ -50,18 +50,7 @@ jobs:
         run: esy build
 
       - name: Check formatting
-        run: |
-          esy format
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "There are differences:"
-            git status --porcelain
-            echo "----"
-            echo ""
-            echo 'Please run `esy format` locally to fix the issues.'
-            exit 1
-          fi
-        # Run formatting check only once
-        if: matrix.os == 'ubuntu-latest'
+        run: esy dune build @fmt
 
       - name: Run tests
         run: esy test
