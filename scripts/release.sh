@@ -39,9 +39,9 @@ if [ -d ".git" ]; then
   if [ -n "${changes}" ]; then
     echo "Please commit staged files prior to bumping"
     exit 1
-  # elif [ "${branch}" != "master" ]; then
-  #   echo "Please run the release script on master"
-  #   exit 1
+  elif [ "${branch}" != "master" ]; then
+    echo "Please run the release script on master"
+    exit 1
   else
     bump_all
     git add .
