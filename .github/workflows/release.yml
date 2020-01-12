@@ -173,7 +173,11 @@ jobs:
       #     asset_content_type: application/gzip
 
       - name: Publish NPM package
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
+          npm config set scope "@tmattio"
+          npm config list
+          npm publish --access public
         working-directory: ./_release
-        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
