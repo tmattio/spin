@@ -1,9 +1,9 @@
 // @flow
 
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
-const package = require('../package.json');
+const { execSync } = require("child_process");
+const fs = require("fs");
+const path = require("path");
+const package = require("../package.json");
 
 const filesToCopy = ["LICENSE", "README.md", path.join("docs", "demo.svg")];
 
@@ -24,12 +24,11 @@ function removeSync(p) {
   exec(`rm -rf "${p}"`);
 }
 
-const src = path.resolve(path.join(__dirname, '..'));
-const dst = path.resolve(path.join(__dirname, '..', '_release'));
+const src = path.resolve(path.join(__dirname, ".."));
+const dst = path.resolve(path.join(__dirname, "..", "_release"));
 
 removeSync(dst);
 mkdirpSync(dst);
-
 
 for (const file of filesToCopy) {
   const p = path.join(dst, file);
@@ -38,37 +37,37 @@ for (const file of filesToCopy) {
 }
 
 fs.copyFileSync(
-  path.join(src, 'scripts', 'release-postinstall.js'),
-  path.join(dst, 'postinstall.js')
+  path.join(src, "scripts", "release-postinstall.js"),
+  path.join(dst, "postinstall.js")
 );
 
 const filesToTouch = [
-  'spin.exe'
+  "spin.exe"
 ];
 
 for (const file of filesToTouch) {
   const p = path.join(dst, file);
   mkdirpSync(path.dirname(p));
-  fs.writeFileSync(p, '');
+  fs.writeFileSync(p, "");
 }
 
 const pkgJson = {
-  name: '@tmattio/spin',
+  name: "@tmattio/spin",
   version: package.version,
   description: package.description,
   homepage: package.homepage,
   scripts: {
-    postinstall: 'node ./postinstall.js'
+    postinstall: "node ./postinstall.js"
   },
   bin: {
-    spin: 'spin.exe'
+    spin: "spin.exe"
   },
   files: [
-    'platform-linux-x64/',
-    'platform-darwin-x64/',
-    'postinstall.js',
-    'spin.exe'
+    "platform-linux-x64/",
+    "platform-darwin-x64/",
+    "postinstall.js",
+    "spin.exe"
   ]
 };
 
-fs.writeFileSync(path.join(dst, 'package.json'), JSON.stringify(pkgJson, null, 2));
+fs.writeFileSync(path.join(dst, "package.json"), JSON.stringify(pkgJson, null, 2));
