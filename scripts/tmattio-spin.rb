@@ -12,6 +12,7 @@ class TmattioSpin < Formula
   end
 
   def install
+    mv "spin.exe", "spin"
     bin.install 'spin'
   end
 end
