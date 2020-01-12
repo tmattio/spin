@@ -18,7 +18,7 @@ function bump_all() {
   output=$(npm version "${release}" --no-git-tag-version)
   version=${output:1}
   bump_source "bin/package.re" "$version"
-  bump_brew "scripts/spin.rb" "$version"
+  bump_brew "scripts/tmattio-spin.rb" "$version"
 }
 
 function help() {
