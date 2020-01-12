@@ -119,7 +119,7 @@ let generate = (~use_defaults=false, source: Source.t, destination: string) => {
   | commands =>
     Console.log(
       <Pastel>
-        "Here are some example commands that you can run inside this directory:"
+        "\nHere are some example commands that you can run inside this directory:"
       </Pastel>,
     );
     List.iter(
