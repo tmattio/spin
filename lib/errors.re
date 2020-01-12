@@ -54,7 +54,7 @@ let handle_errors = fn =>
         "😱  This generator does not exist, you can list the generators of the current project with the command `spin gen`."
       </Pastel>,
     );
-    Caml.exit(205);
+    Caml.exit(206);
   | _ as exn =>
     Console.log(
       <Pastel color=Pastel.Red>
@@ -80,5 +80,5 @@ let all = () => [
     doc: "on project commands executed outside of a Spin project.",
     exit_code: 205,
   },
-  {doc: "on other exceptions.", exit_code: 299},
+  {doc: "on calling a generator that does not exist.", exit_code: 206},
 ];
