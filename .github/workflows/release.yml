@@ -145,8 +145,7 @@ jobs:
         run: node scripts/release-make-skeleton.js
 
       - name: Publish NPM package
-        run: |
-          cd _release
-          npm publish
+        working-directory: ./_release
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
