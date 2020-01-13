@@ -17,8 +17,7 @@ let get_tempdir = name => {
     This requires that the build artifacts are generated in the `_build` directory.
     Make sure the configuration `esy.buildsInSource` is set to `_build` in your `esy.json` file */
 let run = args => {
-  let arguments =
-    args |> Array.append([|"./_build/default/bin/spin_app.exe"|]);
+  let arguments = args |> Array.append([|"esy", "start"|]);
 
   let env =
     Unix.environment()
