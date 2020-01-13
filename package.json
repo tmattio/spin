@@ -11,8 +11,7 @@
   },
   "esy": {
     "build": "dune build -p #{self.name}",
-    "buildDev": "refmterr dune build -p #{self.name}",
-    "buildsInSource": "_build"
+    "buildDev": "refmterr dune build -p #{self.name}"
   },
   "buildDirs": {
     "test": {
@@ -119,9 +118,9 @@
     "start": "esy x spin.exe",
     "test": "esy x test-runner.exe",
     "doc": "esy dune build @doc",
+    "doc-path": "esy echo #{self.target_dir}/default/_doc/_html/index.html",
     "format": "esy dune build @fmt --auto-promote",
     "watch": "esy dune build -p #{self.name} --watch",
-    "doc-path": "esy echo #{self.target_dir}/default/_doc/_html/index.html",
     "utop": "esy dune utop lib -- -implicit-bindings"
   }
 }
