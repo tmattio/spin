@@ -186,17 +186,22 @@ This assumes you have a command like [open-cli](https://github.com/sindresorhus/
 
 ### Creating release builds
 
-`esy` allows creating prebuilt binary packages for your current platform, with no dependencies:
+To release prebuilt binaries to all platforms, we use Github Actions to build each binary individually.
+
+The binaries are then uploaded to a Github Release and NPM automatically.
+
+To trigger the Release workflow, you need to push a git tag to the repository.
+We provide a script that will bump the version of the project, tag the commit and push it to Github:
 
 ```bash
-esy release
+./scripts/release.sh
 ```
 
-This creates a directory `_release` containing a ready-to-publish npm package. You can go to this directory and execute `npm publish`:
+The script uses `npm version` to bump the project, so you can use the same argument.
+For instance, to release a new patch version, you can run:
 
 ```bash
-cd _release
-npm publish
+./scripts/release.sh patch
 ```
 
 ### Repository Structure
