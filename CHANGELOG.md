@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `post_install` stanza to run commands after installing a template now supports the `working_dir` stanza.
+  The command will be executed in the given working directory.
+
+### Changed
+
+- Removed unused `starting_command` stanza.
+- Removed unused `tutorial` stanza.
+
+### Fixed
+
+- Failure to parse a template file now prints an error with the file that cannot be parsed.
+
 ## [0.4.6] - 2020-11-01
 
 ### Changed
