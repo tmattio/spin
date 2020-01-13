@@ -5,25 +5,15 @@ type command = {
 };
 
 [@deriving of_sexp]
-type starting_command = {
-  command: string,
-  args: list(string),
-};
-
-[@deriving of_sexp]
 type cst =
   | Name(string)
   | Description(string)
-  | Command(command)
-  | Starting_command(starting_command)
-  | Tutorial(string);
+  | Command(command);
 
 type t = {
   name: string,
   description: string,
   commands: list(command),
-  starting_command: option(starting_command),
-  tutorial: option(string),
 };
 
 type doc = t;
@@ -53,22 +43,6 @@ let doc_of_cst = (cst: list(cst)): doc => {
       ~f=
         fun
         | Command(v) => Some(v)
-        | _ => None,
-    ),
-  starting_command:
-    Config_file_cst_utils.get_unique(
-      cst,
-      ~f=
-        fun
-        | Starting_command(v) => Some(v)
-        | _ => None,
-    ),
-  tutorial:
-    Config_file_cst_utils.get_unique(
-      cst,
-      ~f=
-        fun
-        | Tutorial(v) => Some(v)
         | _ => None,
     ),
 };

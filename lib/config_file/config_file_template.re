@@ -6,6 +6,8 @@ type post_install = {
   args: list(string),
   [@sexp.option]
   description: option(string),
+  [@sexp.option]
+  working_dir: option(string),
 };
 
 [@deriving of_sexp]

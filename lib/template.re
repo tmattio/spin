@@ -87,11 +87,17 @@ let generate = (~use_defaults=false, source: Source.t, destination: string) => {
         | None => ()
         };
 
+        let dir =
+          Option.map(el.working_dir, working_dir =>
+            Utils.Filename.concat(destination, working_dir)
+          )
+          |> Option.value(~default=destination);
+
         let _ =
           Utils.Sys.exec_in_dir(
             el.command,
             ~args=el.args |> Array.of_list,
-            ~dir=destination,
+            ~dir,
             ~stdout=`Dev_null,
           )
           |> Lwt_main.run;
