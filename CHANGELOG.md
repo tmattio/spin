@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.7] - 2020-01-13
+
 ### Added
 
 - `post_install` stanza to run commands after installing a template now supports the `working_dir` stanza.
@@ -21,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Failure to parse a template file now prints an error with the file that cannot be parsed.
 
-## [0.4.6] - 2020-11-01
+## [0.4.6] - 2020-01-11
 
 ### Changed
 
@@ -33,25 +35,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename Homebrew formula to prevent duplication with existing `spin` formula.
 - Fix installation from NPM using `yarn`
 
-## ~~0.4.5 - 2020-11-01~~
+## ~~0.4.5 - 2020-01-11~~
 
 This release has been unpublished.
 
-## ~~0.4.4 - 2020-11-01~~
+## ~~0.4.4 - 2020-01-11~~
 
 This release has been unpublished.
 
-## ~~0.4.3 - 2020-11-01~~
+## ~~0.4.3 - 2020-01-11~~
 
 This release has been unpublished.
 
-## [0.4.2] - 2020-06-01
+## [0.4.2] - 2020-01-06
 
 ### Fixed
 
 - Fix release artifacts on linux that was using darwin binaries.
 
-## [0.4.1] - 2020-04-01
+## [0.4.1] - 2020-01-04
 
 ### Changed
 
@@ -63,7 +65,7 @@ This release has been unpublished.
 - Use HTTPS instead of SSH to clone `spin-templates`.
 - Remove duplicated git clone logs.
 
-## [0.4.0] - 2020-02-01
+## [0.4.0] - 2020-01-02
 
 ### Added
 
@@ -75,7 +77,8 @@ This release has been unpublished.
 - Install with Homebrew.
 - Install with a bash script.
 
-[Unreleased]: https://github.com/tmattio/spin/compare/v0.4.6...HEAD
+[Unreleased]: https://github.com/tmattio/spin/compare/v0.4.7...HEAD
+[0.4.7]: https://github.com/tmattio/spin/compare/v0.4.26...v0.4.7
 [0.4.6]: https://github.com/tmattio/spin/compare/v0.4.2...v0.4.6
 [0.4.2]: https://github.com/tmattio/spin/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/tmattio/spin/compare/v0.4.0...v0.4.1
