@@ -4,6 +4,7 @@ exception Incorrect_template_name(string);
 exception Config_file_syntax_error;
 exception Current_directory_not_a_spin_project;
 exception Generator_does_not_exist(string);
+exception Cannot_parse_template_file(string);
 
 let handle_errors = fn =>
   try(fn()) {
@@ -55,6 +56,15 @@ let handle_errors = fn =>
       </Pastel>,
     );
     Caml.exit(206);
+  | Cannot_parse_template_file(file) =>
+    Console.error(
+      <Pastel color=Pastel.Red>
+        {"😱  An error occured while parsing "
+         ++ file
+         ++ ". Please, make sure this is a correct Jingoo template."}
+      </Pastel>,
+    );
+    Caml.exit(207);
   | _ as exn =>
     Console.log(
       <Pastel color=Pastel.Red>
@@ -81,4 +91,5 @@ let all = () => [
     exit_code: 205,
   },
   {doc: "on calling a generator that does not exist.", exit_code: 206},
+  {doc: "on failure to parse a template file.", exit_code: 207},
 ];

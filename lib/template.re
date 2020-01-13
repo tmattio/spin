@@ -20,8 +20,12 @@ let generate_file =
       ~models,
       source_file,
     ) => {
+  let content = Stdio.In_channel.read_all(source_file);
+
   let data =
-    Stdio.In_channel.read_all(source_file) |> Jg_wrapper.from_string(~models);
+    try(Jg_wrapper.from_string(content, ~models)) {
+    | _ => raise(Errors.Cannot_parse_template_file(source_file))
+    };
 
   let dest =
     source_file
