@@ -78,7 +78,7 @@ This release has been unpublished.
 - Install with a bash script.
 
 [Unreleased]: https://github.com/tmattio/spin/compare/v0.4.7...HEAD
-[0.4.7]: https://github.com/tmattio/spin/compare/v0.4.26...v0.4.7
+[0.4.7]: https://github.com/tmattio/spin/compare/v0.4.6...v0.4.7
 [0.4.6]: https://github.com/tmattio/spin/compare/v0.4.2...v0.4.6
 [0.4.2]: https://github.com/tmattio/spin/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/tmattio/spin/compare/v0.4.0...v0.4.1
