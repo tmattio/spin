@@ -92,4 +92,12 @@ let generate = (~use_defaults=false, ~source: Source.t, name) => {
   Console.log(
     <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
   );
+
+  switch (generator.message) {
+  | Some(message) =>
+    Console.log(
+      <Pastel color=Pastel.Yellow bold=true> {message ++ "\n"} </Pastel>,
+    )
+  | None => ()
+  };
 };

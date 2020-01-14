@@ -10,6 +10,7 @@ type file = {
 type cst =
   | Name(string)
   | Description(string)
+  | Message(string)
   | Cfg_string(Config_file_common.string_cfg)
   | Cfg_list(Config_file_common.list_cfg)
   | Cfg_confirm(Config_file_common.confirm_cfg)
@@ -18,6 +19,8 @@ type cst =
 type t = {
   name: string,
   description: string,
+  [@sexp.option]
+  message: option(string),
   models: list((string, Jg_types.tvalue)),
   files: list(file),
 };
@@ -83,5 +86,13 @@ let t_of_cst = (~use_defaults, ~models, cst: list(cst)): t => {
           | _ => None,
       ),
     models,
+    message:
+      Config_file_cst_utils.get_unique(
+        cst,
+        ~f=
+          fun
+          | Message(v) => Some(Jg_wrapper.from_string(v, ~models))
+          | _ => None,
+      ),
   };
 };
