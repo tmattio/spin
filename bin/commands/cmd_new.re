@@ -1,10 +1,26 @@
 open Cmdliner;
 open Spin;
 
-let run = (~template: string, ~path: option(string), ~use_defaults, ()) => {
+let run =
+    (
+      ~template: string,
+      ~path: option(string),
+      ~use_defaults,
+      ~ignore_config,
+      (),
+    ) => {
   let path = Option.value(path, ~default=".");
   let source = Source.of_string(template);
-  Template.generate(source, path, ~use_defaults);
+  let global_context = ignore_config ? None : Config.read_global_context();
+
+  Template.generate(
+    source,
+    path,
+    ~use_defaults,
+    ~ignore_config,
+    ~global_context,
+  );
+
   Lwt.return();
 };
 
@@ -26,17 +42,22 @@ let cmd = {
   };
 
   let use_defaults = {
-    let doc = "Use default values for the configuration. The user will be prompted only for configuration that don't have a default value";
+    let doc = "Use default values for the configuration.\nThe user will be prompted only for configuration that don't have a default value";
     Arg.(value & flag & info(["default"], ~doc));
   };
 
-  let run_command = (template, path, use_defaults) =>
-    run(~template, ~path, ~use_defaults)
+  let ignore_config = {
+    let doc = "Ignore the user configuration.\nThe user will be prompted for configurations even if they are present in their Spin configuration file.";
+    Arg.(value & flag & info(["ignore-config"], ~doc));
+  };
+
+  let run_command = (template, path, use_defaults, ignore_config) =>
+    run(~template, ~path, ~use_defaults, ~ignore_config)
     |> Errors.handle_errors
     |> Lwt_main.run;
 
   (
-    Term.(const(run_command) $ template $ path $ use_defaults),
+    Term.(const(run_command) $ template $ path $ use_defaults $ ignore_config),
     Term.info(
       "new",
       ~doc,

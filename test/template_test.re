@@ -52,18 +52,18 @@ describe("Test Template", ({test, describe, _}) => {
         ]),
         Sexp.List([
           Sexp.Atom("Cfg_str"),
-          Sexp.Atom("dirname"),
-          Sexp.Atom("dirname"),
-        ]),
-        Sexp.List([
-          Sexp.Atom("Cfg_str"),
-          Sexp.Atom("filename"),
-          Sexp.Atom("filename"),
-        ]),
-        Sexp.List([
-          Sexp.Atom("Cfg_str"),
           Sexp.Atom("content"),
           Sexp.Atom("Hello World!"),
+        ]),
+        Sexp.List([
+          Sexp.Atom("Cfg_str"),
+          Sexp.Atom("filename"),
+          Sexp.Atom("filename"),
+        ]),
+        Sexp.List([
+          Sexp.Atom("Cfg_str"),
+          Sexp.Atom("dirname"),
+          Sexp.Atom("dirname"),
         ]),
       ]);
 

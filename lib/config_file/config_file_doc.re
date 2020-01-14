@@ -47,4 +47,5 @@ let doc_of_cst = (cst: list(cst)): doc => {
     ),
 };
 
-let t_of_cst = (~use_defaults, ~models, cst: list(cst)) => doc_of_cst(cst);
+let t_of_cst = (~use_defaults, ~models, ~global_context, cst: list(cst)) =>
+  doc_of_cst(cst);

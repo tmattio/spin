@@ -10,6 +10,7 @@ module type Config_file = {
     (
       ~use_defaults: bool,
       ~models: list((string, Jingoo.Jg_types.tvalue)),
+      ~global_context: option(Global_context.t),
       list(cst)
     ) =>
     t;
@@ -24,11 +25,13 @@ module Make = (C: Config_file) => {
 
   let path = dirname => Utils.Filename.concat(dirname, C.path);
 
-  let parse = (~use_defaults=false, ~models=[], dirname: string): t => {
+  let parse =
+      (~use_defaults=false, ~models=[], ~global_context=None, dirname: string)
+      : t => {
     path(dirname)
     |> Sexp.load_sexps
     |> List.map(~f=C.cst_of_sexp)
-    |> C.t_of_cst(~use_defaults, ~models);
+    |> C.t_of_cst(~use_defaults, ~models, ~global_context);
   };
 
   let parse_doc = (dirname: string): doc => {
@@ -43,3 +46,4 @@ module Doc = Make(Config_file_doc);
 module Generators = Make(Config_file_generators);
 module Template = Make(Config_file_template);
 module Project = Make(Config_file_project);
+module User = Make(Config_file_user);
