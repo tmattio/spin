@@ -74,21 +74,18 @@ spin new native my_app
 
 Will create a new native application in the directory `./my_app/`
 
-Anyone can create new Spin templates, but we provide official templates for a lot of use cases. The official templates for each type of applications are listed below.
+Anyone can create new Spin templates, but we provide official templates for a lot of use cases. The [official templates](https://github.com/tmattio/spin-templates) for each type of applications are listed below.
 
 ### Templates for native applications
 
 - **[native](https://github.com/tmattio/spin-templates/tree/master/native)** - A native project containing the minimum viable configurations.
 - **[cli](https://github.com/tmattio/spin-templates/tree/master/cli)** - Native command line interface.
+- **[lib](https://github.com/tmattio/spin-templates/tree/master/lib)** - A library to be used in native or web applications.
+- **[ppx](https://github.com/tmattio/spin-templates/tree/master/ppx)** - A PPX library to be used in native or web applications.
 
 ### Templates for web applications
 
 - **[react](https://github.com/tmattio/spin-templates/tree/master/react)** - React Single-Page-Application in Reason.
-
-### Templates for hybrid applications
-
-- **[lib](https://github.com/tmattio/spin-templates/tree/master/lib)** - A library to be used in native or web applications.
-- **[ppx](https://github.com/tmattio/spin-templates/tree/master/ppx)** - A PPX library to be used in native or web applications.
 
 ## Usage
 
