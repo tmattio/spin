@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.4.8] - 2020-01-14
+
+### Added
+
+- Support user configuration file that stores general configuration such as the user's name, Github username, etc.
+- Provide a `config` subcommand that can be used to change the user configuration.
+- The generators can now print a message when the generation succeeds with the `message` stanza.
 
 ## [0.4.7] - 2020-01-13
 
@@ -77,7 +83,8 @@ This release has been unpublished.
 - Install with Homebrew.
 - Install with a bash script.
 
-[Unreleased]: https://github.com/tmattio/spin/compare/v0.4.7...HEAD
+[Unreleased]: https://github.com/tmattio/spin/compare/v0.4.8...HEAD
+[0.4.8]: https://github.com/tmattio/spin/compare/v0.4.7...v0.4.8
 [0.4.7]: https://github.com/tmattio/spin/compare/v0.4.6...v0.4.7
 [0.4.6]: https://github.com/tmattio/spin/compare/v0.4.2...v0.4.6
 [0.4.2]: https://github.com/tmattio/spin/compare/v0.4.1...v0.4.2
