@@ -13,13 +13,7 @@ let run =
   let source = Source.of_string(template);
   let global_context = ignore_config ? None : Config.read_global_context();
 
-  Template.generate(
-    source,
-    path,
-    ~use_defaults,
-    ~ignore_config,
-    ~global_context,
-  );
+  Template.generate(source, path, ~use_defaults, ~global_context);
 
   Lwt.return();
 };
