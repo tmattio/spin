@@ -96,6 +96,7 @@ Create a new ReasonML/Ocaml project from a template.
 `PATH` defaults to the current working directory.
 
 When `--default` is passed, the user will not be prompted for configurations that have a default value.
+
 When `--ignore-config` is passed, the configuration file will be ignored and the user will be prompted for all the configurations.
 
 ### `spin ls`
