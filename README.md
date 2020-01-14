@@ -74,7 +74,7 @@ spin new native my_app
 
 Will create a new native application in the directory `./my_app/`
 
-Anyone can create new Spin templates, but we provide official templates for a lot of use cases. The [official templates](https://github.com/tmattio/spin-templates) for each type of applications are listed below.
+Anyone can create new Spin templates, but we provide [official templates](https://github.com/tmattio/spin-templates) for a lot of use cases. The official templates for each type of applications are listed below.
 
 ### Templates for native applications
 
