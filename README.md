@@ -89,11 +89,15 @@ Anyone can create new Spin templates, but we provide [official templates](https:
 
 ## Usage
 
-### `spin new TEMPLATE [PATH]`
+### `spin new TEMPLATE [PATH] [--default] [--ignore-config]`
 
 Create a new ReasonML/Ocaml project from a template.
 
 `PATH` defaults to the current working directory.
+
+When `--default` is passed, the user will not be prompted for configurations that have a default value.
+
+When `--ignore-config` is passed, the configuration file will be ignored and the user will be prompted for all the configurations.
 
 ### `spin ls`
 
@@ -106,6 +110,12 @@ List the generators available for the current project.
 ### `spin gen GENERATOR`
 
 Generate a new component in the current project.
+
+### `spin config`
+
+Prompt the user for values that can be saved in the configuration file.
+
+If a value is present in the configuration file, it will not be prompted when generating a new project.
 
 ## Contributing
 

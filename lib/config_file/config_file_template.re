@@ -20,9 +20,9 @@ type ignore = {
 type cst =
   | Post_install(post_install)
   | Ignore(ignore)
-  | Cfg_string(Config_file_common.string_cfg)
-  | Cfg_list(Config_file_common.list_cfg)
-  | Cfg_confirm(Config_file_common.confirm_cfg);
+  | Cfg_string(Prompt_cfg.string_cfg)
+  | Cfg_list(Prompt_cfg.list_cfg)
+  | Cfg_confirm(Prompt_cfg.confirm_cfg);
 
 type t = {
   models: list((string, Jg_types.tvalue)),
@@ -36,18 +36,19 @@ type doc = unit;
 
 let doc_of_cst = (cst: list(cst)): doc => ();
 
-let t_of_cst = (~use_defaults, ~models, cst: list(cst)) => {
+let t_of_cst = (~use_defaults, ~models, ~global_context, cst: list(cst)) => {
+  /* TODO handle global context */
   let new_models =
     Config_file_cst_utils.get(
       cst,
       ~f=
         fun
-        | Cfg_string(v) => Some(Config_file_common.String(v))
-        | Cfg_list(v) => Some(Config_file_common.List(v))
-        | Cfg_confirm(v) => Some(Config_file_common.Confirm(v))
+        | Cfg_string(v) => Some(Prompt_cfg.String(v))
+        | Cfg_list(v) => Some(Prompt_cfg.List(v))
+        | Cfg_confirm(v) => Some(Prompt_cfg.Confirm(v))
         | _ => None,
     )
-    |> Config_file_common.prompt_configs(~use_defaults);
+    |> Prompt_cfg.prompt_configs(~global_context, ~use_defaults);
 
   let models = List.concat([models, new_models]);
 

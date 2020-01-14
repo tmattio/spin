@@ -10,14 +10,17 @@ type file = {
 type cst =
   | Name(string)
   | Description(string)
-  | Cfg_string(Config_file_common.string_cfg)
-  | Cfg_list(Config_file_common.list_cfg)
-  | Cfg_confirm(Config_file_common.confirm_cfg)
+  | Message(string)
+  | Cfg_string(Prompt_cfg.string_cfg)
+  | Cfg_list(Prompt_cfg.list_cfg)
+  | Cfg_confirm(Prompt_cfg.confirm_cfg)
   | File(file);
 
 type t = {
   name: string,
   description: string,
+  [@sexp.option]
+  message: option(string),
   models: list((string, Jg_types.tvalue)),
   files: list(file),
 };
@@ -50,18 +53,19 @@ let doc_of_cst = (cst: list(cst)): doc => {
   };
 };
 
-let t_of_cst = (~use_defaults, ~models, cst: list(cst)): t => {
+let t_of_cst = (~use_defaults, ~models, ~global_context, cst: list(cst)): t => {
+  /* TODO handle global context */
   let newModels =
     Config_file_cst_utils.get(
       cst,
       ~f=
         fun
-        | Cfg_string(v) => Some(Config_file_common.String(v))
-        | Cfg_list(v) => Some(Config_file_common.List(v))
-        | Cfg_confirm(v) => Some(Config_file_common.Confirm(v))
+        | Cfg_string(v) => Some(Prompt_cfg.String(v))
+        | Cfg_list(v) => Some(Prompt_cfg.List(v))
+        | Cfg_confirm(v) => Some(Prompt_cfg.Confirm(v))
         | _ => None,
     )
-    |> Config_file_common.prompt_configs(~use_defaults);
+    |> Prompt_cfg.prompt_configs(~global_context, ~use_defaults);
 
   let models = List.concat([models, newModels]);
 
@@ -83,5 +87,13 @@ let t_of_cst = (~use_defaults, ~models, cst: list(cst)): t => {
           | _ => None,
       ),
     models,
+    message:
+      Config_file_cst_utils.get_unique(
+        cst,
+        ~f=
+          fun
+          | Message(v) => Some(Jg_wrapper.from_string(v, ~models))
+          | _ => None,
+      ),
   };
 };

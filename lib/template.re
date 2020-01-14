@@ -13,6 +13,15 @@ let ensure_dir_is_empty = (d: string) =>
     };
   };
 
+let get_user_config = () => {
+  let filepath = Config.SPIN_CONFIG_DIR.get();
+  if (Utils.Filename.test(Utils.Filename.Exists, filepath)) {
+    Some(Config_file.User.parse(filepath));
+  } else {
+    None;
+  };
+};
+
 let generate_file =
     (
       ~source_directory: string,
@@ -41,12 +50,19 @@ let generate_file =
   Stdio.Out_channel.write_all(dest, ~data);
 };
 
-let generate = (~use_defaults=false, source: Source.t, destination: string) => {
+let generate =
+    (
+      ~use_defaults=false,
+      ~global_context=None,
+      source: Source.t,
+      destination: string,
+    ) => {
   let () = ensure_dir_is_empty(destination);
 
   let origin = Source.to_local_path(source);
   let template_path = Utils.Filename.concat(origin, "template");
-  let template_config = Config_file.Template.parse(origin, ~use_defaults);
+  let template_config =
+    Config_file.Template.parse(origin, ~use_defaults, ~global_context);
   let models = template_config.models;
   let doc_config = Config_file.Doc.parse(origin, ~models, ~use_defaults);
 
@@ -155,6 +171,6 @@ let generate = (~use_defaults=false, source: Source.t, destination: string) => {
   Utils.Filename.rm([Utils.Filename.concat(destination, "spin")]);
   Config_file_project.save(
     {models, source: Source.to_string(source)},
-    ~destination,
+    ~from_dir=destination,
   );
 };

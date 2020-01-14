@@ -27,6 +27,11 @@ let run = args => {
            Spin.Config.SPIN_CACHE_DIR.name,
            get_tempdir("cache_dir"),
          ),
+         Printf.sprintf(
+           "%s=%s",
+           Spin.Config.SPIN_CONFIG_DIR.name,
+           get_tempdir("config_dir"),
+         ),
        |]);
 
   Lwt_process.pread_chars(~env, ("", arguments))

@@ -31,7 +31,7 @@ let doc_of_cst = (cst: list(cst)): doc => {
   };
 };
 
-let t_of_cst = (~use_defaults, ~models, cst: list(cst)): t => {
+let t_of_cst = (~use_defaults, ~models, ~global_context, cst: list(cst)): t => {
   let newModels =
     Config_file_cst_utils.get(
       cst,
@@ -80,8 +80,11 @@ let cst_of_t = (~models, t: t): list(cst) => {
   [Source(t.source), ...cst];
 };
 
-let save = (data: t, ~destination: string) => {
-  let destination = Utils.Filename.concat(destination, path);
+let save = (data: t, ~from_dir: string) => {
+  let destination = Utils.Filename.concat(from_dir, path);
+  let parent_dir = Utils.Filename.dirname(destination);
+  Utils.Filename.mkdir(parent_dir, ~parent=true);
+
   let sexp_string =
     cst_of_t(data, ~models=data.models)
     |> List.map(~f=cst => cst |> sexp_of_cst |> Sexp.to_string)
