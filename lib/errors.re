@@ -5,6 +5,7 @@ exception Config_file_syntax_error;
 exception Current_directory_not_a_spin_project;
 exception Generator_does_not_exist(string);
 exception Cannot_parse_template_file(string);
+exception Generator_files_already_exist(string);
 
 let handle_errors = fn =>
   try(fn()) {
@@ -65,6 +66,15 @@ let handle_errors = fn =>
       </Pastel>,
     );
     Caml.exit(207);
+  | Generator_files_already_exist(file) =>
+    Console.error(
+      <Pastel color=Pastel.Red>
+        {"The generator wants to create the file "
+         ++ file
+         ++ ", but it already exist."}
+      </Pastel>,
+    );
+    Caml.exit(208);
   | _ as exn =>
     Console.log(
       <Pastel color=Pastel.Red>
@@ -92,4 +102,5 @@ let all = () => [
   },
   {doc: "on calling a generator that does not exist.", exit_code: 206},
   {doc: "on failure to parse a template file.", exit_code: 207},
+  {doc: "on generating a file that already exist.", exit_code: 208},
 ];

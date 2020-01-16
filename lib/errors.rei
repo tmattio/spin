@@ -5,6 +5,7 @@ exception Config_file_syntax_error;
 exception Current_directory_not_a_spin_project;
 exception Generator_does_not_exist(string);
 exception Cannot_parse_template_file(string);
+exception Generator_files_already_exist(string);
 
 let handle_errors: (unit => 'a) => 'a;
 
