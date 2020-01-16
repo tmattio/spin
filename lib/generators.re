@@ -47,6 +47,16 @@ let get_generator = (name, ~source: Source.t) => {
   };
 };
 
+let ensure_files_dont_exist = files => {
+  let existing_file =
+    List.find(files, ~f=el => Utils.Filename.test(Utils.Filename.Exists, el));
+
+  switch (existing_file) {
+  | Some(v) => raise(Errors.Generator_files_already_exist(v))
+  | None => ()
+  };
+};
+
 let generate_file = (~destination: string, ~models, source) => {
   let source = Jg_wrapper.from_string(source, ~models);
   let destination = Jg_wrapper.from_string(destination, ~models);
@@ -81,6 +91,12 @@ let generate = (~use_defaults=false, ~source: Source.t, name) => {
         );
         loop(fs);
       };
+
+  generator.files
+  |> List.map(~f=(el: Config_file_generators.file) =>
+       Utils.Filename.concat(project_root, el.destination)
+     )
+  |> ensure_files_dont_exist;
 
   Console.log(
     <Pastel>

@@ -6,6 +6,7 @@ exception Current_directory_not_a_spin_project;
 exception Generator_does_not_exist(string);
 exception Cannot_parse_template_file(string);
 exception Cannot_access_remote_repository;
+exception Generator_files_already_exist(string);
 
 let handle_errors = fn =>
   try(fn()) {
@@ -69,10 +70,19 @@ let handle_errors = fn =>
   | Cannot_access_remote_repository =>
     Console.error(
       <Pastel color=Pastel.Red>
-        "😱  Error while accessing remote repository, please check your Internet connection."
+        "😱  Error while accessing remote repository, please check your Internet connection."}
+        </Pastel>,
+      );
+      Caml.exit(208);
+  | Generator_files_already_exist(file) =>
+    Console.error(
+      <Pastel color=Pastel.Red>
+        {"The generator wants to create the file "
+         ++ file
+         ++ ", but it already exist."}
       </Pastel>,
     );
-    Caml.exit(208);
+    Caml.exit(209);
   | _ as exn =>
     Console.log(
       <Pastel color=Pastel.Red>
@@ -101,4 +111,5 @@ let all = () => [
   {doc: "on calling a generator that does not exist.", exit_code: 206},
   {doc: "on failure to parse a template file.", exit_code: 207},
   {doc: "on failure to access the remote repository", exit_code: 208},
+  {doc: "on generating a file that already exist.", exit_code: 209},
 ];
