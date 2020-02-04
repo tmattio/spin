@@ -10,19 +10,28 @@ let run = (~generator, ()) => {
       Generators.list(source)
       |> List.map(~f=Config_file.Generators.parse_doc);
 
-    Console.log(
-      <Pastel> "The generators available for this project are:\n" </Pastel>,
-    );
+    switch (generators) {
+    | [] =>
+      Console.log(
+        <Pastel> "There are no generator for this project." </Pastel>,
+      )
+    | _ =>
+      Console.log(
+        <Pastel> "The generators available for this project are:\n" </Pastel>,
+      );
 
-    List.iter(
-      generators,
-      ~f=el => {
-        Console.log(
-          <Pastel color=Pastel.Blue bold=true> {"    " ++ el.name} </Pastel>,
-        );
-        Console.log(<Pastel> {"      " ++ el.description ++ "\n"} </Pastel>);
-      },
-    );
+      List.iter(
+        generators,
+        ~f=el => {
+          Console.log(
+            <Pastel color=Pastel.Blue bold=true> {"    " ++ el.name} </Pastel>,
+          );
+          Console.log(
+            <Pastel> {"      " ++ el.description ++ "\n"} </Pastel>,
+          );
+        },
+      );
+    };
 
   | Some(generator_name) =>
     let config = Generators.get_project_config();
