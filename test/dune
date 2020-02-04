@@ -1,3 +1,4 @@
 (library (name spin_test) (public_name spin.test) (modules (:standard))
-    (libraries spin.lib rely.lib) (flags -open Base -linkall -g -w -9))
+    (libraries base lwt.unix spin.lib rely.lib)
+    (flags -open Base -linkall -g -w -9))
 (include_subdirs unqualified)

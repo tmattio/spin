@@ -16,6 +16,8 @@
   "buildDirs": {
     "test": {
       "require": [
+        "base",
+        "lwt.unix",
         "spin.lib",
         "rely.lib"
       ],
