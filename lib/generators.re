@@ -22,13 +22,17 @@ let list = (source: Source.t) => {
   let local_path = Source.to_local_path(source);
   let generators_dir = Utils.Filename.concat(local_path, "generators");
 
-  Utils.Sys.ls_dir(~recursive=false, generators_dir)
-  |> List.filter(~f=el => {
-       Utils.Filename.test(
-         Utils.Filename.Exists,
-         Utils.Filename.concat(el, "spin"),
-       )
-     });
+  if (Utils.Filename.test(Utils.Filename.Exists, generators_dir)) {
+    Utils.Sys.ls_dir(~recursive=false, generators_dir)
+    |> List.filter(~f=el => {
+         Utils.Filename.test(
+           Utils.Filename.Exists,
+           Utils.Filename.concat(el, "spin"),
+         )
+       });
+  } else {
+    [];
+  };
 };
 
 let get_generator = (name, ~source: Source.t) => {
