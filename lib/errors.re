@@ -67,7 +67,7 @@ let handle_errors = fn =>
     );
     Caml.exit(207);
   | Cannot_access_remote_repository =>
-      Console.error(
+    Console.error(
       <Pastel color=Pastel.Red>
         "😱  Error while accessing remote repository, please check your Internet connection."
       </Pastel>,

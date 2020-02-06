@@ -37,9 +37,9 @@ let git_pull = repo => {
     );
   switch (result) {
   | WEXITED(0) =>
-      try(result |> Lwt.return) {
-      | _ => Lwt.fail(Errors.Cannot_access_remote_repository)
-      };
+    try(result |> Lwt.return) {
+    | _ => Lwt.fail(Errors.Cannot_access_remote_repository)
+    }
   | _ => Lwt.fail(Errors.Cannot_access_remote_repository)
-  }
+  };
 };

@@ -14,7 +14,10 @@ let ensure_downloaded = () =>
     );
   } else {
     Console.log(<Pastel> "📡  Downloading official templates." </Pastel>);
-    let _ = Errors.handle_errors(() => Lwt_main.run(Vcs.git_clone(url, ~destination=path, ~branch)));
+    let _ =
+      Errors.handle_errors(() =>
+        Lwt_main.run(Vcs.git_clone(url, ~destination=path, ~branch))
+      );
     Console.log(
       <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
     );
