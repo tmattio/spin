@@ -5,22 +5,38 @@ let branch = "master";
 
 let url = "https://github.com/tmattio/spin-templates.git";
 
-let ensure_downloaded = () =>
+let download_if_absent = () =>
+  if (!Utils.Filename.test(Utils.Filename.Exists, path)) {
+    Console.log(<Pastel> "📡  Downloading official templates." </Pastel>);
+    let status_code =
+      Vcs.git_clone(url, ~destination=path, ~branch) |> Lwt_main.run;
+
+    switch (status_code) {
+    | WEXITED(0) =>
+      Console.log(
+        <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
+      )
+    | _ => raise(Errors.Cannot_access_remote_repository(url))
+    };
+  };
+
+let update_if_present = () =>
   if (Utils.Filename.test(Utils.Filename.Is_dir, path)) {
     Console.log(<Pastel> "📡  Updating official templates." </Pastel>);
-    let _ = Errors.handle_errors(() => Lwt_main.run(Vcs.git_pull(path)));
-    Console.log(
-      <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
-    );
-  } else {
-    Console.log(<Pastel> "📡  Downloading official templates." </Pastel>);
-    let _ =
-      Errors.handle_errors(() =>
-        Lwt_main.run(Vcs.git_clone(url, ~destination=path, ~branch))
-      );
-    Console.log(
-      <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
-    );
+    let status_code = Vcs.git_pull(path) |> Lwt_main.run;
+
+    switch (status_code) {
+    | WEXITED(0) =>
+      Console.log(
+        <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
+      )
+    | _ =>
+      Console.log(
+        <Pastel color=Pastel.Yellow bold=true>
+          "Failed. Using your current version of the official templates.\n"
+        </Pastel>,
+      )
+    };
   };
 
 let all = (): list(Config_file.Doc.doc) => {

@@ -40,9 +40,9 @@ let cmd = {
 
   let run_command = () => run |> Errors.handle_errors |> Lwt_main.run;
 
-  (
-    Term.(app(const(run_command), const())),
-    Term.info(
+  Term.(
+    app(const(run_command), const()),
+    info(
       "config",
       ~doc,
       ~envs=Man.envs,

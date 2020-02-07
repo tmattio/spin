@@ -22,13 +22,17 @@ let list = (source: Source.t) => {
   let local_path = Source.to_local_path(source);
   let generators_dir = Utils.Filename.concat(local_path, "generators");
 
-  Utils.Sys.ls_dir(~recursive=false, generators_dir)
-  |> List.filter(~f=el => {
-       Utils.Filename.test(
-         Utils.Filename.Exists,
-         Utils.Filename.concat(el, "spin"),
-       )
-     });
+  if (Utils.Filename.test(Utils.Filename.Exists, generators_dir)) {
+    Utils.Sys.ls_dir(~recursive=false, generators_dir)
+    |> List.filter(~f=el => {
+         Utils.Filename.test(
+           Utils.Filename.Exists,
+           Utils.Filename.concat(el, "spin"),
+         )
+       });
+  } else {
+    [];
+  };
 };
 
 let get_generator = (name, ~source: Source.t) => {
@@ -44,6 +48,16 @@ let get_generator = (name, ~source: Source.t) => {
   ) {
   | Some(v) => v
   | None => raise(Errors.Generator_does_not_exist(name))
+  };
+};
+
+let ensure_files_dont_exist = files => {
+  let existing_file =
+    List.find(files, ~f=el => Utils.Filename.test(Utils.Filename.Exists, el));
+
+  switch (existing_file) {
+  | Some(v) => raise(Errors.Generator_files_already_exist(v))
+  | None => ()
   };
 };
 
@@ -81,6 +95,12 @@ let generate = (~use_defaults=false, ~source: Source.t, name) => {
         );
         loop(fs);
       };
+
+  generator.files
+  |> List.map(~f=(el: Config_file_generators.file) =>
+       Utils.Filename.concat(project_root, el.destination)
+     )
+  |> ensure_files_dont_exist;
 
   Console.log(
     <Pastel>

@@ -50,9 +50,9 @@ let cmd = {
     |> Errors.handle_errors
     |> Lwt_main.run;
 
-  (
-    Term.(const(run_command) $ template $ path $ use_defaults $ ignore_config),
-    Term.info(
+  Term.(
+    const(run_command) $ template $ path $ use_defaults $ ignore_config,
+    info(
       "new",
       ~doc,
       ~envs=Man.envs,
