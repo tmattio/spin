@@ -2,8 +2,6 @@ open Cmdliner;
 open Spin;
 
 let run = (~generator, ()) => {
-  Template_official.update();
-
   switch (generator) {
   | None =>
     let config = Generators.get_project_config();

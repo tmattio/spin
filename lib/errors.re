@@ -7,6 +7,7 @@ exception Generator_does_not_exist(string);
 exception Cannot_parse_template_file(string);
 exception Cannot_access_remote_repository;
 exception Generator_files_already_exist(string);
+exception Subprocess_exited_with_non_zero(string, int);
 
 let handle_errors = fn =>
   try(fn()) {
@@ -83,6 +84,17 @@ let handle_errors = fn =>
       </Pastel>,
     );
     Caml.exit(209);
+  | Subprocess_exited_with_non_zero(command, exit_code) =>
+    Console.error(
+      <Pastel color=Pastel.Red>
+        {"😱  This command did not run as expected: "
+         ++ command
+         ++ ". It exited with the code "
+         ++ Int.to_string(exit_code)
+         ++ "."}
+      </Pastel>,
+    );
+    Caml.exit(210);
   | _ as exn =>
     Console.log(
       <Pastel color=Pastel.Red>
@@ -112,4 +124,5 @@ let all = () => [
   {doc: "on failure to parse a template file.", exit_code: 207},
   {doc: "on failure to access the remote repository", exit_code: 208},
   {doc: "on generating a file that already exist.", exit_code: 209},
+  {doc: "on subprocess exit with a non-zero status code.", exit_code: 210},
 ];

@@ -9,7 +9,7 @@ let run =
       ~ignore_config,
       (),
     ) => {
-  Template_official.update();
+  Template_official.update_if_present();
 
   let path = Option.value(path, ~default=".");
   let source = Source.of_string(template);

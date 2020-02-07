@@ -113,7 +113,7 @@ let generate =
           )
           |> Option.value(~default=destination);
 
-        let _ =
+        let status_code =
           Utils.Sys.exec_in_dir(
             el.command,
             ~args=el.args |> Array.of_list,
@@ -121,6 +121,15 @@ let generate =
             ~stdout=`Dev_null,
           )
           |> Lwt_main.run;
+
+        switch (status_code) {
+        | WEXITED(0) => ()
+        | WEXITED(s)
+        | WSIGNALED(s)
+        | WSTOPPED(s) =>
+          let command_string = Utils.String.join([el.command, ...el.args]);
+          raise(Errors.Subprocess_exited_with_non_zero(command_string, s));
+        };
 
         switch (el.description) {
         | Some(description) =>

@@ -2,8 +2,8 @@ open Cmdliner;
 open Spin;
 
 let run = () => {
-  Template_official.update();
-  
+  Template_official.download_if_absent();
+  Template_official.update_if_present();
   let templates = Template_official.all();
 
   Console.log("The official templates are:\n");

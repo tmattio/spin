@@ -7,6 +7,7 @@ exception Generator_does_not_exist(string);
 exception Cannot_parse_template_file(string);
 exception Cannot_access_remote_repository;
 exception Generator_files_already_exist(string);
+exception Subprocess_exited_with_non_zero(string, int);
 
 let handle_errors: (unit => 'a) => 'a;
 

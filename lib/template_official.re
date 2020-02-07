@@ -17,7 +17,7 @@ let download_if_absent = () =>
     );
   };
 
-let update = () =>
+let update_if_present = () =>
   if (Utils.Filename.test(Utils.Filename.Is_dir, path)) {
     Console.log(<Pastel> "📡  Updating official templates." </Pastel>);
     let status_code = Lwt_main.run(Vcs.git_pull(path));
@@ -29,16 +29,14 @@ let update = () =>
       )
     | _ =>
       Console.log(
-        <Pastel color=Pastel.Yellow bold=true> "Failed. Using your current version of the official templates.\n" </Pastel>,
+        <Pastel color=Pastel.Yellow bold=true>
+          "Failed. Using your current version of the official templates.\n"
+        </Pastel>,
       )
     };
-  } else {
-    download_if_absent();
   };
 
 let all = (): list(Config_file.Doc.doc) => {
-  download_if_absent();
-
   Caml.Sys.readdir(path)
   |> Array.to_list
   |> List.filter(~f=el =>
