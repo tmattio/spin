@@ -15,6 +15,7 @@ describe("Integration test generators", ({test, _}) => {
     let status_new =
       Test_utils.exec([|"new", "--default", template_dir, working_dir|]);
     expect.int(status_new).toBe(0);
+    
     let status_gen = Test_utils.exec([|"gen"|], ~dir=working_dir);
     expect.int(status_gen).toBe(0);
   })

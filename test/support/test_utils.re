@@ -15,9 +15,15 @@ let get_tempdir = name => {
   filename;
 };
 
+let exe_path =
+  Lwt_process.pread_chars(("", [|"esy", "x", "which", "spin.exe"|]))
+  |> Lwt_stream.to_string
+  |> Lwt.map(String.strip)
+  |> Lwt_main.run;
+
 /** Run Spin binary with the given arguments and return the standard output. */
 let run = args => {
-  let arguments = args |> Array.append([|"esy", "start"|]);
+  let arguments = Array.append([|exe_path|], args);
 
   let env =
     Unix.environment()
@@ -41,8 +47,6 @@ let run = args => {
 
 /** Run Spin binary with the given arguments and return the exit status. */
 let exec = (~dir=?, args) => {
-  let arguments = args |> Array.append([|"start"|]);
-
   let env =
     Unix.environment()
     |> Array.append([|
@@ -61,18 +65,9 @@ let exec = (~dir=?, args) => {
   let status =
     switch (dir) {
     | Some(dir) =>
-      Spin.Utils.Sys.exec_in_dir(~dir, ~env, ~args=arguments, "esy")
-      |> Lwt_main.run
-    | None =>
-      Spin.Utils.Sys.exec(~env, ~args=arguments, "esy") |> Lwt_main.run
+      Spin.Utils.Sys.exec_in_dir(~dir, ~env, ~args, exe_path) |> Lwt_main.run
+    | None => Spin.Utils.Sys.exec(~env, ~args, exe_path) |> Lwt_main.run
     };
 
-  let status_code =
-    switch (status) {
-    | Unix.WEXITED(s)
-    | Unix.WSIGNALED(s)
-    | Unix.WSTOPPED(s) => s
-    };
-
-  status_code;
+  Spin.Utils.Unix.int_of_process_status(status);
 };

@@ -1,1 +1,1 @@
-let () = Stdio.print_endline("{{ project_name }}");
+let _ = "{{ project_name }}";
