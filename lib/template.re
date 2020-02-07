@@ -127,7 +127,8 @@ let generate =
         | WEXITED(s)
         | WSIGNALED(s)
         | WSTOPPED(s) =>
-          let command_string = Utils.String.join([el.command, ...el.args]);
+          let command_string =
+            Utils.String.join([el.command, ...el.args], ~sep=" ");
           raise(Errors.Subprocess_exited_with_non_zero(command_string, s));
         };
 
