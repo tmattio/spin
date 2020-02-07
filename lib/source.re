@@ -14,7 +14,16 @@ let to_local_path: t => local =
       Console.log(
         <Pastel> {"📡  Downloading " ++ s ++ " to " ++ tempdir} </Pastel>,
       );
-      let _ = Lwt_main.run(Vcs.git_clone(s, ~destination=tempdir));
+      let status_code =
+        Vcs.git_clone(s, ~destination=tempdir) |> Lwt_main.run;
+
+      switch (status_code) {
+      | WEXITED(0) =>
+        Console.log(
+          <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
+        )
+      | _ => raise(Errors.Cannot_access_remote_repository(s))
+      };
       tempdir;
     };
 
