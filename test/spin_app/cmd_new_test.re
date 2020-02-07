@@ -14,6 +14,6 @@ describe("Integration test templates", ({test, _}) => {
 
     let status_new =
       Test_utils.exec([|"new", "--default", template_dir, working_dir|]);
-    expect.int(status_new).toBe(208);
+    expect.int(status_new).toBe(210);
   })
 });
