@@ -5,6 +5,7 @@ exception Config_file_syntax_error;
 exception Current_directory_not_a_spin_project;
 exception Generator_does_not_exist(string);
 exception Cannot_parse_template_file(string);
+exception Cannot_access_remote_repository;
 
 let handle_errors = fn =>
   try(fn()) {
@@ -65,6 +66,13 @@ let handle_errors = fn =>
       </Pastel>,
     );
     Caml.exit(207);
+  | Cannot_access_remote_repository =>
+    Console.error(
+      <Pastel color=Pastel.Red>
+        "😱  Error while accessing remote repository, please check your Internet connection."
+      </Pastel>,
+    );
+    Caml.exit(208);
   | _ as exn =>
     Console.log(
       <Pastel color=Pastel.Red>
@@ -92,4 +100,5 @@ let all = () => [
   },
   {doc: "on calling a generator that does not exist.", exit_code: 206},
   {doc: "on failure to parse a template file.", exit_code: 207},
+  {doc: "on failure to access the remote repository", exit_code: 208},
 ];
