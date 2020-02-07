@@ -2,10 +2,11 @@ open Cmdliner;
 open Spin;
 
 let run = () => {
-  Template_official.ensure_downloaded();
+  Template_official.update();
+  
   let templates = Template_official.all();
 
-  Console.log(<Pastel> "The official templates are:\n" </Pastel>);
+  Console.log("The official templates are:\n");
 
   List.iter(
     templates,
@@ -13,7 +14,7 @@ let run = () => {
       Console.log(
         <Pastel color=Pastel.Blue bold=true> {"    " ++ el.name} </Pastel>,
       );
-      Console.log(<Pastel> {"      " ++ el.description ++ "\n"} </Pastel>);
+      Console.log("      " ++ el.description ++ "\n");
     },
   );
 
@@ -22,11 +23,12 @@ let run = () => {
 
 let cmd = {
   let doc = "List the official spin templates";
+
   let run_command = () => run |> Errors.handle_errors |> Lwt_main.run;
 
-  (
-    Term.(app(const(run_command), const())),
-    Term.info(
+  Term.(
+    app(const(run_command), const()),
+    info(
       "ls",
       ~doc,
       ~envs=Man.envs,

@@ -19,12 +19,12 @@ let to_local_path: t => local =
     };
 
 let of_string = (s: string) =>
+{
   if (Utils.Filename.test(Utils.Filename.Exists, s)) {
     Local_dir(s);
   } else if (Vcs.is_git_url(s)) {
     Git(s);
   } else {
-    Template_official.ensure_downloaded();
     let templates = Template_official.all();
     if (List.exists(templates, ~f=el => String.equal(s, el.name))) {
       Official(s);
@@ -32,6 +32,7 @@ let of_string = (s: string) =>
       raise(Errors.Incorrect_template_name(s));
     };
   };
+}
 
 let to_string =
   fun

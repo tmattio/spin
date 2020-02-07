@@ -57,7 +57,7 @@ let generate =
       source: Source.t,
       destination: string,
     ) => {
-  let () = ensure_dir_is_empty(destination);
+  ensure_dir_is_empty(destination);
 
   let origin = Source.to_local_path(source);
   let template_path = Utils.Filename.concat(origin, "template");

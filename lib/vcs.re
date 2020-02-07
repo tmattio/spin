@@ -35,6 +35,7 @@ let git_pull = repo => {
       ~stdout=Lwt_process.(`Dev_null),
       ~stderr=Lwt_process.(`Dev_null),
     );
+
   switch (result) {
   | WEXITED(0) =>
     try(result |> Lwt.return) {

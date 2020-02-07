@@ -2,6 +2,8 @@ open Cmdliner;
 open Spin;
 
 let run = (~generator, ()) => {
+  Template_official.update();
+
   switch (generator) {
   | None =>
     let config = Generators.get_project_config();
@@ -55,9 +57,9 @@ let cmd = {
   let run_command = generator =>
     run(~generator) |> Errors.handle_errors |> Lwt_main.run;
 
-  (
-    Term.(const(run_command) $ generator),
-    Term.info(
+  Term.(
+    const(run_command) $ generator,
+    info(
       "gen",
       ~doc,
       ~envs=Man.envs,

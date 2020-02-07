@@ -5,14 +5,8 @@ let branch = "master";
 
 let url = "https://github.com/tmattio/spin-templates.git";
 
-let ensure_downloaded = () =>
-  if (Utils.Filename.test(Utils.Filename.Is_dir, path)) {
-    Console.log(<Pastel> "📡  Updating official templates." </Pastel>);
-    let _ = Errors.handle_errors(() => Lwt_main.run(Vcs.git_pull(path)));
-    Console.log(
-      <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
-    );
-  } else {
+let download_if_absent = () =>
+  if (!Utils.Filename.test(Utils.Filename.Exists, path)) {
     Console.log(<Pastel> "📡  Downloading official templates." </Pastel>);
     let _ =
       Errors.handle_errors(() =>
@@ -23,7 +17,28 @@ let ensure_downloaded = () =>
     );
   };
 
+let update = () =>
+  if (Utils.Filename.test(Utils.Filename.Is_dir, path)) {
+    Console.log(<Pastel> "📡  Updating official templates." </Pastel>);
+    let status_code = Lwt_main.run(Vcs.git_pull(path));
+
+    switch (status_code) {
+    | WEXITED(0) =>
+      Console.log(
+        <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
+      )
+    | _ =>
+      Console.log(
+        <Pastel color=Pastel.Yellow bold=true> "Failed. Using your current version of the official templates.\n" </Pastel>,
+      )
+    };
+  } else {
+    download_if_absent();
+  };
+
 let all = (): list(Config_file.Doc.doc) => {
+  download_if_absent();
+
   Caml.Sys.readdir(path)
   |> Array.to_list
   |> List.filter(~f=el =>

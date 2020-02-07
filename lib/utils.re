@@ -91,8 +91,8 @@ module Sys = {
         ~stdout: Lwt_process.redirection=`Keep,
         command,
       ) => {
-    let realArgs = Array.append([|command|], args);
-    Lwt_process.exec(~stderr, ~stdout, ~env?, ("", realArgs));
+    let real_args = Array.append([|command|], args);
+    Lwt_process.exec(~stderr, ~stdout, ~env?, ("", real_args));
   };
 
   let exec_in_dir =
@@ -146,4 +146,15 @@ module Filename = {
           ? loop(el, rest) : loop(concat(acc, el), rest);
     loop("", ls);
   };
+};
+
+module Unix = {
+  include Unix;
+
+  let int_of_process_status = status =>
+    switch (status) {
+    | Unix.WEXITED(s)
+    | Unix.WSIGNALED(s)
+    | Unix.WSTOPPED(s) => s
+    };
 };
