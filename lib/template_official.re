@@ -8,19 +8,22 @@ let url = "https://github.com/tmattio/spin-templates.git";
 let download_if_absent = () =>
   if (!Utils.Filename.test(Utils.Filename.Exists, path)) {
     Console.log(<Pastel> "📡  Downloading official templates." </Pastel>);
-    let _ =
-      Errors.handle_errors(() =>
-        Lwt_main.run(Vcs.git_clone(url, ~destination=path, ~branch))
-      );
-    Console.log(
-      <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
-    );
+    let status_code =
+      Vcs.git_clone(url, ~destination=path, ~branch) |> Lwt_main.run;
+
+    switch (status_code) {
+    | WEXITED(0) =>
+      Console.log(
+        <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
+      )
+    | _ => raise(Errors.Cannot_access_remote_repository(url))
+    };
   };
 
 let update_if_present = () =>
   if (Utils.Filename.test(Utils.Filename.Is_dir, path)) {
     Console.log(<Pastel> "📡  Updating official templates." </Pastel>);
-    let status_code = Lwt_main.run(Vcs.git_pull(path));
+    let status_code = Vcs.git_pull(path) |> Lwt_main.run;
 
     switch (status_code) {
     | WEXITED(0) =>

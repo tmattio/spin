@@ -12,6 +12,7 @@ let git_clone = (~destination, ~branch=?, repo) => {
       ~stdout=Lwt_process.(`Dev_null),
       ~stderr=Lwt_process.(`Dev_null),
     );
+
   try(result |> Lwt.return) {
   | _ => Lwt.fail_with("Error while cloning the repository")
   };
@@ -36,11 +37,7 @@ let git_pull = repo => {
       ~stderr=Lwt_process.(`Dev_null),
     );
 
-  switch (result) {
-  | WEXITED(0) =>
-    try(result |> Lwt.return) {
-    | _ => Lwt.fail(Errors.Cannot_access_remote_repository)
-    }
-  | _ => Lwt.fail(Errors.Cannot_access_remote_repository)
+  try(result |> Lwt.return) {
+  | _ => Lwt.fail_with("Error while pulling the repository")
   };
 };
