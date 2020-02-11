@@ -8,6 +8,7 @@ exception Cannot_parse_template_file(string);
 exception Cannot_access_remote_repository(string);
 exception Generator_files_already_exist(string);
 exception Subprocess_exited_with_non_zero(string, int);
+exception External_command_unavailable(string);
 
 let handle_errors = fn =>
   try(fn()) {
@@ -97,6 +98,15 @@ let handle_errors = fn =>
       </Pastel>,
     );
     Caml.exit(210);
+  | External_command_unavailable(command) =>
+    Console.error(
+      <Pastel color=Pastel.Red>
+        {"😱  External command not available: "
+         ++ command
+         ++ ". Please install it and try again."}
+      </Pastel>,
+    );
+    Caml.exit(211);
   | _ as exn =>
     Console.log(
       <Pastel color=Pastel.Red>
@@ -127,4 +137,5 @@ let all = () => [
   {doc: "on failure to access the remote repository", exit_code: 208},
   {doc: "on generating a file that already exist.", exit_code: 209},
   {doc: "on subprocess exit with a non-zero status code.", exit_code: 210},
+  {doc: "on calling a missing external command.", exit_code: 211},
 ];
