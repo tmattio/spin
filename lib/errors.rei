@@ -8,6 +8,7 @@ exception Cannot_parse_template_file(string);
 exception Cannot_access_remote_repository(string);
 exception Generator_files_already_exist(string);
 exception Subprocess_exited_with_non_zero(string, int);
+exception External_command_unavailable(string);
 
 let handle_errors: (unit => 'a) => 'a;
 

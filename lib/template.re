@@ -113,6 +113,13 @@ let generate =
           )
           |> Option.value(~default=destination);
 
+        switch (
+          Utils.Sys.exec("which", ~args=[|el.command|]) |> Lwt_main.run
+        ) {
+        | WEXITED(0) => ()
+        | _ => raise(Errors.External_command_unavailable(el.command))
+        };
+
         let status_code =
           Utils.Sys.exec_in_dir(
             el.command,
