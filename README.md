@@ -30,7 +30,7 @@
 
 🚀 Quickly start new projects that are ready for the real world.
 
-❤️ Have a great developer experience when developping with Reason/OCaml.
+❤️ Have a great developer experience when developing with Reason/OCaml.
 
 🏄 Be as productive as Ruby-on-Rails or Elixir's Mix users.
 
@@ -133,7 +133,7 @@ npm install -g esy@latest
 
 > NOTE: Make sure `esy --version` returns at least `0.5.8` for this project to build.
 
-Then run the `esy` command from this project root to install and build depenencies.
+Then run the `esy` command from this project root to install and build dependencies.
 
 ```bash
 esy
@@ -227,7 +227,7 @@ The following snippet describes Spin's repository structure.
 |   Source for Spin's binary. This links to the library defined in `lib/`.
 │
 ├── lib/
-|   Source for Spin's library. Contains Spin's core functionnalities.
+|   Source for Spin's library. Contains Spin's core functionalities.
 │
 ├── test/
 |   Unit tests and integration tests for Spin.
@@ -257,12 +257,12 @@ The following snippet describes Spin's repository structure.
 - Add more templates
   - **data-science** - Data Science workflow.
   - **desktop** - Native UI application using Revery.
-  - **graphl-api** - HTTP server that serves a GraphQL API.
+  - **graphql-api** - HTTP server that serves a GraphQL API.
   - **rest-api** - HTTP server that serves a REST API.
   - **react-components** - React component library with Storybook.
-  - **bs-bindings** - Bucklescript bindings to Javascript libraries.
+  - **bs-bindings** - BuckleScript bindings to Javascript libraries.
 - Support more CI/CD
-  - Gitlab
+  - GitLab
   - Azure
   - Google Build
   - Bitbucket Pipeline
