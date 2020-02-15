@@ -1,35 +1,30 @@
-open Alcotest;
+open Test_framework;
 open Spin;
 
-/** Test suite for the Utils module. */
+describe("Test Utils", ({test, describe, _}) => {
+  test("join string", ({expect, _}) => {
+    let joined_string = Utils.String.join(["1", "2"], ~sep=", ");
+    expect.equal(joined_string, "1, 2");
+  });
 
-let test_join_string = () => {
-  let result = Utils.String.join(["1", "2"], ~sep=", ");
-  check(string, "same string", result, "1, 2");
-};
-
-let test_ls_dir = () => {
-  let root_dir =
-    Utils.Filename.join(["test", "resources", "sample_hierarchy"]);
-
-  let files =
-    Utils.Sys.ls_dir(root_dir) |> List.sort(~compare=String.compare);
-
-  let expected =
-    [
-      Utils.Filename.join([root_dir, "d1", "f1"]),
-      Utils.Filename.join([root_dir, "d2", "f2"]),
-    ]
-    |> List.sort(~compare=String.compare);
-
-  check(list(string), "same value", files, expected);
-};
-
-let suite = [
-  ("can join a list of string", `Quick, test_join_string),
-  (
+  test(
     "ls_dir returns the correct list of files in the directory",
-    `Quick,
-    test_ls_dir,
-  ),
-];
+    ({expect, _}) => {
+    let root_dir =
+      Utils.Filename.join(["test", "resources", "sample_hierarchy"]);
+
+    let files =
+      Utils.Sys.ls_dir(root_dir) |> List.sort(~compare=String.compare);
+
+    let expected =
+      expect.list(
+        [
+          Utils.Filename.join([root_dir, "d1", "f1"]),
+          Utils.Filename.join([root_dir, "d2", "f2"]),
+        ]
+        |> List.sort(~compare=String.compare),
+      );
+
+    expected.toEqual(files);
+  });
+});

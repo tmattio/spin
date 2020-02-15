@@ -1,10 +1,9 @@
-open Alcotest;
+open Test_framework;
 
-let test_get_cli_version = () => {
-  let version = Test_utils.run([|"--version"|]);
-  check(string, "same string", "%%VERSION%%", version)
-};
-
-let suite = [
-  ("calling cli with --version returns the version", `Quick, test_get_cli_version),
-];
+describe("Smoke test", ({test, _}) => {
+  test("Get version", ({expect}) => {
+    let version = Test_utils.run([|"--version"|]);
+    let expected = expect.string(version |> String.strip);
+    expected.toMatch("^\\d+.\\d+.\\d+$");
+  })
+});

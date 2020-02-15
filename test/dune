@@ -1,8 +1,4 @@
-(test
- (name test_runner)
- (libraries base alcotest spin.lib)
- (flags -open Base)
- (action
-  (run %{test} -ev --color=always)))
-
+(library (name spin_test) (public_name spin.test) (modules (:standard))
+    (libraries base lwt.unix spin.lib rely.lib)
+    (flags -open Base -linkall -g -w -9))
 (include_subdirs unqualified)
