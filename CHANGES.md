@@ -7,16 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Before generating a template, Spin will check if the user has all the dependencies installed and exit gracefully if not. (by [@citizen428](https://github.com/citizen428))
+
 ### Changed
 
-- Trying to generate a file that already exist now raises an error instead of overwritting the file.
 - Print a warning when the update of the official templates failed, but continue the execution.
 - Do not update the official templates when running new with a local path or a git repository.
 
 ### Fixed
 
+- Trying to generate a file that already exists now raises an error instead of overwritting the file.
 - Fix to output a proper message when no generator exist for the current project.
-- Exit gracefully when trying to download a git repository or the initial templates for the first time. (by @citizen428)
+- Exit gracefully when failing to download a git repository or the initial templates for the first time. (by [@citizen428](https://github.com/citizen428))
 
 ## [0.4.8] - 2020-01-14
 
