@@ -1,5 +1,11 @@
-(library (name Spin) (public_name spin.lib) (modules (:standard))
-    (libraries base console.lib pastel.lib lwt.unix str stdio sexplib jingoo
-        fileutils)
-    (flags -open Base) (preprocess (pps lwt_ppx ppx_let ppx_sexp_conv)))
+(library
+ (name Spin)
+ (public_name spin.lib)
+ (modules (:standard))
+ (libraries base lwt.unix str stdio sexplib jingoo
+   fileutils)
+ (flags -open Base)
+ (preprocess
+  (pps lwt_ppx ppx_let ppx_sexp_conv)))
+
 (include_subdirs unqualified)

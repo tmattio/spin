@@ -13,112 +13,32 @@
     "build": "dune build -p #{self.name}",
     "buildDev": "refmterr dune build -p #{self.name}"
   },
-  "buildDirs": {
-    "test": {
-      "require": [
-        "base",
-        "lwt.unix",
-        "spin.lib",
-        "rely.lib"
-      ],
-      "flags": [
-        "-open",
-        "Base",
-        "-linkall",
-        "-g",
-        "-w",
-        "-9"
-      ],
-      "includeSubdirs": "unqualified",
-      "namespace": "spin_test"
-    },
-    "test_runner": {
-      "require": [
-        "spin/test"
-      ],
-      "bin": {
-        "test-runner.exe": "test_runner.re"
-      }
-    },
-    "lib": {
-      "preprocess": [
-        "pps",
-        "lwt_ppx",
-        "ppx_let",
-        "ppx_sexp_conv"
-      ],
-      "require": [
-        "base",
-        "console.lib",
-        "pastel.lib",
-        "lwt.unix",
-        "str",
-        "stdio",
-        "sexplib",
-        "jingoo",
-        "fileutils"
-      ],
-      "flags": [
-        "-open",
-        "Base"
-      ],
-      "includeSubdirs": "unqualified",
-      "namespace": "Spin"
-    },
-    "bin": {
-      "preprocess": [
-        "pps",
-        "lwt_ppx",
-        "ppx_let"
-      ],
-      "require": [
-        "base",
-        "cmdliner",
-        "lwt.unix",
-        "console.lib",
-        "pastel.lib",
-        "spin.lib"
-      ],
-      "flags": [
-        "-open",
-        "Base"
-      ],
-      "bin": {
-        "spin.exe": "spin_app.re"
-      },
-      "includeSubdirs": "unqualified"
-    }
-  },
   "dependencies": {
-    "@esy-ocaml/reason": "*",
-    "@opam/base": "v0.13.0",
-    "@opam/cmdliner": "1.0.4",
-    "@opam/dune": ">=1.6.0",
+    "@opam/alcotest": "*",
+    "@opam/base": "*",
+    "@opam/cmdliner": "*",
     "@opam/fileutils": "*",
     "@opam/jingoo": "*",
-    "@opam/lwt": "^4.4.0",
-    "@opam/lwt_ppx": "^1.2.4",
-    "@opam/ppx_let": "v0.13.0",
-    "@opam/ppx_sexp_conv": "v0.13.0",
-    "@opam/sexplib": "v0.13.0",
-    "@reason-native/console": "^0.1.0",
-    "@reason-native/pastel": "^0.2.2",
-    "@reason-native/rely": "^3.1.0",
-    "ocaml": "~4.8.1000"
+    "@opam/lwt": "*",
+    "@opam/lwt_ppx": "*",
+    "@opam/ppx_let": "*",
+    "@opam/ppx_sexp_conv": "*",
+    "@opam/sexplib": "*",
+    "@opam/reason": "*",
+    "@opam/dune": ">= 1.6.0",
+    "ocaml": ">= 4.06.0"
   },
   "devDependencies": {
+    "@opam/dune-release": "*",
     "@opam/merlin": "*",
     "@opam/odoc": "*",
     "@opam/utop": "*",
-    "@pesy/esy-pesy": "0.1.0-alpha.5",
-    "refmterr": "*"
-  },
-  "resolutions": {
-    "@opam/jingoo": "tmattio/jingoo:jingoo.opam#e012716"
+    "refmterr": "*",
+    "ocaml": "~4.8.1000"
   },
   "scripts": {
     "start": "esy x spin.exe",
-    "test": "esy x test-runner.exe",
+    "test": "esy dune runtest",
     "doc": "esy dune build @doc",
     "doc-path": "esy echo #{self.target_dir}/default/_doc/_html/index.html",
     "format": "esy dune build @fmt --auto-promote",

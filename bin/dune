@@ -1,4 +1,10 @@
-(executable (name spin_app) (modules (:standard)) (public_name spin.exe)
-    (libraries base cmdliner lwt.unix console.lib pastel.lib spin.lib)
-    (flags -open Base) (preprocess (pps lwt_ppx ppx_let)))
+(executable
+ (name spin_app)
+ (modules (:standard))
+ (public_name spin.exe)
+ (libraries base cmdliner lwt.unix spin.lib)
+ (flags -open Base)
+ (preprocess
+  (pps lwt_ppx ppx_let)))
+
 (include_subdirs unqualified)
