@@ -1,31 +1,35 @@
-open Test_framework;
+open Alcotest;
 open Spin;
 
-describe("Test Jg_wrapper", ({test, describe, _}) => {
-  test("slugify", ({expect, _}) => {
+let test_slugify = () => {
     let t = Jg_wrapper.slugify("My Project Name");
-    expect.string(t).toEqual("my-project-name");
+    check(string, "same string", "my-project-name", t);
 
     let t = Jg_wrapper.slugify("MyProjectName");
-    expect.string(t).toEqual("myprojectname");
-  });
+    check(string, "same string", "myprojectname", t);
+}
 
-  test("snake_case", ({expect, _}) => {
+let test_snake_case = () => {
     let t = Jg_wrapper.snake_case("MyProjectName");
-    expect.string(t).toEqual("my_project_name");
+    check(string, "same string", "my_project_name", t);
 
     let t = Jg_wrapper.snake_case("My Project Name");
-    expect.string(t).toEqual("my_project_name");
+    check(string, "same string", "my_project_name", t);
 
     let t = Jg_wrapper.snake_case("My-Project-Name");
-    expect.string(t).toEqual("my_project_name");
-  });
+    check(string, "same string", "my_project_name", t);
+}
 
-  test("camel_case", ({expect, _}) => {
+let test_camel_case = () => {
     let t = Jg_wrapper.camel_case("my_project_name");
-    expect.string(t).toEqual("MyProjectName");
+    check(string, "same string", "MyProjectName", t);
 
     let t = Jg_wrapper.camel_case("my-project-name");
-    expect.string(t).toEqual("MyProjectName");
-  });
-});
+    check(string, "same string", "MyProjectName", t);
+}
+
+let suite = [
+  ("convert string to slug format", `Quick, test_slugify),
+  ("convert string to snake case format", `Quick, test_snake_case),
+  ("convert string to camel case format", `Quick, test_camel_case),
+];

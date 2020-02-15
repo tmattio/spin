@@ -1,9 +1,13 @@
-open Test_framework;
+open Alcotest;
 open Spin;
 
-describe("Test Vcs", ({test, describe, _}) => {
-  test("is_git_url returns true when given a git URL", ({expect, _}) => {
-    let result = Vcs.is_git_url("git@github.com:tmattio/spin-minimal.git");
-    expect.bool(result).toBe(true);
-  })
-});
+/** Test suite for the Vcs module. */
+
+let test_is_git_url = () => {
+  let result = Vcs.is_git_url("git@github.com:tmattio/spin-minimal.git");
+  check(bool, "same value", result, true);
+};
+
+let suite = [
+  ("is_git_url returns true when given a git URL", `Quick, test_is_git_url),
+];
