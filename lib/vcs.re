@@ -18,7 +18,7 @@ let git_clone = (~destination, ~branch=?, repo) => {
   };
 };
 
-/* Inspired from the reges "((git|ssh|http(s)?)|(git@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(\.git)(/)?".
+/* Inspired from the regex "((git|ssh|http(s)?)|(git@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(\.git)(/)?".
    Source: https://stackoverflow.com/questions/2514859/regular-expression-for-git-repository */
 let is_git_url = value => {
   let regexp =
