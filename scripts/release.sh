@@ -7,30 +7,13 @@ function bump_source() {
   rm "$1.tmp"
 }
 
-function bump_brew() {
-  search="(VERSION = ').+(')"
-  replace="\1$2\2"
-  sed -i ".tmp" -E "s/${search}/${replace}/g" "$1"
-  rm "$1.tmp"
-}
-
 function bump_all() {
   output=$(npm version "${release}" --no-git-tag-version)
   version=${output:1}
   bump_source "bin/package.re" "$version"
-  bump_brew "scripts/tmattio-spin.rb" "$version"
 }
 
-function help() {
-  echo "Usage: $(basename $0) [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease]"
-}
-
-if [ -z "$1" ] || [ "$1" = "help" ]; then
-  help
-  exit
-fi
-
-release=$1
+version=$(sed -nE 's/^version: "(.*)"$/\1/p' inquire.opam)
 
 if [ -d ".git" ]; then
   changes=$(git status --porcelain)
@@ -46,6 +29,10 @@ if [ -d ".git" ]; then
     bump_all
     git add .
     git commit -m "Bump to ${version}"
+    dune-release tag ${version} -y
+    dune-release distrib
+    dune-release publish -y
+    dune-release opam submit --no-auto-open -y
     git tag -a "${output}" -m "${version}"
     git push origin --tags
   fi
