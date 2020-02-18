@@ -17,8 +17,14 @@ depends: [
   "dune" {build & >= "1.6.0"}
   "dune-release" {dev}
   "base"
+  "cmdliner"
+  "fileutils"
+  "jingoo"
   "lwt"
-  "lambda-term"
+  "lwt_ppx"
+  "ppx_let"
+  "ppx_sexp_conv"
+  "sexplib"
 ]
 build: [
   ["dune" "subst"] {pinned}

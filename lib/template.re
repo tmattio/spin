@@ -94,22 +94,22 @@ let generate =
         loop(fs);
       };
 
-  Console.log(
-    <Pastel>
-      <Pastel> "\n🏗️  Creating a new " </Pastel>
-      <Pastel color=Pastel.Blue bold=true> {doc_config.name} </Pastel>
-      <Pastel> {" in " ++ destination} </Pastel>
-    </Pastel>,
-  );
+  Pastel.make([
+    "\n🏗️  Creating a new ",
+    Pastel.make(~color=Pastel.Blue, ~bold=true, [doc_config.name]),
+    " in " ++ destination,
+  ])
+  |> Stdio.print_endline;
+
   let template_path_regex = template_path;
   let ignore_files =
     List.map(template_config.ignore_files, ~f=file => {
       Utils.Filename.concat(template_path_regex, file)
     });
   Utils.Sys.ls_dir(template_path, ~ignore_files) |> loop;
-  Console.log(
-    <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
-  );
+
+  Pastel.make(~color=Pastel.GreenBright, ~bold=true, ["Done!\n"])
+  |> Stdio.print_endline;
 
   switch (template_config.post_installs) {
   | [] => ()
@@ -118,7 +118,7 @@ let generate =
       post_installs,
       el => {
         switch (el.description) {
-        | Some(description) => Console.log(<Pastel> description </Pastel>)
+        | Some(description) => Stdio.print_endline(description)
         | None => ()
         };
 
@@ -156,48 +156,42 @@ let generate =
 
         switch (el.description) {
         | Some(description) =>
-          Console.log(
-            <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
-          )
+          Pastel.make(~color=Pastel.GreenBright, ~bold=true, ["Done!\n"])
+          |> Stdio.print_endline
         | None => ()
         };
       },
     )
   };
 
-  Console.log(
-    <Pastel>
-      <Pastel> "🎉  Success! Created the project at " </Pastel>
-      <Pastel> destination </Pastel>
-    </Pastel>,
+  Stdio.print_endline(
+    "🎉  Success! Created the project at " ++ destination,
   );
 
   switch (doc_config.commands) {
   | [] => ()
   | commands =>
-    Console.log(
-      <Pastel>
-        "\nHere are some example commands that you can run inside this directory:"
-      </Pastel>,
+    Stdio.print_endline(
+      "\nHere are some example commands that you can run inside this directory:",
     );
     List.iter(
       commands,
       ~f=el => {
-        Console.log(
-          <Pastel color=Pastel.Blue bold=true>
-            {"\n    " ++ Jg_wrapper.from_string(el.name, ~models)}
-          </Pastel>,
-        );
-        Console.log(
-          <Pastel>
-            {"      " ++ Jg_wrapper.from_string(el.description, ~models)}
-          </Pastel>,
+        Pastel.make(
+          ~color=Pastel.Blue,
+          ~bold=true,
+          ["\n    ", Jg_wrapper.from_string(el.name, ~models)],
+        )
+        |> Stdio.print_endline;
+
+        Stdio.print_endline(
+          "      " ++ Jg_wrapper.from_string(el.description, ~models),
         );
       },
     );
   };
 
-  Console.log(<Pastel> "\nHappy hacking!" </Pastel>);
+  Stdio.print_endline("\nHappy hacking!");
 
   /* Remove spin configuration file from the generated project */
   Utils.Filename.rm([Utils.Filename.concat(destination, "spin")]);

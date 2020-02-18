@@ -11,17 +11,15 @@ let to_local_path: t => local =
   | Local_dir(s) => s
   | Git(s) => {
       let tempdir = Utils.Sys.get_tempdir("spin");
-      Console.log(
-        <Pastel> {"📡  Downloading " ++ s ++ " to " ++ tempdir} </Pastel>,
-      );
+      Stdio.print_endline("📡  Downloading " ++ s ++ " to " ++ tempdir);
       let status_code =
         Vcs.git_clone(s, ~destination=tempdir) |> Lwt_main.run;
 
       switch (status_code) {
       | WEXITED(0) =>
-        Console.log(
-          <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
-        )
+        Pastel.make(~color=Pastel.GreenBright, ~bold=true, ["Done!\n"])
+        |> Stdio.print_endline
+
       | _ => raise(Errors.Cannot_access_remote_repository(s))
       };
       tempdir;

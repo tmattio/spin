@@ -6,15 +6,16 @@ let run = () => {
   Template_official.update_if_present();
   let templates = Template_official.all();
 
-  Console.log("The official templates are:\n");
+  Stdio.print_endline("The official templates are:\n");
 
   List.iter(
     templates,
     ~f=el => {
-      Console.log(
-        <Pastel color=Pastel.Blue bold=true> {"    " ++ el.name} </Pastel>,
-      );
-      Console.log("      " ++ el.description ++ "\n");
+      ["    " ++ el.name]
+      |> Pastel.make(~color=Pastel.Blue, ~bold=true)
+      |> Stdio.print_endline;
+
+      Stdio.print_endline("      " ++ el.description ++ "\n");
     },
   );
 
