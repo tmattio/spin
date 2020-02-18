@@ -14,18 +14,16 @@
     "buildDev": "refmterr dune build -p #{self.name}"
   },
   "dependencies": {
-    "@opam/alcotest": "*",
     "@opam/base": "*",
     "@opam/cmdliner": "*",
     "@opam/fileutils": "*",
     "@opam/jingoo": "*",
     "@opam/lwt": "*",
-    "@opam/lwt_ppx": "*",
-    "@opam/ppx_let": "*",
     "@opam/ppx_sexp_conv": "*",
     "@opam/sexplib": "*",
     "@opam/reason": "*",
     "@opam/dune": ">= 1.6.0",
+    "@reason-native/rely": "*",
     "ocaml": ">= 4.06.0"
   },
   "devDependencies": {
@@ -38,7 +36,7 @@
   },
   "scripts": {
     "start": "esy x spin.exe",
-    "test": "esy dune runtest",
+    "test": "esy dune build @runtest",
     "doc": "esy dune build @doc",
     "doc-path": "esy echo #{self.target_dir}/default/_doc/_html/index.html",
     "format": "esy dune build @fmt --auto-promote",

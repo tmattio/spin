@@ -13,7 +13,6 @@ doc: "https://tmattio.github.io/spin"
 bug-reports: "https://github.com/tmattio/spin/issues"
 depends: [
   "ocaml" {>= "4.06.0"}
-  "alcotest" {with-test}
   "dune" {build & >= "1.6.0"}
   "dune-release" {dev}
   "base"
@@ -21,8 +20,6 @@ depends: [
   "fileutils"
   "jingoo"
   "lwt"
-  "lwt_ppx"
-  "ppx_let"
   "ppx_sexp_conv"
   "sexplib"
 ]

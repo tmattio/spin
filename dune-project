@@ -16,7 +16,6 @@
  (description "Project scaffolding tool and set of templates for Reason and OCaml")
  (depends
   (ocaml (>= 4.06.0))
-  (alcotest :with-test)
   (dune (and :build (>= 1.6.0)))
   (dune-release :dev)
   base
@@ -24,7 +23,5 @@
   fileutils
   jingoo
   lwt
-  lwt_ppx
-  ppx_let
   ppx_sexp_conv
   sexplib))
