@@ -2,18 +2,20 @@
  (name Spin_test)
  (public_name spin.test)
  (flags -open Base -linkall -g -w -9)
- ; Make the library optional to skip building test on Opam
- (optional)
  (libraries base rely.lib spin.lib)
  (modules
   (:standard \ test_runner)))
 
-(test
+(executable
  (name test_runner)
+ (public_name test_runner.exe)
  (modules test_runner)
  (libraries base spin.test)
- (flags -open Base)
- (action
-  (run %{test} -q --color=always)))
+ (flags -open Base))
+
+(alias
+ (name runtest)
+ (deps (:test_runner test_runner.exe))
+ (action (run %{test_runner} --color=always)))
 
 (include_subdirs unqualified)
