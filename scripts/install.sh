@@ -60,7 +60,7 @@ download_spin() {
   fi
 
   unzip -q "$DOWNLOAD_DIR/$FILENAME.zip" -d "$DOWNLOAD_DIR"
-  mv "$DOWNLOAD_DIR/spin.exe" "$INSTALL_DIR/spin"
+  mv "$DOWNLOAD_DIR/spin" "$INSTALL_DIR/spin"
   chmod u+x "$INSTALL_DIR/spin"
 }
 

@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const package = require("../package.json");
 
-const filesToCopy = ["LICENSE", "README.md"];
+const filesToCopy = ["LICENSE", "README.md", "CHANGES.md"];
 
 function exec(cmd) {
   console.log(`exec: ${cmd}`);
@@ -42,7 +42,7 @@ fs.copyFileSync(
 );
 
 const filesToTouch = [
-  "spin.exe"
+  "spin"
 ];
 
 for (const file of filesToTouch) {
@@ -62,13 +62,13 @@ const pkgJson = {
     postinstall: "node postinstall.js"
   },
   bin: {
-    spin: "spin.exe"
+    spin: "spin"
   },
   files: [
     "platform-linux-x64/",
     "platform-darwin-x64/",
     "postinstall.js",
-    "spin.exe"
+    "spin"
   ]
 };
 

@@ -61,10 +61,10 @@ jobs:
         shell: bash
         run: |
           # from https://stackoverflow.com/a/24848739/617787
-          s=$(pwd); d=$(dirname $(esy x which spin.exe));
+          s=$(pwd); d=$(dirname $(esy x which spin));
           while [ "${d#$s/}" == "${d}" ]
           do s=$(dirname $s);b="../${b}"; done; 
-          ESY__BINARY_PATH=${b}${d#$s/}/spin.exe
+          ESY__BINARY_PATH=${b}${d#$s/}/spin
           echo "ESY__BINARY_PATH: $ESY__BINARY_PATH"
           echo "##[set-output name=path;]$ESY__BINARY_PATH"
 

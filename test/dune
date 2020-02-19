@@ -11,8 +11,8 @@
  (flags -open Base)
  (modules test_runner))
 
-(alias
- (name runtest)
+(rule
+ (alias runtest)
  (deps
   (:m test_runner.exe))
  (action

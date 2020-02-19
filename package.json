@@ -23,7 +23,7 @@
     "@opam/ppx_sexp_conv": "*",
     "@opam/sexplib": "*",
     "@opam/reason": "*",
-    "@opam/dune": ">= 1.6.0",
+    "@opam/dune": ">= 2.0",
     "@reason-native/rely": "*",
     "ocaml": ">= 4.06.0"
   },
@@ -36,7 +36,7 @@
     "ocaml": "~4.8.1000"
   },
   "scripts": {
-    "start": "esy x spin.exe",
+    "start": "esy x spin",
     "test": "esy dune exec test/test_runner.exe",
     "doc": "esy dune build @doc",
     "doc-path": "esy echo #{self.target_dir}/default/_doc/_html/index.html",

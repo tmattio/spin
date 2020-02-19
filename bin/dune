@@ -1,6 +1,5 @@
 (executable
  (name spin_app)
- (public_name spin.exe)
  (libraries base stdio cmdliner lwt.unix spin.lib)
  (flags -open Base)
  (modules (:standard)))
