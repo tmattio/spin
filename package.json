@@ -1,6 +1,6 @@
 {
   "name": "spin",
-  "version": "0.4.8",
+  "version": "0.5.0",
   "description": "Project scaffolding tool and set of templates for Reason and OCaml.",
   "author": "Thibaut Mattio",
   "homepage": "https://github.com/tmattio/spin",
@@ -11,7 +11,8 @@
   },
   "esy": {
     "build": "dune build -p #{self.name}",
-    "buildDev": "refmterr dune build -p #{self.name}"
+    "buildDev": "refmterr dune build --root . --only-package #{self.name}",
+    "install": "esy-installer #{self.target_dir / 'default' / self.name '.install'}"
   },
   "dependencies": {
     "@opam/base": "*",

@@ -10,11 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Before generating a template, Spin will check if the user has all the dependencies installed and exit gracefully if not. (by [@citizen428](https://github.com/citizen428))
+- Add a `condition` field in the `postinstall` stanza for the templates.
 
 ### Changed
 
 - Print a warning when the update of the official templates failed, but continue the execution.
 - Do not update the official templates when running new with a local path or a git repository.
+- Remove some runtime dependencies to reduce Spin's binary size.
 
 ### Fixed
 
