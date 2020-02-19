@@ -19,6 +19,7 @@
   (dune (and :build (>= 1.6.0)))
   (dune-release :dev)
   base
+  stdio
   cmdliner
   fileutils
   jingoo

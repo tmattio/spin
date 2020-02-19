@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@opam/base": "*",
+    "@opam/stdio": "*",
     "@opam/cmdliner": "*",
     "@opam/fileutils": "*",
     "@opam/jingoo": "*",
