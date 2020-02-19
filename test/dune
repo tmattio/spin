@@ -1,6 +1,5 @@
 (library
- (name Spin_test)
- (public_name spin.test)
+ (name spin_test)
  (flags -open Base -linkall -g -w -9)
  (libraries base rely.lib spin.lib)
  (modules
@@ -8,14 +7,15 @@
 
 (executable
  (name test_runner)
- (public_name test_runner.exe)
- (modules test_runner)
- (libraries base spin.test)
- (flags -open Base))
+ (libraries base rely.lib spin_test)
+ (flags -open Base)
+ (modules test_runner))
 
 (alias
  (name runtest)
- (deps (:test_runner test_runner.exe))
- (action (run %{test_runner} --color=always)))
+ (deps
+  (:m test_runner.exe))
+ (action
+  (run %{m} -q --color=always)))
 
 (include_subdirs unqualified)
