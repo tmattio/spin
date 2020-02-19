@@ -8,6 +8,8 @@ type post_install = {
   description: option(string),
   [@sexp.option]
   working_dir: option(string),
+  [@sexp.option]
+  condition: option(string),
 };
 
 [@deriving of_sexp]
@@ -59,7 +61,16 @@ let t_of_cst = (~use_defaults, ~models, ~global_context, cst: list(cst)) => {
         cst,
         ~f=
           fun
-          | Post_install(v) => Some(v)
+          | Post_install(v) => {
+              let evaluated =
+                Option.map(v.condition, ~f=condition => {
+                  Jg_wrapper.from_string(condition, ~models) |> Bool.of_string
+                })
+                |> Option.value(~default=true);
+
+              evaluated ? Some(v) : None;
+            }
+
           | _ => None,
       ),
     ignore_files:
