@@ -1,1 +1,1 @@
-let version = "%%VERSION%%";
+let version = "0.4.8";
