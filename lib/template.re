@@ -168,7 +168,7 @@ let generate =
     "🎉  Success! Created the project at " ++ destination,
   );
 
-  switch (doc_config.commands) {
+  switch (template_config.example_commands) {
   | [] => ()
   | commands =>
     Stdio.print_endline(

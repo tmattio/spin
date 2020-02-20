@@ -19,17 +19,26 @@ type ignore = {
 };
 
 [@deriving of_sexp]
+type example_command = {
+  name: string,
+  description: string,
+  condition: string,
+};
+
+[@deriving of_sexp]
 type cst =
   | Post_install(post_install)
   | Ignore(ignore)
   | Cfg_string(Prompt_cfg.string_cfg)
   | Cfg_list(Prompt_cfg.list_cfg)
-  | Cfg_confirm(Prompt_cfg.confirm_cfg);
+  | Cfg_confirm(Prompt_cfg.confirm_cfg)
+  | Example_command(example_command);
 
 type t = {
   models: list((string, Jg_types.tvalue)),
   post_installs: list(post_install),
   ignore_files: list(string),
+  example_commands: list(example_command),
 };
 
 let path = Utils.Filename.concat("template", "spin");
@@ -85,5 +94,24 @@ let t_of_cst = (~use_defaults, ~models, ~global_context, cst: list(cst)) => {
           | _ => None,
       )
       |> Caml.List.flatten,
+    example_commands:
+      Config_file_cst_utils.get(
+        cst,
+        ~f=
+          fun
+          | Example_command(v) => {
+              let evaluated = Jg_wrapper.from_string(v.condition, ~models);
+              if (Bool.of_string(evaluated)) {
+                Some({
+                  name: Jg_wrapper.from_string(v.name, ~models),
+                  description: Jg_wrapper.from_string(v.description, ~models),
+                  condition: v.condition,
+                });
+              } else {
+                None;
+              };
+            }
+          | _ => None,
+      ),
   };
 };
