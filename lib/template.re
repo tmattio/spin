@@ -57,6 +57,19 @@ let generate =
       source: Source.t,
       destination: string,
     ) => {
+  if (Option.is_none(global_context)) {
+    Console.log(
+      <Pastel>
+        <Pastel>
+          "\n⚠️  No config file found. To save some time in the future, "
+        </Pastel>
+        <Pastel> "create one with " </Pastel>
+        <Pastel color=Pastel.BlueBright bold=true> "spin config" </Pastel>
+        <Pastel> ".\n" </Pastel>
+      </Pastel>,
+    );
+  };
+
   ensure_dir_is_empty(destination);
 
   let origin = Source.to_local_path(source);
