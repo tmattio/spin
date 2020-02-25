@@ -22,7 +22,8 @@ type ignore = {
 type example_command = {
   name: string,
   description: string,
-  condition: string,
+  [@sexp.option]
+  condition: option(string),
 };
 
 [@deriving of_sexp]
@@ -100,16 +101,23 @@ let t_of_cst = (~use_defaults, ~models, ~global_context, cst: list(cst)) => {
         ~f=
           fun
           | Example_command(v) => {
-              let evaluated = Jg_wrapper.from_string(v.condition, ~models);
-              if (Bool.of_string(evaluated)) {
-                Some({
-                  name: Jg_wrapper.from_string(v.name, ~models),
-                  description: Jg_wrapper.from_string(v.description, ~models),
-                  condition: v.condition,
-                });
-              } else {
-                None;
-              };
+              Option.map(
+                v.condition,
+                ~f=condition => {
+                  let evaluated = Jg_wrapper.from_string(condition, ~models);
+                  if (Bool.of_string(evaluated)) {
+                    Some({
+                      name: Jg_wrapper.from_string(v.name, ~models),
+                      description:
+                        Jg_wrapper.from_string(v.description, ~models),
+                      condition: v.condition,
+                    });
+                  } else {
+                    None;
+                  };
+                },
+              )
+              |> Option.value(~default=Some(v));
             }
           | _ => None,
       ),
