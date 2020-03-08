@@ -1,9 +1,8 @@
 name: Release
 
-on:
-  push:
-    tags:
-      - v*
+on: 
+  release:
+    types: published
 
 jobs:
   build:
@@ -15,9 +14,6 @@ jobs:
         # os: [ubuntu-latest, macos-latest, windows-latest]
         os: [ubuntu-latest, macos-latest]
     steps:
-      - name: Log Github reference
-        run: echo "Checking out ${{ github.ref }}"
-
       - uses: actions/checkout@v2
 
       - name: Use Node.js 12.x
@@ -38,7 +34,7 @@ jobs:
             ${{ runner.OS }}-
 
       - name: Install esy
-        run: npm install -g @esy-nightly/esy@latest
+        run: npm install -g esy@latest
 
       - name: Import dependencies
         if: steps.cache.outputs.cache-hit == 'true'
@@ -49,6 +45,9 @@ jobs:
 
       - name: Build
         run: esy build
+
+      - name: Substitute watermarks
+        run: esy dune subst
 
       - name: Run tests
         run: esy test
@@ -85,6 +84,33 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
+
+      - name: Cache esy dependencies
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: _export
+          key: ${{ runner.OS }}-build-${{ hashFiles('esy.lock/index.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Install esy
+        run: npm install -g esy@latest
+
+      - name: Import dependencies
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: esy import-build _export/*
+
+      - name: Install dependencies
+        run: esy install
+
+      - name: Build
+        run: esy build
+
+      - name: Substitute watermarks
+        run: esy dune subst
 
       - name: Make NPM release skeleton
         run: node scripts/release-make-skeleton.js
@@ -123,23 +149,12 @@ jobs:
           # zip -r ../../spin-windows-x64.zip .
           # cd ../..
 
-      - name: Create Github release
-        id: create_release
-        uses: actions/create-release@v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-
       - name: Upload spin-darwin-x64.zip to Github release 
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ github.event.release.upload_url }}
           asset_path: spin-darwin-x64.zip
           asset_name: spin-darwin-x64.zip
           asset_content_type: application/gzip
@@ -149,7 +164,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ github.event.release.upload_url }}
           asset_path: spin-linux-x64.zip
           asset_name: spin-linux-x64.zip
           asset_content_type: application/gzip
@@ -160,7 +175,7 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     upload_url: ${{ github.event.release.upload_url }}
       #     asset_path: spin-windows-x64.zip
       #     asset_name: spin-windows-x64.zip
       #     asset_content_type: application/gzip
