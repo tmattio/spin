@@ -1,6 +1,5 @@
 (lang dune 2.0)
 (name spin)
-(version 0.5.0)
 (source (github tmattio/spin))
 (documentation "https://tmattio.github.io/spin")
 (license MIT)
