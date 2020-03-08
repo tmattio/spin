@@ -7,7 +7,7 @@ const fs = require("fs");
 const platform = process.platform;
 
 const binariesToCopy = [
-  "spin.exe"
+  "spin"
 ];
 
 function find_arch() {

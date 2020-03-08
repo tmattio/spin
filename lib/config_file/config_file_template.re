@@ -8,6 +8,8 @@ type post_install = {
   description: option(string),
   [@sexp.option]
   working_dir: option(string),
+  [@sexp.option]
+  condition: option(string),
 };
 
 [@deriving of_sexp]
@@ -17,17 +19,27 @@ type ignore = {
 };
 
 [@deriving of_sexp]
+type example_command = {
+  name: string,
+  description: string,
+  [@sexp.option]
+  condition: option(string),
+};
+
+[@deriving of_sexp]
 type cst =
   | Post_install(post_install)
   | Ignore(ignore)
   | Cfg_string(Prompt_cfg.string_cfg)
   | Cfg_list(Prompt_cfg.list_cfg)
-  | Cfg_confirm(Prompt_cfg.confirm_cfg);
+  | Cfg_confirm(Prompt_cfg.confirm_cfg)
+  | Example_command(example_command);
 
 type t = {
   models: list((string, Jg_types.tvalue)),
   post_installs: list(post_install),
   ignore_files: list(string),
+  example_commands: list(example_command),
 };
 
 let path = Utils.Filename.concat("template", "spin");
@@ -59,7 +71,16 @@ let t_of_cst = (~use_defaults, ~models, ~global_context, cst: list(cst)) => {
         cst,
         ~f=
           fun
-          | Post_install(v) => Some(v)
+          | Post_install(v) => {
+              let evaluated =
+                Option.map(v.condition, ~f=condition => {
+                  Jg_wrapper.from_string(condition, ~models) |> Bool.of_string
+                })
+                |> Option.value(~default=true);
+
+              evaluated ? Some(v) : None;
+            }
+
           | _ => None,
       ),
     ignore_files:
@@ -74,5 +95,31 @@ let t_of_cst = (~use_defaults, ~models, ~global_context, cst: list(cst)) => {
           | _ => None,
       )
       |> Caml.List.flatten,
+    example_commands:
+      Config_file_cst_utils.get(
+        cst,
+        ~f=
+          fun
+          | Example_command(v) => {
+              Option.map(
+                v.condition,
+                ~f=condition => {
+                  let evaluated = Jg_wrapper.from_string(condition, ~models);
+                  if (Bool.of_string(evaluated)) {
+                    Some({
+                      name: Jg_wrapper.from_string(v.name, ~models),
+                      description:
+                        Jg_wrapper.from_string(v.description, ~models),
+                      condition: v.condition,
+                    });
+                  } else {
+                    None;
+                  };
+                },
+              )
+              |> Option.value(~default=Some(v));
+            }
+          | _ => None,
+      ),
   };
 };

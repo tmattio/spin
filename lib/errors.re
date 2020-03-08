@@ -10,110 +10,99 @@ exception Generator_files_already_exist(string);
 exception Subprocess_exited_with_non_zero(string, int);
 exception External_command_unavailable(string);
 
+let print_err = e => {
+  ["😱  ", ...e] |> Pastel.make(~color=Pastel.Red) |> Stdio.prerr_endline;
+};
+
 let handle_errors = fn =>
   try(fn()) {
   | Missing_env_var(name) =>
-    Console.error(
-      <Pastel color=Pastel.Red>
-        {"😱  Ooops, it seems you don't have an environment variable named \""
-         ++ name
-         ++ "\". I need it to work!"}
-      </Pastel>,
-    );
+    print_err([
+      "Ooops, it seems you don't have an environment variable named \"",
+      name,
+      "\". I need it to work!",
+    ]);
+
     Caml.exit(201);
   | Incorrect_destination_path(reason) =>
-    Console.error(
-      <Pastel color=Pastel.Red>
-        {"😱  Can't generate the template at this destination: " ++ reason}
-      </Pastel>,
-    );
+    print_err(["Can't generate the template at this destination: ", reason]);
+
     Caml.exit(202);
   | Incorrect_template_name(name) =>
-    Console.error(
-      <Pastel color=Pastel.Red>
-        {"😱  The template \""
-         ++ name
-         ++ "\" does not exist.\n"
-         ++ "The template can be a local path, a git repository or the name of an official template.\n"
-         ++ "To get the list of official templates, you can use the subcommand `ls`"}
-      </Pastel>,
-    );
+    print_err([
+      "The template \"",
+      name,
+      "\" does not exist.\n",
+      "The template can be a local path, a git repository or the name of an official template.\n",
+      "To get the list of official templates, you can use the subcommand `ls`",
+    ]);
+
     Caml.exit(203);
   | Config_file_syntax_error =>
-    Console.error(
-      <Pastel color=Pastel.Red>
-        "😱  There is a syntax error in one of the configuration file. I can't generate your project."
-      </Pastel>,
-    );
+    print_err([
+      "There is a syntax error in one of the configuration file. I can't generate your project.",
+    ]);
+
     Caml.exit(204);
   | Current_directory_not_a_spin_project =>
-    Console.error(
-      <Pastel>
-        "You need to be inside a Spin project to run this command, but the current directory is not in a Spin project.\nA Spin project contains a file `.spin` at its root."
-      </Pastel>,
-    );
+    print_err([
+      "You need to be inside a Spin project to run this command, but the current directory is not in a Spin project.\nA Spin project contains a file `.spin` at its root.",
+    ]);
+
     Caml.exit(205);
   | Generator_does_not_exist(name) =>
-    Console.error(
-      <Pastel color=Pastel.Red>
-        "😱  This generator does not exist, you can list the generators of the current project with the command `spin gen`."
-      </Pastel>,
-    );
+    print_err([
+      "This generator does not exist, you can list the generators of the current project with the command `spin gen`.",
+    ]);
+
     Caml.exit(206);
   | Cannot_parse_template_file(file) =>
-    Console.error(
-      <Pastel color=Pastel.Red>
-        {"😱  An error occured while parsing "
-         ++ file
-         ++ ". Please, make sure this is a correct Jingoo template."}
-      </Pastel>,
-    );
+    print_err([
+      "An error occured while parsing ",
+      file,
+      ". Please, make sure this is a correct Jingoo template.",
+    ]);
+
     Caml.exit(207);
   | Cannot_access_remote_repository(repo) =>
-    Console.error(
-      <Pastel color=Pastel.Red>
-        {"😱  Error while accessing remote repository at url "
-         ++ repo
-         ++ ", please check your Internet connection."}
-      </Pastel>,
-    );
+    print_err([
+      "Error while accessing remote repository at url ",
+      repo,
+      ", please check your Internet connection.",
+    ]);
+
     Caml.exit(208);
   | Generator_files_already_exist(file) =>
-    Console.error(
-      <Pastel color=Pastel.Red>
-        {"The generator wants to create the file "
-         ++ file
-         ++ ", but it already exist."}
-      </Pastel>,
-    );
+    print_err([
+      "The generator wants to create the file ",
+      file,
+      ", but it already exist.",
+    ]);
+
     Caml.exit(209);
   | Subprocess_exited_with_non_zero(command, exit_code) =>
-    Console.error(
-      <Pastel color=Pastel.Red>
-        {"😱  This command did not run as expected: "
-         ++ command
-         ++ ". It exited with the code "
-         ++ Int.to_string(exit_code)
-         ++ "."}
-      </Pastel>,
-    );
+    print_err([
+      "This command did not run as expected: ",
+      command,
+      ". It exited with the code ",
+      Int.to_string(exit_code),
+      ".",
+    ]);
+
     Caml.exit(210);
   | External_command_unavailable(command) =>
-    Console.error(
-      <Pastel color=Pastel.Red>
-        {"😱  External command not available: "
-         ++ command
-         ++ ". Please install it and try again."}
-      </Pastel>,
-    );
+    print_err([
+      "External command not available: ",
+      command,
+      ". Please install it and try again.",
+    ]);
+
     Caml.exit(211);
   | _ as exn =>
-    Console.log(
-      <Pastel color=Pastel.Red>
-        {"😱  Ooops, an unknown error occured. You can file a bug reports at https://github.com/tmattio/spin.\n"
-         ++ "Here is the stack trace in case it helps:\n"}
-      </Pastel>,
-    );
+    print_err([
+      "Ooops, an unknown error occured. You can file a bug reports at https://github.com/tmattio/spin.\n",
+      "Here is the stack trace in case it helps:\n",
+    ]);
 
     raise(exn);
   };

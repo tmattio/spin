@@ -1,36 +1,6 @@
 #!/bin/bash
 
-function bump_source() {
-  search='(let version = ").+(")'
-  replace="\1$2\2"
-  sed -i ".tmp" -E "s/${search}/${replace}/g" "$1"
-  rm "$1.tmp"
-}
-
-function bump_brew() {
-  search="(VERSION = ').+(')"
-  replace="\1$2\2"
-  sed -i ".tmp" -E "s/${search}/${replace}/g" "$1"
-  rm "$1.tmp"
-}
-
-function bump_all() {
-  output=$(npm version "${release}" --no-git-tag-version)
-  version=${output:1}
-  bump_source "bin/package.re" "$version"
-  bump_brew "scripts/tmattio-spin.rb" "$version"
-}
-
-function help() {
-  echo "Usage: $(basename $0) [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease]"
-}
-
-if [ -z "$1" ] || [ "$1" = "help" ]; then
-  help
-  exit
-fi
-
-release=$1
+set -e
 
 if [ -d ".git" ]; then
   changes=$(git status --porcelain)
@@ -43,12 +13,13 @@ if [ -d ".git" ]; then
     echo "Please run the release script on master"
     exit 1
   else
-    bump_all
-    git add .
-    git commit -m "Bump to ${version}"
-    git tag -a "${output}" -m "${version}"
-    git push origin --tags
+    esy x dune-release tag
+    esy x dune-release distrib --skip-tests
+    esy x dune-release publish distrib -y
+    esy x dune-release opam pkg
+    esy x dune-release opam submit --no-auto-open -y
   fi
 else
-  bump_all
+  echo "This project is not a git repository. Run `git init` first to be able to release."
+  exit 1
 fi

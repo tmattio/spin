@@ -16,7 +16,7 @@ let get_tempdir = name => {
 };
 
 let exe_path =
-  Lwt_process.pread_chars(("", [|"esy", "x", "which", "spin.exe"|]))
+  Lwt_process.pread_chars(("", [|"esy", "x", "which", "spin"|]))
   |> Lwt_stream.to_string
   |> Lwt.map(String.strip)
   |> Lwt_main.run;

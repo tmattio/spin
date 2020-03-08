@@ -6,7 +6,7 @@ let rec read =
           prompt: string,
         )
         : 'a => {
-  Stdio.Out_channel.print_string(<Pastel bold> {prompt ++ ": "} </Pastel>);
+  Pastel.make(~bold=true, [prompt ++ ": "]) |> Stdio.Out_channel.print_string;
 
   switch (default) {
   | None => ()
@@ -36,9 +36,7 @@ let rec read =
     switch (validate(user_input)) {
     | Ok(result) => result
     | Error(error) =>
-      Stdio.Out_channel.print_endline(
-        <Pastel color=Pastel.Red> error </Pastel>,
-      );
+      Pastel.make(~color=Pastel.Red, [error]) |> Stdio.print_endline;
       read(prompt, ~validate, ~default?, ~bold);
     }
   };
@@ -146,7 +144,7 @@ let list =
       prompt: string,
       choices: list(string),
     ) => {
-  Stdio.Out_channel.print_endline(<Pastel bold> prompt </Pastel>);
+  Pastel.make(~bold=true, [prompt]) |> Stdio.print_endline;
   List.iteri(choices, ~f=(i, el) =>
     Stdio.Out_channel.print_endline(Int.to_string(i + 1) ++ " - " ++ el)
   );

@@ -1,2 +1,0 @@
-(executable (name test_runner) (modules (:standard))
-    (public_name test-runner.exe) (libraries spin.test))

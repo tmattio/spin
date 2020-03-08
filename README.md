@@ -41,14 +41,14 @@
 ### Using Homebrew (macOS)
 
 ```bash
-brew install https://raw.githubusercontent.com/tmattio/spin/master/scripts/tmattio-spin.rb
+brew install tmattio/tap/spin
 ```
 
-<!-- ### Using Chocolatey (Windows)
+### Using Opam
 
 ```bash
-choco install
-``` -->
+opam install spin
+```
 
 ### Using npm
 

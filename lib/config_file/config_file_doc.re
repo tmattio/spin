@@ -1,19 +1,11 @@
 [@deriving of_sexp]
-type command = {
-  name: string,
-  description: string,
-};
-
-[@deriving of_sexp]
 type cst =
   | Name(string)
-  | Description(string)
-  | Command(command);
+  | Description(string);
 
 type t = {
   name: string,
   description: string,
-  commands: list(command),
 };
 
 type doc = t;
@@ -35,14 +27,6 @@ let doc_of_cst = (cst: list(cst)): doc => {
       ~f=
         fun
         | Description(v) => Some(v)
-        | _ => None,
-    ),
-  commands:
-    Config_file_cst_utils.get(
-      cst,
-      ~f=
-        fun
-        | Command(v) => Some(v)
         | _ => None,
     ),
 };

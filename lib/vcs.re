@@ -1,3 +1,5 @@
+open Lwt;
+
 let git_clone = (~destination, ~branch=?, repo) => {
   let args =
     switch (branch) {
@@ -5,20 +7,21 @@ let git_clone = (~destination, ~branch=?, repo) => {
     | None => [|"clone", repo, destination|]
     };
 
-  let%lwt result =
-    Utils.Sys.exec(
-      "git",
-      ~args,
-      ~stdout=Lwt_process.(`Dev_null),
-      ~stderr=Lwt_process.(`Dev_null),
-    );
-
-  try(result |> Lwt.return) {
-  | _ => Lwt.fail_with("Error while cloning the repository")
-  };
+  Utils.Sys.exec(
+    "git",
+    ~args,
+    ~stdout=Lwt_process.(`Dev_null),
+    ~stderr=Lwt_process.(`Dev_null),
+  )
+  >>= (
+    result =>
+      try(result |> Lwt.return) {
+      | _ => Lwt.fail_with("Error while cloning the repository")
+      }
+  );
 };
 
-/* Inspired from the reges "((git|ssh|http(s)?)|(git@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(\.git)(/)?".
+/* Inspired from the regex "((git|ssh|http(s)?)|(git@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(\.git)(/)?".
    Source: https://stackoverflow.com/questions/2514859/regular-expression-for-git-repository */
 let is_git_url = value => {
   let regexp =
@@ -29,15 +32,16 @@ let is_git_url = value => {
 };
 
 let git_pull = repo => {
-  let%lwt result =
-    Utils.Sys.exec(
-      "git",
-      ~args=[|"-C", repo, "pull"|],
-      ~stdout=Lwt_process.(`Dev_null),
-      ~stderr=Lwt_process.(`Dev_null),
-    );
-
-  try(result |> Lwt.return) {
-  | _ => Lwt.fail_with("Error while pulling the repository")
-  };
+  Utils.Sys.exec(
+    "git",
+    ~args=[|"-C", repo, "pull"|],
+    ~stdout=Lwt_process.(`Dev_null),
+    ~stderr=Lwt_process.(`Dev_null),
+  )
+  >>= (
+    result =>
+      try(result |> Lwt.return) {
+      | _ => Lwt.fail_with("Error while pulling the repository")
+      }
+  );
 };

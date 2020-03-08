@@ -102,22 +102,21 @@ let generate = (~use_defaults=false, ~source: Source.t, name) => {
      )
   |> ensure_files_dont_exist;
 
-  Console.log(
-    <Pastel>
-      <Pastel> "\n🏗️  Creating a new " </Pastel>
-      <Pastel color=Pastel.Blue bold=true> {generator.name} </Pastel>
-    </Pastel>,
-  );
+  Pastel.make([
+    "\n🏗️  Creating a new ",
+    Pastel.make(~color=Pastel.Blue, ~bold=true, [generator.name]),
+  ])
+  |> Stdio.print_endline;
+
   loop(generator.files);
-  Console.log(
-    <Pastel color=Pastel.GreenBright bold=true> "Done!\n" </Pastel>,
-  );
+
+  Pastel.make(~color=Pastel.GreenBright, ~bold=true, ["Done!\n"])
+  |> Stdio.print_endline;
 
   switch (generator.message) {
   | Some(message) =>
-    Console.log(
-      <Pastel color=Pastel.Yellow bold=true> {message ++ "\n"} </Pastel>,
-    )
+    Pastel.make(~color=Pastel.Yellow, ~bold=true, [message, "\n"])
+    |> Stdio.print_endline
   | None => ()
   };
 };
