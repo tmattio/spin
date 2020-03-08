@@ -12,7 +12,7 @@ if [ -d ".git" ]; then
     exit 1
   else
     esy dune-release tag
-    esy dune-release distrib
+    esy dune-release distrib --skip-tests
     esy dune-release publish -y
     esy dune-release opam pkg
     esy dune-release opam submit --no-auto-open -y
