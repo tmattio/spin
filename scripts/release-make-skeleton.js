@@ -53,7 +53,7 @@ for (const file of filesToTouch) {
 
 const pkgJson = {
   name: "@tmattio/spin",
-  version: package.version,
+  version: "%%VERSION%%",
   description: package.description,
   homepage: package.homepage,
   license: package.license,
