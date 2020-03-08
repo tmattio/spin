@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ -d ".git" ]; then
   changes=$(git status --porcelain)
   branch=$(git rev-parse --abbrev-ref HEAD)
