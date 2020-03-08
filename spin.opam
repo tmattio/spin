@@ -29,6 +29,8 @@ depends: [
   "ppx_sexp_conv"
   "sexplib"
 ]
+dev-repo: "git+https://github.com/tmattio/spin.git"
+# We need to avoid "@runtest", since it depends on rely
 build: [
   ["dune" "subst"] {pinned}
   [
@@ -39,8 +41,6 @@ build: [
     "-j"
     jobs
     "@install"
-    "@runtest" {with-test}
     "@doc" {with-doc}
   ]
 ]
-dev-repo: "git+https://github.com/tmattio/spin.git"
