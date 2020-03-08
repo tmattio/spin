@@ -18,6 +18,6 @@ depends: [
   "ounit" {with-test & >= "2.0.0"}
 ]
 url {
-  src: "https://github.com/tategakibunko/jingoo/archive/v1.3.2.tar.gz"
-  checksum: "md5=90b16fd2bcf332c664f20dd9837723a1"
+  src: "https://github.com/tategakibunko/jingoo/archive/v1.3.3.tar.gz"
+  checksum: "md5=226319585e6d8541bbce7582021ad80d"
 }
