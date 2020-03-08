@@ -11,11 +11,11 @@ if [ -d ".git" ]; then
     echo "Please run the release script on master"
     exit 1
   else
-    esy dune-release tag
-    esy dune-release distrib --skip-tests
-    esy dune-release publish -y
-    esy dune-release opam pkg
-    esy dune-release opam submit --no-auto-open -y
+    esy x dune-release tag
+    esy x dune-release distrib --skip-tests
+    esy x dune-release publish distrib -y
+    esy x dune-release opam pkg
+    esy x dune-release opam submit --no-auto-open -y
   fi
 else
   echo "This project is not a git repository. Run `git init` first to be able to release."
