@@ -49,6 +49,9 @@ jobs:
       - name: Substitute watermarks
         run: esy dune subst
 
+      - name: Build changes
+        run: esy dune build
+
       - name: Export dependencies
         run: esy export-dependencies
 
