@@ -30,6 +30,7 @@
   "devDependencies": {
     "@opam/dune-release": "*",
     "@opam/merlin": "*",
+    "@opam/ocamlformat": "*",
     "@opam/odoc": "*",
     "@opam/utop": "*",
     "refmterr": "*",

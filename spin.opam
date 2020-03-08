@@ -17,6 +17,7 @@ depends: [
   "odoc" {with-doc}
   "dune-release" {dev}
   "merlin" {dev}
+  "ocamlformat" {dev}
   "utop" {dev}
   "reason" {build}
   "base"

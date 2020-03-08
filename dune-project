@@ -22,6 +22,7 @@ Project scaffolding tool and set of templates for Reason and OCaml
   (odoc :with-doc)
   (dune-release :dev)
   (merlin :dev)
+  (ocamlformat :dev)
   (utop :dev)
   (reason :build)
   base
