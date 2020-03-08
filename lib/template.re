@@ -2,16 +2,13 @@ open Jingoo;
 
 let check_config_file = (c: option(Global_context.t)) =>
   if (Option.is_none(c)) {
-    Console.log(
-      <Pastel>
-        <Pastel>
-          "\n⚠️  No config file found. To save some time in the future, "
-        </Pastel>
-        <Pastel> "create one with " </Pastel>
-        <Pastel color=Pastel.BlueBright bold=true> "spin config" </Pastel>
-        <Pastel> ".\n" </Pastel>
-      </Pastel>,
-    );
+    Pastel.make([
+      "\n⚠️  No config file found. To save some time in the future, ",
+      "create one with ",
+      Pastel.make(~color=Pastel.BlueBright, ~bold=true, ["spin config"]),
+      ".\n",
+    ])
+    |> Stdio.print_endline;
   };
 
 let ensure_dir_is_empty = (d: string) =>
