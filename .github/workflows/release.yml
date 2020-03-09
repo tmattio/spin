@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Fetch git tags
+        run: git fetch --tags --force
+
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
