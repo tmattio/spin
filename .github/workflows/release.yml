@@ -19,6 +19,11 @@ jobs:
       - name: Fetch git tags
         run: git fetch --tags --force
 
+      - name: Fetch git tags
+        run: |
+          tag=$(git describe --always --dirty)
+          echo "${tag}"
+
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
