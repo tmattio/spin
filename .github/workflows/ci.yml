@@ -48,7 +48,7 @@ jobs:
         run: esy install
 
       - name: Build
-        run: esy build
+        run: esy build --release
 
       - name: Check formatting
         run: esy dune build @fmt

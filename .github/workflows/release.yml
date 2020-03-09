@@ -44,12 +44,12 @@ jobs:
         run: esy install
 
       - name: Build
-        run: esy build
+        run: esy build --release
 
       - name: Substitute watermarks
         run: esy dune subst
 
-      - name: Build changes
+      - name: Build subst changes
         run: esy dune build
 
       - name: Export dependencies
@@ -107,7 +107,7 @@ jobs:
         run: esy install
 
       - name: Build
-        run: esy build
+        run: esy build --release
 
       - name: Substitute watermarks
         run: esy dune subst
