@@ -1,6 +1,8 @@
 name: Release
 
-on: [push]
+on: 
+  release:
+    types: published
 
 jobs:
   build:
@@ -10,9 +12,7 @@ jobs:
       matrix:
         # TODO(tmattio) - Fix windows build
         # os: [ubuntu-latest, macos-latest, windows-latest]
-        # TODO(tmattio) - Add back ubuntu
-        # os: [ubuntu-latest, macos-latest]
-        os: [macos-latest]
+        os: [ubuntu-latest, macos-latest]
     steps:
       - uses: actions/checkout@v2
 
@@ -56,9 +56,6 @@ jobs:
       - name: Build subst changes
         run: esy dune build
 
-      - name: Export dependencies
-        run: esy export-dependencies
-
       - name: Get Esy binary path
         id: esy_binary_path
         shell: bash
@@ -71,125 +68,128 @@ jobs:
           echo "ESY__BINARY_PATH: $ESY__BINARY_PATH"
           echo "##[set-output name=path;]$ESY__BINARY_PATH"
 
-      # - name: Upload artifacts for ${{ matrix.os }}
-      #   uses: actions/upload-artifact@master
+      - name: Upload artifacts for ${{ matrix.os }}
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ matrix.os }}
+          path: ${{ steps.esy_binary_path.outputs.path }}
+
+      - name: Export dependencies
+        run: esy export-dependencies
+
+  publish:
+    needs: build
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Cache esy dependencies
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: _export
+          key: ${{ runner.OS }}-build-${{ hashFiles('esy.lock/index.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Install esy
+        run: npm install -g esy@latest
+
+      - name: Import dependencies
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: esy import-build _export/*
+
+      - name: Install dependencies
+        run: esy install
+
+      - name: Build
+        run: esy build --release
+
+      - name: Substitute watermarks
+        run: esy dune subst
+
+      - name: Make NPM release skeleton
+        run: node scripts/release-make-skeleton.js
+
+      - name: Download linux artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: ubuntu-latest
+          path: _release/platform-linux-x64
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: macos-latest
+          path: _release/platform-darwin-x64
+
+      # TODO(tmattio) - Fix windows build
+      # - name: Download windows artifacts
+      #   uses: actions/download-artifact@master
       #   with:
-      #     name: ${{ matrix.os }}
-      #     path: ${{ steps.esy_binary_path.outputs.path }}
+      #     name: windows-latest
+      #     path: _release/platform-windows-x64
 
-  # publish:
-  #   needs: build
-  #   name: Publish
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
+      - name: Create archives for Github release
+        run: |
+          cd _release/platform-darwin-x64
+          zip -r ../../spin-darwin-x64.zip .
+          cd ../..
 
-  #     - name: Use Node.js 12.x
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 12.x
+          cd _release/platform-linux-x64
+          zip -r ../../spin-linux-x64.zip .
+          cd ../..
 
-  #     - name: Cache esy dependencies
-  #       uses: actions/cache@v1
-  #       id: cache
-  #       with:
-  #         path: _export
-  #         key: ${{ runner.OS }}-build-${{ hashFiles('esy.lock/index.json') }}
-  #         restore-keys: |
-  #           ${{ runner.OS }}-build-${{ env.cache-name }}-
-  #           ${{ runner.OS }}-build-
-  #           ${{ runner.OS }}-
+          # TODO(tmattio) - Fix windows build
+          # cd _release/platform-windows-x64
+          # zip -r ../../spin-windows-x64.zip .
+          # cd ../..
 
-  #     - name: Install esy
-  #       run: npm install -g esy@latest
+      - name: Upload spin-darwin-x64.zip to Github release 
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: spin-darwin-x64.zip
+          asset_name: spin-darwin-x64.zip
+          asset_content_type: application/gzip
 
-  #     - name: Import dependencies
-  #       if: steps.cache.outputs.cache-hit == 'true'
-  #       run: esy import-build _export/*
+      - name: Upload spin-linux-x64.zip to Github release 
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: spin-linux-x64.zip
+          asset_name: spin-linux-x64.zip
+          asset_content_type: application/gzip
 
-  #     - name: Install dependencies
-  #       run: esy install
+      # TODO(tmattio) - Fix windows build
+      # - name: Upload spin-windows-x64.zip to Github release 
+      #   uses: actions/upload-release-asset@v1.0.1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ github.event.release.upload_url }}
+      #     asset_path: spin-windows-x64.zip
+      #     asset_name: spin-windows-x64.zip
+      #     asset_content_type: application/gzip
 
-  #     - name: Build
-  #       run: esy build --release
-
-  #     - name: Substitute watermarks
-  #       run: esy dune subst
-
-  #     - name: Make NPM release skeleton
-  #       run: node scripts/release-make-skeleton.js
-
-  #     - name: Download linux artifacts
-  #       uses: actions/download-artifact@master
-  #       with:
-  #         name: ubuntu-latest
-  #         path: _release/platform-linux-x64
-
-  #     - name: Download macOS artifacts
-  #       uses: actions/download-artifact@master
-  #       with:
-  #         name: macos-latest
-  #         path: _release/platform-darwin-x64
-
-  #     # TODO(tmattio) - Fix windows build
-  #     # - name: Download windows artifacts
-  #     #   uses: actions/download-artifact@master
-  #     #   with:
-  #     #     name: windows-latest
-  #     #     path: _release/platform-windows-x64
-
-  #     - name: Create archives for Github release
-  #       run: |
-  #         cd _release/platform-darwin-x64
-  #         zip -r ../../spin-darwin-x64.zip .
-  #         cd ../..
-
-  #         cd _release/platform-linux-x64
-  #         zip -r ../../spin-linux-x64.zip .
-  #         cd ../..
-
-  #         # TODO(tmattio) - Fix windows build
-  #         # cd _release/platform-windows-x64
-  #         # zip -r ../../spin-windows-x64.zip .
-  #         # cd ../..
-
-  #     - name: Upload spin-darwin-x64.zip to Github release 
-  #       uses: actions/upload-release-asset@v1.0.1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         upload_url: ${{ github.event.release.upload_url }}
-  #         asset_path: spin-darwin-x64.zip
-  #         asset_name: spin-darwin-x64.zip
-  #         asset_content_type: application/gzip
-
-  #     - name: Upload spin-linux-x64.zip to Github release 
-  #       uses: actions/upload-release-asset@v1.0.1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         upload_url: ${{ github.event.release.upload_url }}
-  #         asset_path: spin-linux-x64.zip
-  #         asset_name: spin-linux-x64.zip
-  #         asset_content_type: application/gzip
-
-  #     # TODO(tmattio) - Fix windows build
-  #     # - name: Upload spin-windows-x64.zip to Github release 
-  #     #   uses: actions/upload-release-asset@v1.0.1
-  #     #   env:
-  #     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #     #   with:
-  #     #     upload_url: ${{ github.event.release.upload_url }}
-  #     #     asset_path: spin-windows-x64.zip
-  #     #     asset_name: spin-windows-x64.zip
-  #     #     asset_content_type: application/gzip
-
-  #     - name: Publish NPM package
-  #       run: |
-  #         npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
-  #         npm config set scope "@tmattio"
-  #         npm config list
-  #         npm publish --access public
-  #       working-directory: ./_release
-  #       env:
-  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      - name: Publish NPM package
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
+          npm config set scope "@tmattio"
+          npm config list
+          npm publish --access public
+        working-directory: ./_release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
