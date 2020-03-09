@@ -19,11 +19,6 @@ jobs:
       - name: Fetch git tags
         run: git fetch --tags --force
 
-      - name: Print git describe
-        run: |
-          tag=$(git describe --always --dirty)
-          echo "${tag}"
-
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
@@ -61,9 +56,6 @@ jobs:
       - name: Substitute watermarks
         run: esy dune subst
 
-      - name: cat package.json
-        run: cat scripts/release-make-skeleton.js
-
       - name: Build subst changes
         run: esy dune build
 
@@ -94,6 +86,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Fetch git tags
+        run: git fetch --tags --force
 
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
