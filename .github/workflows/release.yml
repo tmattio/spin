@@ -22,6 +22,10 @@ jobs:
           node-version: 12.x
           registry-url: "https://registry.npmjs.org"
 
+      - name: Set macOS deployment target
+        run: |
+          echo "::set-env name=MACOSX_DEPLOYMENT_TARGET=10.9"
+          
       - name: Cache esy dependencies
         uses: actions/cache@v1
         id: cache
