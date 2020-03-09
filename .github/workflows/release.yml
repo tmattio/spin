@@ -19,7 +19,7 @@ jobs:
       - name: Fetch git tags
         run: git fetch --tags --force
 
-      - name: Fetch git tags
+      - name: Print git describe
         run: |
           tag=$(git describe --always --dirty)
           echo "${tag}"
@@ -60,6 +60,9 @@ jobs:
 
       - name: Substitute watermarks
         run: esy dune subst
+
+      - name: cat package.json
+        run: cat scripts/release-make-skeleton.js
 
       - name: Build subst changes
         run: esy dune build
