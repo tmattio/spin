@@ -15,15 +15,11 @@
 Project scaffolding tool and set of templates for Reason and OCaml
 ")
  (depends
-  (ocaml (and (>= 4.06.0) (< 4.10.0)))
+  (ocaml (>= 4.06.0))
   (dune (>= 2.0))
   ; Add Rely when released on Opam
   ; (rely :with-test)
   (odoc :with-doc)
-  (dune-release :dev)
-  (merlin :dev)
-  (ocamlformat :dev)
-  (utop :dev)
   (reason :build)
   base
   stdio
