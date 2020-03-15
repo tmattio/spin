@@ -100,7 +100,7 @@ let handle_errors = fn =>
     Caml.exit(211);
   | _ as exn =>
     print_err([
-      "Ooops, an unknown error occured. You can file a bug reports at https://github.com/tmattio/spin.\n",
+      "Ooops, an unknown error occured. You can file a bug report at https://github.com/tmattio/spin.\n",
       "Here is the stack trace in case it helps:\n",
     ]);
 
