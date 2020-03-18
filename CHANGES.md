@@ -1,3 +1,10 @@
+# 0.5.1 - 2020-03-14
+
+## Added
+
+- Add versionning for the official templates to ensure updates on the templates don't break old version of Spin.
+- Order `spin ls` result by name.
+
 # 0.5.0 - 2020-03-07
 
 ## Added
