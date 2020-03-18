@@ -83,9 +83,9 @@ Anyone can create new Spin templates, but we provide [official templates](https:
 - **[lib](https://github.com/tmattio/spin-templates/tree/master/lib)** - A library to be used in native or web applications.
 - **[ppx](https://github.com/tmattio/spin-templates/tree/master/ppx)** - A PPX library to be used in native or web applications.
 
-### Templates for web applications
+### Templates for Bucklescript applications
 
-- **[react](https://github.com/tmattio/spin-templates/tree/master/react)** - React Single-Page-Application in Reason.
+- **[bs-react](https://github.com/tmattio/spin-templates/tree/master/bs-react)** - React Single-Page-Application in Reason.
 
 ## Usage
 

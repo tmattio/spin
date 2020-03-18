@@ -4,7 +4,12 @@ open Spin;
 let run = () => {
   Template_official.download_if_absent();
   Template_official.update_if_present();
-  let templates = Template_official.all();
+  let templates =
+    Template_official.all()
+    |> List.sort(
+         ~compare=(doc1: Config_file_doc.doc, doc2: Config_file_doc.doc) =>
+         String.compare(doc1.name, doc2.name)
+       );
 
   Stdio.print_endline("The official templates are:\n");
 

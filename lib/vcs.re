@@ -36,12 +36,40 @@ let git_pull = repo => {
     "git",
     ~args=[|"-C", repo, "pull"|],
     ~stdout=Lwt_process.(`Dev_null),
-    ~stderr=Lwt_process.(`Dev_null),
   )
   >>= (
     result =>
       try(result |> Lwt.return) {
       | _ => Lwt.fail_with("Error while pulling the repository")
+      }
+  );
+};
+
+let git_fetch = repo => {
+  Utils.Sys.exec(
+    "git",
+    ~args=[|"-C", repo, "fetch", "--tags"|],
+    ~stdout=Lwt_process.(`Dev_null),
+  )
+  >>= (
+    result =>
+      try(result |> Lwt.return) {
+      | _ => Lwt.fail_with("Error while fetching the repository")
+      }
+  );
+};
+
+let git_checkout = (repo, ~reference) => {
+  Utils.Sys.exec(
+    "git",
+    ~args=[|"-C", repo, "checkout", reference|],
+    ~stdout=Lwt_process.(`Dev_null),
+    ~stderr=Lwt_process.(`Dev_null),
+  )
+  >>= (
+    result =>
+      try(result |> Lwt.return) {
+      | _ => Lwt.fail_with("Error while fetching the repository")
       }
   );
 };
