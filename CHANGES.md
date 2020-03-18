@@ -1,9 +1,24 @@
-# 0.5.1 - 2020-03-14
+# 0.5.1 - 2020-03-17
 
 ## Added
 
 - Add versionning for the official templates to ensure updates on the templates don't break old version of Spin.
-- Order `spin ls` result by name.
+- Sort `spin ls` result by name.
+
+### Templates
+
+- Rename react to bs-react. All the upcoming Bucklescript templates will be prefixed by bs-.
+- Add a lib template that is releasable on Opam.
+- Make the cli and ppx templates releasable on Opam.
+- Add support for Alcotest as an alternative to Rely in the native templates.
+- Add support for Opam as an alternative to Esy in the native templates.
+- Stop using Pesy and the dune files manually in each sub-directories.
+- Move the test_runner to a subdirectory support in test.
+- Extract the Contributing section of the README to a CONTRIBUTING.md file.
+- Add a CHANGES.md file that complies with dune-release requirements.
+- Use dune-release in the release scripts.
+- Remove homebrew Formula from the cli template that was a bad practice and didn’t allow users to update the generated projects.
+- Enable Windows in CI/CD of generated projects
 
 # 0.5.0 - 2020-03-07
 
