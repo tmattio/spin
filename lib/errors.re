@@ -9,6 +9,7 @@ exception Cannot_access_remote_repository(string);
 exception Generator_files_already_exist(string);
 exception Subprocess_exited_with_non_zero(string, int);
 exception External_command_unavailable(string);
+exception Cannot_checkout_version(string);
 
 let print_err = e => {
   ["😱  ", ...e] |> Pastel.make(~color=Pastel.Red) |> Stdio.prerr_endline;
@@ -98,6 +99,14 @@ let handle_errors = fn =>
     ]);
 
     Caml.exit(211);
+  | Cannot_checkout_version(version) =>
+    print_err([
+      "Spin depends on version ",
+      version,
+      " of the official templates, but failed to checkout this version in the repository.",
+    ]);
+
+    Caml.exit(212);
   | _ as exn =>
     print_err([
       "Ooops, an unknown error occured. You can file a bug reports at https://github.com/tmattio/spin.\n",
@@ -127,4 +136,8 @@ let all = () => [
   {doc: "on generating a file that already exist.", exit_code: 209},
   {doc: "on subprocess exit with a non-zero status code.", exit_code: 210},
   {doc: "on calling a missing external command.", exit_code: 211},
+  {
+    doc: "on failure to use the correct version of the official templates.",
+    exit_code: 212,
+  },
 ];
