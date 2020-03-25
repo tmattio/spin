@@ -28,8 +28,8 @@ let to_local_path: t => local =
 let is_local_template_dir = s => {
   Utils.Filename.(
     test(Exists, s)
-    && test(Exists, join([s, "/spin"]))
-    && test(Exists, join([s, "/template/spin"]))
+    && test(Exists, join([s, "spin"]))
+    && test(Exists, join([s, "template", "spin"]))
   );
 };
 
