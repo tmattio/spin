@@ -22,7 +22,7 @@ let cmd = {
   let doc = "Create a new ReasonML/Ocaml project from a template";
 
   let template = {
-    let doc = "The template to use to generate the project. Can be the name of an official template or a git repository.";
+    let doc = "The template to use to generate the project. Can be the name of an official template, a git repository or a local template directory.";
     Arg.(
       required
       & pos(0, some(string), None)

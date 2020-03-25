@@ -25,8 +25,16 @@ let to_local_path: t => local =
       tempdir;
     };
 
+let is_local_template_dir = s => {
+  Utils.Filename.(
+    test(Exists, s)
+    && test(Exists, join([s, "spin"]))
+    && test(Exists, join([s, "template", "spin"]))
+  );
+};
+
 let of_string = (s: string) =>
-  if (Utils.Filename.test(Utils.Filename.Exists, s)) {
+  if (is_local_template_dir(s)) {
     Local_dir(s);
   } else if (Vcs.is_git_url(s)) {
     Git(s);
