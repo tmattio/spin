@@ -125,37 +125,50 @@ let generate =
           )
           |> Option.value(~default=destination);
 
+        let command_string =
+          Utils.String.join([el.command, ...el.args], ~sep=" ");
+
         switch (
           Utils.Sys.exec("which", ~args=[|el.command|]) |> Lwt_main.run
         ) {
-        | WEXITED(0) => ()
-        | _ => raise(Errors.External_command_unavailable(el.command))
-        };
+        | WEXITED(0) =>
+          let status_code =
+            Utils.Sys.exec_in_dir(
+              el.command,
+              ~args=el.args |> Array.of_list,
+              ~dir,
+              ~stdout=`Dev_null,
+            )
+            |> Lwt_main.run;
 
-        let status_code =
-          Utils.Sys.exec_in_dir(
-            el.command,
-            ~args=el.args |> Array.of_list,
-            ~dir,
-            ~stdout=`Dev_null,
+          switch (status_code) {
+          | WEXITED(0) => ()
+          | WEXITED(s)
+          | WSIGNALED(s)
+          | WSTOPPED(s) =>
+            raise(Errors.Subprocess_exited_with_non_zero(command_string, s))
+          };
+
+          switch (el.description) {
+          | Some(description) =>
+            Pastel.make(~color=Pastel.GreenBright, ~bold=true, ["Done!\n"])
+            |> Stdio.print_endline
+          | None => ()
+          };
+        | _ =>
+          Pastel.make(
+            ~color=Pastel.Yellow,
+            ~bold=true,
+            [
+              "\nCouldn't find ",
+              el.command,
+              ".\n",
+              "Please run: \"",
+              command_string,
+              "\"\n"
+            ],
           )
-          |> Lwt_main.run;
-
-        switch (status_code) {
-        | WEXITED(0) => ()
-        | WEXITED(s)
-        | WSIGNALED(s)
-        | WSTOPPED(s) =>
-          let command_string =
-            Utils.String.join([el.command, ...el.args], ~sep=" ");
-          raise(Errors.Subprocess_exited_with_non_zero(command_string, s));
-        };
-
-        switch (el.description) {
-        | Some(description) =>
-          Pastel.make(~color=Pastel.GreenBright, ~bold=true, ["Done!\n"])
           |> Stdio.print_endline
-        | None => ()
         };
       },
     )

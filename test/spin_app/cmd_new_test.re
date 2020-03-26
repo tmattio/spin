@@ -30,8 +30,8 @@ describe("Integration test templates", ({test, _}) => {
         "sample_template_postinstall_unavailable",
       ]);
 
-    let status_new =
-      Test_utils.exec([|"new", "--default", template_dir, working_dir|]);
-    expect.int(status_new).toBe(211);
+    let output =
+      Test_utils.run([|"new", "--default", template_dir, working_dir|]);
+    expect.string(output).toMatch("Please run:");
   })
 });
