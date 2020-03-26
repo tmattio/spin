@@ -165,7 +165,7 @@ let generate =
               ".\n",
               "Please run: \"",
               command_string,
-              "\"\n"
+              "\"\n",
             ],
           )
           |> Stdio.print_endline
