@@ -1,6 +1,6 @@
-<h1 align="center">
-	Spin
-</h1>
+<div align="center">
+  <img src="docs/logo.png" als="Spin" />
+</div>
 
 <h4 align="center">Project scaffolding tool and set of templates for Reason and OCaml.</h4>
 
