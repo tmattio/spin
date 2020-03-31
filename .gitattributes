@@ -11,3 +11,10 @@ esy.lock/* linguist-generated=true
 # to CRLF. This causes problems for shell scripts, as bash
 # gets choked up on the extra `\r` character.
 * text eol=lf
+
+#
+## These files are binary and should be left untouched
+#
+
+# (binary is a macro for -text -diff)
+*.png binary
