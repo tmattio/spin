@@ -1,8 +1,9 @@
-<h1 align="center">
-	Spin
-</h1>
+<p align="center">
+    <img width="300" src="https://raw.githubusercontent.com/tmattio/spin/master/docs/logo.svg?sanitize=true" alt="Logo">
+  	<br><br>
+    Project scaffolding tool and set of templates for Reason and OCaml.
+</p>
 
-<h4 align="center">Project scaffolding tool and set of templates for Reason and OCaml.</h4>
 
 <p align="center">
   <a href="https://github.com/tmattio/spin/actions">
