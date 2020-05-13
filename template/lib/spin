@@ -1,0 +1,9 @@
+(inherit (official bin))
+
+(name lib)
+(description "Library releasable on Opam")
+
+(spin_version 0.6.0)
+
+(ignore 
+  (files bin/*))

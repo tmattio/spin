@@ -1,21 +1,15 @@
 (library
  (name spin_test)
- (flags -open Base -linkall -g -w -9)
- (libraries base rely.lib spin.lib)
+ (flags -linkall -g -w +42 -open Spin_std)
+ (libraries spin spin_std spin_refmt alcotest stdio)
  (modules
   (:standard \ test_runner)))
 
-(executable
+(test
  (name test_runner)
- (libraries base rely.lib spin_test)
- (flags -open Base)
- (modules test_runner))
-
-(rule
- (alias runtest)
- (deps
-  (:m test_runner.exe))
+ (libraries spin_test)
+ (modules test_runner)
  (action
-  (run %{m} -q --color=always)))
+  (run %{test} -q --color=always)))
 
 (include_subdirs unqualified)

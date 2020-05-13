@@ -1,4 +1,0 @@
-(post_install (
-  (command invalid)
-  (args ())
-))

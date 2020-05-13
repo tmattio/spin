@@ -1,12 +1,15 @@
-npm-debug.log
-.merlin
-yarn-error.log
-node_modules/
+# ocamlbuild working directory
 _build/
-_generated/
-_release/
-_export/
-_esy/
-spin.install
-.DS_Store
+
+# ocamlbuild targets
+*.byte
+*.native
+
+# Merlin configuring file for Vim and Emacs
+.merlin
+
+# Dune generated files
 *.install
+
+# Local OPAM switch
+_opam/

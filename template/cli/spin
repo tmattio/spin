@@ -1,0 +1,6 @@
+(inherit (official bin))
+
+(name cli)
+(description "Command Line Interface releasable on Opam")
+
+(spin_version 0.6.0)

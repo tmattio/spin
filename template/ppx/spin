@@ -1,0 +1,9 @@
+(inherit (official bin))
+
+(name ppx)
+(description "PPX library with prebuilt binaries for native and bucklescript")
+
+(spin_version 0.6.0)
+
+(ignore 
+  (files test/utils_test.ml))

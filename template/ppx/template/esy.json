@@ -1,0 +1,51 @@
+{
+  "name": "{{ project_slug }}",
+  "esy": {
+    "build": "dune build -p #{self.name}",
+    {%- if syntax == 'Reason' %}
+    "buildDev": "refmterr dune build --root . --only-package #{self.name}",
+    {% else %}
+    "buildDev": "dune build --root . --only-package #{self.name}",
+    {% endif -%}
+    "install": "esy-installer #{self.target_dir / 'default' / self.name '.install'}",
+    "buildEnv": {
+      "ODOC_SYNTAX": "{% if syntax == 'Reason' %}re{% else %}ml{% endif %}"
+    }
+  },
+  "dependencies": {
+    "@opam/ppxlib": "*",
+    "@opam/dune": ">= 2.0",
+    {%- if syntax == 'Reason' %}
+    "@opam/reason": "*",
+    {%- endif %}
+    "ocaml": ">= 4.6.0"
+  },
+  "devDependencies": {
+    {% if test_framework == 'Alcotest' -%}
+    "@opam/alcotest": "*",
+    {% endif -%}
+    "@opam/dune-release": "*",
+    "@opam/merlin": "*",
+    {% if syntax == 'OCaml' -%}
+    "@opam/ocamlformat": "*",
+    {% endif -%}
+    "@opam/odoc": "*",
+    "@opam/utop": "*"{% if syntax == 'Reason' or test_framework == 'Rely'  %},{% endif %}
+    {% if test_framework == 'Rely' -%}
+    "@reason-native/rely": "*"{% if syntax == 'Reason' %},{% endif %}
+    {%- endif -%}
+    {%- if syntax == 'Reason' %}
+    "refmterr": "*"
+    {%- endif %}
+  },
+  "scripts": {
+    "start": "esy x {{ project_slug }}",
+    "test": "esy {% if test_framework == 'Rely' %}dune exec test/test_runner.exe{% else %}dune build @test/runtest -f{% endif %}",
+    "doc": "esy dune build @doc",
+    "doc-path": "esy echo #{self.target_dir}/default/_doc/_html/index.html",
+    "format": "esy dune build @fmt --auto-promote",
+    "watch": "esy dune build -p #{self.name} --watch",
+    "utop": "esy dune utop lib -- -implicit-bindings",
+    "release": "./script/release.sh"
+  }
+}

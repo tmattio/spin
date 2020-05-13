@@ -1,0 +1,5 @@
+{% if css_framework == 'TailwindCSS' %}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+{% endif %}

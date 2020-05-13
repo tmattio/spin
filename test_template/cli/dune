@@ -1,0 +1,18 @@
+(rule
+ (target test-case.md.corrected)
+ (deps
+  (package spin)
+  (:md test-case.md)
+  (source_tree .))
+ (action
+  (with-stdout-to
+   %{target}
+   (run ocaml-mdx test --output - %{md}))))
+
+(rule
+ (alias runtest)
+ (deps
+  (:expected test-case.md)
+  (:actual test-case.md.corrected))
+ (action
+  (diff %{expected} %{actual})))

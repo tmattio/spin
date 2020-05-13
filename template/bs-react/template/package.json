@@ -1,0 +1,64 @@
+{
+  "name": "{{ project_slug }}",
+  "version": "0.1.0",
+  "description": "{{ project_description }}",
+  "author": "{{ username }}{% if author_email %} <{{ author_email }}>{% endif %}",
+  "license": "MIT",
+  "homepage": "https://github.com/{{ github_username }}/{{ project_slug }}",
+  "bugs": {
+    "url": "https://github.com/{{ github_username }}/{{ project_slug }}/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/{{ github_username }}/{{ project_slug }}.git"
+  },
+  "keywords": [
+    "BuckleScript",
+    "Reason",
+    "ReasonReact"
+  ],
+  "dependencies": {
+    "autoprefixer": "^9.7.3",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "reason-react": ">=0.7.0"
+  },
+  "devDependencies": {
+    {% if css_framework == 'TailwindCSS' %}"@fullhuman/postcss-purgecss": "^1.3.0",{% endif -%}
+    "@glennsl/bs-jest": "^0.4.9",
+    {% if css_framework == 'None' %}"bs-css": "^11.0.0",{% endif -%}
+    "bs-platform": "^7.0.1",
+    "bs-react-testing-library": "^0.6.0",
+    "bs-webapi": "^0.15.6",
+    "concurrently": "^5.0.2",
+    "css-loader": "^3.4.2",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    {% if css_framework == 'TailwindCSS' %}"postcss-loader": "^3.0.0",{% endif -%}
+    {% if css_framework == 'TailwindCSS' %} "postcss-preset-env": "^6.7.0",{% endif -%}
+    "style-loader": "^1.1.2",
+    {% if css_framework == 'TailwindCSS' %}"tailwindcss": "^1.1.4",{% endif -%}
+    "terser-webpack-plugin": "^2.3.2",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/tests"
+    ],
+    "testMatch": [
+      "<rootDir>/tests/**/*_test.{js,bs.js}"
+    ]
+  },
+  "scripts": {
+    "build": "bsb -make-world && NODE_ENV=production webpack --config config/webpack.config.js && cp -n public/* build/ | true",
+    "start": "concurrently -c --kill-others 'yarn start:bsb' 'yarn start:webpack'",
+    "start:bsb": "bsb -make-world -w",
+    "start:webpack": "webpack-dev-server --config config/webpack.config.js --open",
+    "clean": "bsb -clean-world",
+    "test": "bsb -make-world && jest",
+    "format": "bsrefmt --in-place */**/*.re */*.re"
+  }
+}
