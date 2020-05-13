@@ -1,13 +1,17 @@
 (executable
- (name spin_app)
- (libraries base stdio cmdliner lwt.unix spin.lib)
- (flags -open Base)
- (modules (:standard)))
+ (name main)
+ (public_name spin)
+ (libraries spin spin_std cmdliner fmt fmt.tty logs.fmt logs.cli)
+ (modules
+  (:standard \ refmt))
+ (flags
+  (:standard -open Spin_std)))
 
-(install
- (section bin)
- (package spin)
- (files
-  (spin_app.exe as spin)))
+(executable
+ (name refmt)
+ (libraries spin spin_std spin_refmt)
+ (modules refmt)
+ (flags
+  (:standard -open Spin_std)))
 
 (include_subdirs unqualified)

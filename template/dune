@@ -1,0 +1,45 @@
+(library
+ (name spin_template)
+ (public_name spin.template))
+
+(data_only_dirs *)
+
+(rule
+ (targets bs_react.ml)
+ (deps
+  (:data
+   (source_tree bs-react)))
+ (action
+  (run %{bin:ocaml-crunch} -m plain bs-react -o %{targets})))
+
+(rule
+ (targets cli.ml)
+ (deps
+  (:data
+   (source_tree cli)))
+ (action
+  (run %{bin:ocaml-crunch} -m plain cli -o %{targets})))
+
+(rule
+ (targets lib.ml)
+ (deps
+  (:data
+   (source_tree lib)))
+ (action
+  (run %{bin:ocaml-crunch} -m plain lib -o %{targets})))
+
+(rule
+ (targets bin.ml)
+ (deps
+  (:data
+   (source_tree bin)))
+ (action
+  (run %{bin:ocaml-crunch} -m plain bin -o %{targets})))
+
+(rule
+ (targets ppx.ml)
+ (deps
+  (:data
+   (source_tree ppx)))
+ (action
+  (run %{bin:ocaml-crunch} -m plain ppx -o %{targets})))

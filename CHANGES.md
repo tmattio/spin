@@ -1,3 +1,23 @@
+# Unreleased
+
+This release is a complete rewrite of Spin.
+
+Since the beginning of the project, a lot of learnings have been made and this new version incorporates these learning to build a solid foundation for the future of Spin.
+
+- Documentation of the CLI, template DSL and template engine.
+- Better man page documentation
+- Calling `spin` without a subcommand now displays a simpler usage documentation. The `man` page is available with `spin --help`
+- The CLI now provides a verbose flag to increase the verbosity
+- New template DSL
+- Template extension
+- Better error messages
+- Improvements of the configuration prompts using Inquire
+- Update native templates to follow best practices (e.g. name of libraries)
+- Versionning of the templates
+- Bucklescript templates now fallback to using `npm` when `yarn` is absent
+- Windows is now supported
+- The official templates are now embedded. No need to download a git repository, and the project generation works offline.
+
 # 0.5.1 - 2020-03-17
 
 ## Added

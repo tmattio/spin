@@ -2,77 +2,53 @@
 
 ## Setup your development environment
 
-### Developing
+You need Opam, you can install it by following [Opam's documentation](https://opam.ocaml.org/doc/Install.html).
 
-You need Esy, you can install the latest version from [npm](https://npmjs.com):
+With Opam installed, you can install the dependencies with:
 
 ```bash
-yarn global add esy@latest
-# Or
-npm install -g esy@latest
+make dev
 ```
 
-> NOTE: Make sure `esy --version` returns at least `0.5.8` for this project to build.
-
-Then run the `esy` command from this project root to install and build dependencies.
+Then, build the project with:
 
 ```bash
-esy
-```
-
-Now you can run your editor within the environment (which also includes merlin):
-
-```bash
-esy $EDITOR
-esy vim
-```
-
-Alternatively you can try [vim-reasonml](https://github.com/jordwalke/vim-reasonml)
-which loads esy project environments automatically.
-
-After you make some changes to source code, you can re-run project's build
-again with the same simple `esy` command.
-
-```bash
-esy
-```
-
-This project uses [Dune](https://dune.build/) as a build system, and Pesy to generate Dune's configuration files. If you change the `buildDirs` configuration in `package.json`, you will have to regenerate the configuration files using:
-
-```bash
-esy pesy
+make build
 ```
 
 ### Running Binary
 
 After building the project, you can run the main binary that is produced.
 
+
 ```bash
-esy start
+make start
 ```
 
 ### Running Tests
 
-You can test compiled executable (runs `scripts.tests` specified in `package.json`):
+You can run the test compiled executable:
+
 
 ```bash
-esy test
+make test
 ```
 
 ### Building documentation
 
 Documentation for the libraries in the project can be generated with:
 
+
 ```bash
-esy doc
-open-cli $(esy doc-path)
+make doc
+open-cli $(make doc-path)
 ```
 
 This assumes you have a command like [open-cli](https://github.com/sindresorhus/open-cli) installed on your system.
 
-> NOTE: On macOS, you can use the system command `open`, for instance `open $(esy doc-path)`
+> NOTE: On macOS, you can use the system command `open`, for instance `open $(make doc-path)`
 
-### Creating release builds
+### Releasing
 
 To release prebuilt binaries to all platforms, we use Github Actions to build each binary individually.
 
@@ -82,15 +58,26 @@ To trigger the Release workflow, you need to push a git tag to the repository.
 We provide a script that will bump the version of the project, tag the commit and push it to Github:
 
 ```bash
-./scripts/release.sh
+./script/release.sh
 ```
 
-The script uses `npm version` to bump the project, so you can use the same argument.
-For instance, to release a new patch version, you can run:
+The script will release the current project version on Opam, update the documentation and push a new tag on Github.
 
-```bash
-./scripts/release.sh patch
-```
+### Releasing
+
+To create a release and publish it on Opam, first update the `CHANGES.md` file with the last changes and the version that you want to release.
+The, you can run the script `script/release.sh`. The script will perform the following actions:
+
+- Create a tag with the version found in `spin.opam`, and push it to your repository.
+- Create the distribution archive.
+- Publish the distribution archive to a Github Release.
+- Submit a PR on Opam's repository.
+
+When the release is published on Github, the CI/CD will trigger the `Release` workflow which will perform the following actions
+
+- Compile binaries for all supported platforms.
+- Create an NPM release containing the pre-built binaries.
+- Publish the NPM release to the registry.
 
 ### Repository Structure
 
@@ -101,30 +88,23 @@ The following snippet describes Spin's repository structure.
 ├── .github/
 |   Contains Github specific files such as actions definitions and issue templates.
 │
-├── docs/
-|   End-user documentation in Markdown format.
-│
 ├── bin/
 |   Source for Spin's binary. This links to the library defined in `lib/`.
 │
 ├── lib/
-|   Source for Spin's library. Contains Spin's core functionalities.
+|   Source for Spin's library. Contains Spin's core functionnalities.
 │
 ├── test/
 |   Unit tests and integration tests for Spin.
 │
-├── test_runner/
-|   Source for the test runner's binary.
-|
 ├── dune-project
 |   Dune file used to mark the root of the project and define project-wide parameters.
 |   For the documentation of the syntax, see https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
 │
 ├── LICENSE
 │
-├── package.json
-|   Esy package definition.
-|   To know more about creating Esy packages, see https://esy.sh/docs/en/configuration.html.
+├── Makefile
+|   Make file containing common development command.
 │
 ├── README.md
 │

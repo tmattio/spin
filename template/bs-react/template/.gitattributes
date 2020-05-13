@@ -1,0 +1,17 @@
+# Supresses the lock folder from the diffs
+yarn.lock linguist-generated=true
+package-lock.json linguist-generated=true
+
+# Tell github that .re and .rei files are Reason
+*.re linguist-language=Reason
+*.rei linguist-language=Reason
+
+# Disable syntax detection for .spin
+.spin linguist-language=Text
+
+# Declare shell files to have LF endings on checkout
+# On Windows, the default git setting for `core.autocrlf`
+# means that when checking out code, LF endings get converted
+# to CRLF. This causes problems for shell scripts, as bash
+# gets choked up on the extra `\r` character.
+* text eol=lf

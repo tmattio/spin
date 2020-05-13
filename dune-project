@@ -1,31 +1,34 @@
-(lang dune 2.0)
+(lang dune 2.4)
 (name spin)
 (source (github tmattio/spin))
-(documentation "https://tmattio.github.io/spin")
+(documentation "https://github.com/tmattio/spin")
 (license MIT)
 (authors "Thibaut Mattio")
 (maintainers "Thibaut Mattio")
 
 (generate_opam_files true)
 
+(using mdx 0.1)
+
 (package
  (name spin)
- (synopsis "Project scaffolding tool and set of templates for Reason and OCaml")
+ (synopsis "A project generator for Reason and OCaml")
  (description "\
-Project scaffolding tool and set of templates for Reason and OCaml
+A project generator for Reason and OCaml
 ")
  (depends
-  (ocaml (>= 4.06.0))
-  (dune (>= 2.0))
-  ; Add Rely when released on Opam
-  ; (rely :with-test)
+  (ocaml (>= 4.08.0))
+  (dune (>= 2.4))
+  (mdx :with-test)
+  (alcotest :with-test)
   (odoc :with-doc)
-  (reason :build)
+  (crunch :build)
   base
-  stdio
+  fmt
+  fpath
   cmdliner
-  fileutils
-  jingoo
+  logs
+  sexplib
   lwt
-  ppx_sexp_conv
-  sexplib))
+  jingoo
+  (inquire (>= 0.2.0))))
