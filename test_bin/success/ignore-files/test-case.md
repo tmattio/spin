@@ -1,5 +1,5 @@
 ```sh
-$ spin new . _generated
+$ spin new --ignore-config . _generated
 
 🏗️  Creating a new project from test in _generated
 Done!

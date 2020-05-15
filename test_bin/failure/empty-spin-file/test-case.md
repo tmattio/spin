@@ -1,5 +1,5 @@
 ```sh
-$ spin new . _generated
+$ spin new --ignore-config . _generated
 spin: [ERROR] I failed to parse the file "spin":
 Expected an s-expression with a field "name", but got ()
 Expected an s-expression with a field "description", but got ()

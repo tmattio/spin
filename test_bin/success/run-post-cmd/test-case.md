@@ -1,6 +1,6 @@
 ```sh
-$ spin new . _generated
-...
+$ spin new --ignore-config . _generated
+
 $ ls _generated
 file
 ```

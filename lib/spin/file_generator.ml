@@ -24,6 +24,8 @@ let generate_string ~context s =
 let generate ~context ~content path =
   let open Lwt.Syntax in
   let content = try generate_string content ~context with e -> raise e in
+  (* Need to normalize the file separation because "\\" will escape the expressions to evaluate in the template engine *)
+  let path = String.substr_replace_all path ~pattern:"\\" ~with_:"/" in
   let path = generate_string path ~context in
   let* () = Logs_lwt.debug (fun m -> m "Generating %s" path) in
   Filename.dirname path |> Spin_unix.mkdir_p;

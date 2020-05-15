@@ -1,5 +1,5 @@
 ```sh
-$ spin new subdir _generated
+$ spin new --ignore-config subdir _generated
 
 🏗️  Creating a new project from test in _generated
 Done!
