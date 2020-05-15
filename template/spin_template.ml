@@ -37,9 +37,4 @@ module Ppx : Template = struct
 end
 
 let all : (module Template) list =
-  [ (module Bs_react)
-  ; (module Cli)
-  ; (module Lib)
-  ; (module Bin)
-  ; (module Ppx)
-  ]
+  [ (module Bs_react); (module Cli); (module Lib); (module Bin); (module Ppx) ]
