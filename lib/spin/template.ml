@@ -170,7 +170,9 @@ let ignore_files files ~context ~(dec : Dec_template.t) =
   files
   |> Hashtbl.to_alist
   |> List.filter_map ~f:(fun (path, content) ->
-         if List.exists ignores ~f:(fun glob -> Glob.matches_glob path ~glob)
+         if List.exists ignores ~f:(fun glob -> 
+          let normalized_path =  String.substr_replace_all path ~pattern:"\\" ~with_:"/" in
+        Glob.matches_glob normalized_path ~glob)
          then
            None
          else

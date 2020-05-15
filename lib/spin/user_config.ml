@@ -35,6 +35,7 @@ let read ?path () =
 let save ?path t =
   let open Result.Let_syntax in
   let+ path = path_of_opt path in
+  let () = Spin_unix.mkdir_p (Filename.dirname path) in
   Encoder.encode_file
     { username = t.username
     ; email = t.email
