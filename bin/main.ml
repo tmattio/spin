@@ -21,7 +21,7 @@ Useful options:
   --v, --verbose   Increase verbosity
        --version   Show spin version
 
-For a complete documentation, reference to the manual with `spin --help`.
+For a complete documentation, refer to the manual with `spin --help`.
 
 Use `spin COMMAND --help` for help on a single command.|}
   in
