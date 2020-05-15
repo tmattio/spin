@@ -31,4 +31,5 @@ A project generator for Reason and OCaml
   sexplib
   lwt
   jingoo
+  reason
   (inquire (>= 0.2.0))))

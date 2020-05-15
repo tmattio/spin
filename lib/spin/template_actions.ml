@@ -50,16 +50,17 @@ let action_run ~root_path cmd =
 
 let action_refmt ~root_path globs =
   let files = Spin_sys.ls_dir root_path in
-  let files =
-    List.map files ~f:(fun file ->
-        String.chop_prefix_exn ~prefix:root_path file)
-  in
-  let files = Glob.filter_files files ~globs in
-  let files = List.map files ~f:(fun file -> Filename.concat root_path file) in
   List.iter files ~f:(fun input_path ->
       Logs.debug (fun m -> m "Running refmt on %s" input_path);
-      Spin_refmt.convert input_path;
-      Caml.Sys.remove input_path)
+      let normalized_path =
+        String.chop_prefix_exn input_path ~prefix:root_path
+        |> String.substr_replace_all ~pattern:"\\" ~with_:"/"
+      in
+      if Glob.matches_globs normalized_path ~globs then (
+        Spin_refmt.convert input_path;
+        Caml.Sys.remove input_path)
+      else
+        ())
 
 let run ~path t =
   let open Lwt_result.Syntax in

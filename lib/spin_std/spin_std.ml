@@ -120,7 +120,7 @@ module Spin_lwt = struct
     let+ stderr = Lwt_io.read_lines process#stderr |> Lwt_stream.to_list in
     { stdout; stderr; status }
 
-  let prepare_args cmd args = cmd, Array.of_list (cmd :: args)
+  let prepare_args cmd args = "", Array.of_list (cmd :: args)
 
   let exec cmd args =
     Lwt_process.with_process_full
