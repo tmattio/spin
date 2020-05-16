@@ -29,13 +29,13 @@ esy add @opam/inquire
 ### In OCaml
 
 ```ocaml
-let () = {{ project_slug | modulify }}.Utils.greet "World"
+let () = {{ project_snake | capitalize }}.Utils.greet "World"
 ```
 
 ### In Reason
 
 ```ocaml
-{{ project_slug | modulify }}.Utils.greet("World");
+{{ project_snake | capitalize }}.Utils.greet("World");
 ```
 
 ## Contributing

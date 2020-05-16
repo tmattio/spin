@@ -31,9 +31,9 @@
     "@opam/ocamlformat": "*",
     {% endif -%}
     "@opam/odoc": "*",
-    "@opam/utop": "*"{% if syntax == 'Reason' or test_framework == 'Rely'  %},{% endif %}
+    "@opam/utop": "*",
     {% if test_framework == 'Rely' -%}
-    "@reason-native/rely": "*"{% if syntax == 'Reason' %},{% endif %}
+    "@reason-native/rely": "*",
     {%- endif -%}
     {%- if syntax == 'Reason' %}
     "refmterr": ">= 3.3.0",

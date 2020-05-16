@@ -1,7 +1,7 @@
 {% if test_framework == 'Rely' -%}
 open Test_framework
 
-let test_simple_addition { expect } =
+let test_simple_addition { expect; _ } =
     let result = [%{{ project_snake }} 5] in
     (expect.int result).toBe 10
 

@@ -7,7 +7,6 @@ let jg_string_fn ?kwargs:_ ?defaults:_ fn value =
 
 let filters =
   [ "slugify", Helpers.slugify |> jg_string_fn |> Jg_types.func_arg1_no_kw
-  ; "modulify", Helpers.modulify |> jg_string_fn |> Jg_types.func_arg1_no_kw
   ; "snake_case", Helpers.snake_case |> jg_string_fn |> Jg_types.func_arg1_no_kw
   ; "camel_case", Helpers.camel_case |> jg_string_fn |> Jg_types.func_arg1_no_kw
   ]

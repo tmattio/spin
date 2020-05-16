@@ -35,6 +35,8 @@ let of_dec ~context (dec_actions : Dec_template.Actions.t) =
   { message; actions }
 
 let action_run ~root_path cmd =
+  Logs.debug (fun m ->
+      m "Running %s %s" cmd.name (String.concat cmd.args ~sep:" "));
   Spin_lwt.with_chdir ~dir:root_path (fun () ->
       Spin_lwt.exec_with_logs cmd.name cmd.args)
   |> Lwt_result.map_err (fun err -> Spin_error.failed_to_generate err)

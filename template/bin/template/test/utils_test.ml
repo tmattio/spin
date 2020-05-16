@@ -1,10 +1,10 @@
 {% if test_framework == 'Rely' -%}
 open Test_framework
-open {{ project_slug | modulify }}
+open {{ project_snake | capitalize }}
 
 (** Test suite for the Utils module. *)
 
-let test_hello_with_name name { expect } =
+let test_hello_with_name name { expect ; _ } =
   let greeting = Utils.greet name in
   let expected = "Hello " ^ name ^ "!" in
   (expect.string greeting).toEqual expected
@@ -15,7 +15,7 @@ let () =
   test "can greet John" (test_hello_with_name "John")
 {%- else -%}
 open Alcotest
-open {{ project_slug | modulify }}
+open {{ project_snake | capitalize }}
 
 (** Test suite for the Utils module. *)
 
