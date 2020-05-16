@@ -8,9 +8,9 @@
     all the modules in the library when compiling. This allows us to discover
     all the test automatically, instead of having to manually include them. *)
 
-let () = {{ project_slug | modulify }}_test.Test_framework.cli ()
+let () = {{ project_snake | capitalize }}_test.Test_framework.cli ()
 {%- else -%}
-open {{ project_slug | modulify }}_test
+open {{ project_snake | capitalize }}_test
 
 (** Main entry point for our test runner.
 

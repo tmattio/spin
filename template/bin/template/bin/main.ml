@@ -1,4 +1,4 @@
-open {{ project_slug | modulify }}
+open {{ project_snake | capitalize }}
 
 (** Main entry point for our application. *)
 

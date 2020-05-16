@@ -8,12 +8,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
         ocaml-version: ['4.10.0']
     steps:
       - uses: avsm/setup-ocaml@master
         with:
           ocaml-version: ${{ matrix.ocaml-version }}
+
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install esy
+        run: npm install -g esy@latest
 
       - uses: actions/checkout@v2
 
@@ -34,3 +43,6 @@ jobs:
 
       - name: Run tests
         run: make test
+
+      - name: Run template tests
+        run: opam exec -- dune build @test_template/runtest

@@ -102,31 +102,43 @@ module Spin_lwt = struct
 
   let fold_left ~f l =
     let open Syntax in
-    List.fold_left l ~init:(Lwt.return []) ~f:(fun acc el ->
-        let* acc = acc in
-        let+ result = f el in
-        result :: acc)
+    let+ l =
+      List.fold_left l ~init:(Lwt.return []) ~f:(fun acc el ->
+          let* acc = acc in
+          let+ result = f el in
+          result :: acc)
+    in
+    List.rev l
 
   let fold_right ~f l =
     let open Syntax in
-    List.fold_right l ~init:(Lwt.return []) ~f:(fun el acc ->
-        let* acc = acc in
-        let+ result = f el in
-        result :: acc)
+    let+ l =
+      List.fold_right l ~init:(Lwt.return []) ~f:(fun el acc ->
+          let* acc = acc in
+          let+ result = f el in
+          result :: acc)
+    in
+    List.rev l
 
   let result_fold_left ~f l =
     let open Lwt_result.Syntax in
-    List.fold_left l ~init:(Lwt_result.return []) ~f:(fun acc el ->
-        let* acc = acc in
-        let+ result = f el in
-        result :: acc)
+    let+ l =
+      List.fold_left l ~init:(Lwt_result.return []) ~f:(fun acc el ->
+          let* acc = acc in
+          let+ result = f el in
+          result :: acc)
+    in
+    List.rev l
 
   let result_fold_right ~f l =
     let open Lwt_result.Syntax in
-    List.fold_right l ~init:(Lwt_result.return []) ~f:(fun el acc ->
-        let* acc = acc in
-        let+ result = f el in
-        result :: acc)
+    let+ l =
+      List.fold_right l ~init:(Lwt_result.return []) ~f:(fun el acc ->
+          let* acc = acc in
+          let+ result = f el in
+          result :: acc)
+    in
+    List.rev l
 
   type command_result =
     { stdout : string list
