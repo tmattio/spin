@@ -77,20 +77,23 @@ spin new native my_app
 
 Will create a new native application in the directory `./my_app/`
 
-Anyone can create new Spin templates, but we provide [official templates](https://github.com/tmattio/spin-templates) for a lot of use cases. The official templates for each type of applications are listed below.
+Anyone can create new Spin templates, but we provide official templates for a lot of use cases.
+The official templates for each type of applications are listed below.
 
 ### Templates for native applications
 
-- **[native](https://github.com/tmattio/spin-templates/tree/master/native)** - A native project containing the minimum viable configurations.
-- **[cli](https://github.com/tmattio/spin-templates/tree/master/cli)** - Native command line interface.
-- **[lib](https://github.com/tmattio/spin-templates/tree/master/lib)** - A library to be used in native or web applications.
-- **[ppx](https://github.com/tmattio/spin-templates/tree/master/ppx)** - A PPX library to be used in native or web applications.
+- **bin** - Native project containing a binary.
+- **cli** - Command Line Interface releasable on Opam.
+- **lib** - Library releasable on Opam.
+- **ppx** - PPX library with prebuilt binaries for native and bucklescript.
 
 ### Templates for Bucklescript applications
 
-- **[bs-react](https://github.com/tmattio/spin-templates/tree/master/bs-react)** - React Single-Page-Application in Reason.
+- **bs-react** - React application in Reason.
 
 ## Usage
+
+For a detailed documentation of Spin's CLI, run `spin --help`, or refer to the [CLI documentation](https://github.com/tmattio/spin/tree/master/doc/cli.md].
 
 ### `spin new TEMPLATE [PATH] [--default] [--ignore-config]`
 

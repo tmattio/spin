@@ -1,15 +1,13 @@
-# native
+# cli
 
-![Actions Status](https://github.com/tmattio/spin/workflows/template-native/badge.svg)
-
-A native project containing the minimum viable configurations.
+Command Line Interface releasable on Opam.
 
 ```bash
-spin new native
+spin new cli
 ```
 
 ## Acknowledgments
 
 This template is inspired by these awesome projects:
 
-- [hello-reason](https://github.com/esy-ocaml/hello-reason) - An example esy-powered Reason project.
+- [fnm](https://github.com/Schniz/fnm) - Fast and simple Node.js version manager, built in native ReasonML

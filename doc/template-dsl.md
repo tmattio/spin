@@ -1,4 +1,4 @@
-{0:top Template Syntax Reference}
+# Template Syntax Reference
 
 A spin file is used to define a template.
 

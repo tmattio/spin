@@ -1,4 +1,4 @@
-{0:top Template Functions}
+# Template Functions
 
 The following functions are available when writing a Spin file.
 

@@ -1,8 +1,6 @@
 # PPX
 
-![Actions Status](https://github.com/tmattio/spin/workflows/template-ppx/badge.svg)
-
-A Spin template to create PPXs.
+PPX library with prebuilt binaries for native and bucklescript.
 
 ```bash
 spin new ppx

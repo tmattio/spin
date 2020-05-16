@@ -1,4 +1,4 @@
-{0:top Command Line Interface}
+# Command Line Interface
 
 `spin` must be used with a subcommand.
 
