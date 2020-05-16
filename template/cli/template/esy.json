@@ -7,7 +7,6 @@
     {% else %}
     "buildDev": "dune build --root . --only-package #{self.name}",
     {% endif -%}
-    "install": "esy-installer #{self.target_dir / 'default' / self.name '.install'}",
     "buildEnv": {
       "ODOC_SYNTAX": "{% if syntax == 'Reason' %}re{% else %}ml{% endif %}"
     }
