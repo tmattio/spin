@@ -23,30 +23,9 @@ let of_dec (dec_actions : Dec_template.Actions.t) : t =
   }
 
 let action_run ~root_path cmd =
-  let open Lwt.Syntax in
-  let f () =
-    let* p_output = Spin_lwt.exec cmd.name cmd.args in
-    let* () =
-      Spin_lwt.fold_left p_output.stdout ~f:(fun line ->
-          Logs_lwt.debug (fun m -> m "stdout of %s: %s" cmd.name line))
-    in
-    match p_output.status with
-    | WEXITED 0 ->
-      let+ () =
-        Spin_lwt.fold_left p_output.stderr ~f:(fun line ->
-            Logs_lwt.debug (fun m -> m "stderr of %s: %s" cmd.name line))
-      in
-      Ok ()
-    | _ ->
-      let+ () =
-        Spin_lwt.fold_left p_output.stderr ~f:(fun line ->
-            Logs_lwt.err (fun m -> m "stderr of %s: %s" cmd.name line))
-      in
-      Error
-        (Spin_error.failed_to_generate
-           (Printf.sprintf "The command %s did not run successfully." cmd.name))
-  in
-  Spin_lwt.with_chdir ~dir:root_path f
+  Spin_lwt.with_chdir ~dir:root_path (fun () ->
+      Spin_lwt.exec_with_logs cmd.name cmd.args)
+  |> Lwt_result.map_err (fun err -> Spin_error.failed_to_generate err)
 
 let action_refmt ~root_path globs =
   let files = Spin_sys.ls_dir root_path in

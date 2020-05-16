@@ -6,7 +6,7 @@ let run () =
   let* new_config =
     let result = User_config.prompt ?default:user_config () in
     try Ok (Lwt_main.run result) with
-    | Caml.Sys.Break ->
+    | Caml.Sys.Break | Failure _ ->
       Caml.exit 1
     | e ->
       raise e

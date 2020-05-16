@@ -86,6 +86,15 @@ module Spin_unix = struct
       else (
         mkdir_p ?perm parent;
         mkdir_idempotent ?perm dir)
+
+  let rec rm_p path =
+    match Caml.Sys.is_directory path with
+    | true ->
+      Caml.Sys.readdir path
+      |> Array.iter ~f:(fun name -> rm_p (Filename.concat path name));
+      Unix.rmdir path
+    | false ->
+      Caml.Sys.remove path
 end
 
 module Spin_lwt = struct
@@ -126,6 +135,27 @@ module Spin_lwt = struct
     Lwt_process.with_process_full
       (prepare_args cmd args)
       command_result_of_process
+
+  let exec_with_logs cmd args =
+    let open Lwt.Syntax in
+    let* p_output = exec cmd args in
+    let* () =
+      fold_left p_output.stdout ~f:(fun line ->
+          Logs_lwt.debug (fun m -> m "stdout of %s: %s" cmd line))
+    in
+    match p_output.status with
+    | WEXITED 0 ->
+      let+ () =
+        fold_left p_output.stderr ~f:(fun line ->
+            Logs_lwt.debug (fun m -> m "stderr of %s: %s" cmd line))
+      in
+      Ok ()
+    | _ ->
+      let+ () =
+        fold_left p_output.stderr ~f:(fun line ->
+            Logs_lwt.err (fun m -> m "stderr of %s: %s" cmd line))
+      in
+      Error (Printf.sprintf "The command %s did not run successfully." cmd)
 
   let with_chdir ~dir t =
     let open Lwt.Syntax in

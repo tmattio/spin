@@ -143,10 +143,6 @@ let populate_context ?(use_defaults = false) ~context (dec : Dec_template.t) =
             try Lwt_result.return result with
             | Failed_rule_eval e ->
               Lwt.return (Error e)
-            | Caml.Sys.Break ->
-              Caml.exit 1
-            | e ->
-              raise e
           in
           (match data_opt with
           | Some data ->
@@ -360,8 +356,20 @@ and read
       ~files:(Hashtbl.of_alist_exn (module String) files)
       ~context
       ~use_defaults
-  | Git _ ->
-    failwith "Missing implementation"
+  | Git repo ->
+    let* template_dir = Git_template.donwload_git_repo repo in
+    let* spin_file = Local_template.read_spin_file template_dir in
+    let* files =
+      Local_template.files_with_content template_dir |> Lwt_result.ok
+    in
+    of_dec
+      spin_file
+      ~ignore_configs
+      ~ignore_actions
+      ~ignore_example_commands
+      ~files:(Hashtbl.of_alist_exn (module String) files)
+      ~context
+      ~use_defaults
 
 let generate ~path:generation_root template =
   let open Lwt_result.Syntax in
