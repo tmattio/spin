@@ -112,12 +112,7 @@ spin ls [OPTION]...
 
 ### Description
 
-`ls` will list the available templates from the official templates
-repository located at `SPIN_CACHE_DIR/spin-templates` (defaults to
-`~/.cache/spin-templates`).
-
-If the official template repository cannot be found, it will be
-downloaded first.
+`ls` will list the available official template with their description.
 
 ### Options
 
@@ -125,7 +120,6 @@ downloaded first.
 
     Run as if spin was started in PATH instead of the current
     directory.
-
 
 ## `new`
 

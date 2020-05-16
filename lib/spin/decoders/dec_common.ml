@@ -52,9 +52,9 @@ module Source = struct
 
   let encode = function
     | Git v ->
-      Sexp.List [ Sexp.Atom "official"; Sexp.Atom v ]
+      Sexp.List [ Sexp.Atom "git"; Sexp.Atom v ]
     | Local_dir v ->
       Sexp.List [ Sexp.Atom "local"; Sexp.Atom v ]
     | Official v ->
-      Sexp.List [ Sexp.Atom "git"; Sexp.Atom v ]
+      Sexp.List [ Sexp.Atom "official"; Sexp.Atom v ]
 end

@@ -1,4 +1,4 @@
-open Demo
+open {{ project_snake | capitalize }}
 
 let run ~name =
   let greeting = Utils.greet name in
