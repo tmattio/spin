@@ -1,16 +1,14 @@
-# CLI
+# bin
 
-![Actions Status](https://github.com/tmattio/spin/workflows/template-cli/badge.svg)
-
-A Spin template to create CLIs.
+Native project containing a binary.
 
 ```bash
-spin new cli
+spin new bin
 ```
 
 ## Acknowledgments
 
 This template is inspired by these awesome projects:
 
-- [dune](https://github.com/ocaml/dune) - A composable build system for OCaml
-- [fnm](https://github.com/Schniz/fnm) - Fast and simple Node.js version manager, built in native ReasonML
+- [hello-reason](https://github.com/esy-ocaml/hello-reason) - An example esy-powered Reason project.
+- [pesy-reason-template](https://github.com/esy/pesy-reason-template) - Default template for pesy.

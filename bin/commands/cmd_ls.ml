@@ -42,12 +42,8 @@ let man_xrefs = [ `Main ]
 let man =
   [ `S Manpage.s_description
   ; `P
-      "$(tname) will list the available templates from the official templates \
-       repository located at `$SPIN_CACHE_DIR/spin-templates` (defaults to \
-       `~/.cache/spin-templates`)."
-  ; `P
-      "If the official template repository cannot be found, it will be \
-       downloaded first."
+      "$(tname) will list the available official template with their \
+       description."
   ]
 
 let info = Term.info "ls" ~doc ~sdocs ~exits ~envs ~man ~man_xrefs
