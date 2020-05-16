@@ -29,7 +29,13 @@ let run ~ignore_config ~use_defaults ~template ~path =
       let* template = Template.read ?context ~use_defaults source in
       Template.generate ~path template
     in
-    let+ _ = Lwt_main.run result in
+    let+ _ =
+      try Lwt_main.run result with
+      | Caml.Sys.Break | Failure _ ->
+        Caml.exit 1
+      | e ->
+        raise e
+    in
     ()
   | None ->
     Logs.err (fun m -> m "This template does not exist");
