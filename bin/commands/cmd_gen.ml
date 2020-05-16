@@ -1,7 +1,27 @@
-let run ~ignore_config ~use_defaults ~generator =
-  let _ = ignore_config, use_defaults, generator in
-  Caml.print_endline "Hi";
-  Ok ()
+open Spin
+
+let run ~ignore_config:_ ~use_defaults:_ ~generator =
+  let open Result.Let_syntax in
+  match generator with
+  | None ->
+    (match Project.read_project_config () with
+    | None ->
+      Logs.app (fun m -> m "The current directory is not in a Spin project.");
+      Logs.app (fun m ->
+          m "The \"gen\" command can only be used within a Spin project.");
+      Ok ()
+    | Some project_config ->
+      let* project_config = project_config in
+      let+ generators =
+        Project.project_generators project_config |> Lwt_main.run
+      in
+      Logs.app (fun m -> m "");
+      List.iter generators ~f:(fun (name, description) ->
+          Logs.app (fun m -> m "  %a" Pp.pp_blue name);
+          Logs.app (fun m -> m "    %s" description);
+          Logs.app (fun m -> m "")))
+  | Some _ ->
+    failwith "Missing implementation"
 
 (* Command line interface *)
 

@@ -101,20 +101,32 @@ module Spin_lwt = struct
   include Lwt
 
   let fold_left ~f l =
-    List.fold_left l ~init:(Lwt.return ()) ~f:(fun acc el ->
-        Lwt.bind acc (fun () -> f el))
+    let open Syntax in
+    List.fold_left l ~init:(Lwt.return []) ~f:(fun acc el ->
+        let* acc = acc in
+        let+ result = f el in
+        result :: acc)
 
   let fold_right ~f l =
-    List.fold_right l ~init:(Lwt.return ()) ~f:(fun el acc ->
-        Lwt.bind acc (fun () -> f el))
+    let open Syntax in
+    List.fold_right l ~init:(Lwt.return []) ~f:(fun el acc ->
+        let* acc = acc in
+        let+ result = f el in
+        result :: acc)
 
   let result_fold_left ~f l =
-    List.fold_left l ~init:(Lwt_result.return ()) ~f:(fun acc el ->
-        Lwt_result.bind acc (fun () -> f el))
+    let open Lwt_result.Syntax in
+    List.fold_left l ~init:(Lwt_result.return []) ~f:(fun acc el ->
+        let* acc = acc in
+        let+ result = f el in
+        result :: acc)
 
   let result_fold_right ~f l =
-    List.fold_right l ~init:(Lwt_result.return ()) ~f:(fun el acc ->
-        Lwt_result.bind acc (fun () -> f el))
+    let open Lwt_result.Syntax in
+    List.fold_right l ~init:(Lwt_result.return []) ~f:(fun el acc ->
+        let* acc = acc in
+        let+ result = f el in
+        result :: acc)
 
   type command_result =
     { stdout : string list
@@ -139,19 +151,19 @@ module Spin_lwt = struct
   let exec_with_logs cmd args =
     let open Lwt.Syntax in
     let* p_output = exec cmd args in
-    let* () =
+    let* _ =
       fold_left p_output.stdout ~f:(fun line ->
           Logs_lwt.debug (fun m -> m "stdout of %s: %s" cmd line))
     in
     match p_output.status with
     | WEXITED 0 ->
-      let+ () =
+      let+ _ =
         fold_left p_output.stderr ~f:(fun line ->
             Logs_lwt.debug (fun m -> m "stderr of %s: %s" cmd line))
       in
       Ok ()
     | _ ->
-      let+ () =
+      let+ _ =
         fold_left p_output.stderr ~f:(fun line ->
             Logs_lwt.err (fun m -> m "stderr of %s: %s" cmd line))
       in

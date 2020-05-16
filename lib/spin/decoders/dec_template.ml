@@ -52,6 +52,7 @@ module Base_template = struct
     | Configs
     | Actions
     | Example_commands
+    | Generators
 
   type t =
     { source : Source.t
@@ -68,6 +69,8 @@ module Base_template = struct
       Ok Actions
     | Sexp.Atom "example_commands" ->
       Ok Example_commands
+    | Sexp.Atom "generators" ->
+      Ok Generators
     | Sexp.Atom _ ->
       decoder_error ~msg:Errors.invalid_overwite sexp
     | Sexp.List _ ->
@@ -110,6 +113,7 @@ module Expr = struct
     | Trim of t
     | First_char of t
     | Last_char of t
+    | Concat of t list
 
   let rec decode = function
     | Sexp.Atom s when String.equal (String.prefix s 1) ":" ->
@@ -161,6 +165,15 @@ module Expr = struct
                "The function %S expected exactly one argument."
                name)
           sexp)
+    | Sexp.List (Sexp.Atom "concat" :: args) ->
+      let open Result.Let_syntax in
+      let+ d_args =
+        List.fold_left args ~init:(Ok []) ~f:(fun acc el ->
+            let* acc = acc in
+            let+ decoded = decode el in
+            decoded :: acc)
+      in
+      Function (Concat d_args)
     | Sexp.List (Sexp.Atom fn :: _) as sexp ->
       decoder_error
         ~msg:(Printf.sprintf "The function %S does not exist." fn)
@@ -230,7 +243,7 @@ module Configuration = struct
     | Confirm of confirm_t
 
   type rule =
-    { message : string
+    { message : Expr.t
     ; expr : Expr.t
     }
 
@@ -268,8 +281,9 @@ module Configuration = struct
   let decode_rule =
     let open Result.Let_syntax in
     function
-    | Sexp.List [ Sexp.Atom message; expr ] ->
-      let+ expr = Expr.decode expr in
+    | Sexp.List [ message; expr ] ->
+      let+ message = Expr.decode message
+      and+ expr = Expr.decode expr in
       { message; expr }
     | sexp ->
       decoder_error
@@ -314,11 +328,11 @@ module Actions = struct
 
   type action =
     | Run of command
-    | Refmt of string list
+    | Refmt of Expr.t list
 
   type t =
     { actions : action list
-    ; message : string option
+    ; message : Expr.t option
     ; enabled_if : Expr.t option
     }
 
@@ -339,8 +353,8 @@ module Actions = struct
     let open Result.Let_syntax in
     let+ files =
       Decoder.one_of
-        [ ("string list", Decoder.(list string))
-        ; "string", Decoder.map Decoder.string ~f:List.return
+        [ ("string list", Decoder.(list Expr.decode))
+        ; "string", Decoder.map Expr.decode ~f:List.return
         ]
         sexp
     in
@@ -362,7 +376,7 @@ module Actions = struct
              [ "n actions", Decoder.list decode_action
              ; "one action", Decoder.map ~f:List.return decode_action
              ])
-    and+ message = Decoder.field_opt "message" ~f:Decoder.string
+    and+ message = Decoder.field_opt "message" ~f:Expr.decode
     and+ enabled_if = Decoder.field_opt "enabled_if" ~f:Expr.decode in
     { actions; message; enabled_if }
 end
@@ -429,6 +443,57 @@ module Example_commands = struct
           { name = cmd.name; description = cmd.description; enabled_if })
 end
 
+module Generator = struct
+  type file =
+    { source : string
+    ; destination : Expr.t
+    }
+
+  type t =
+    { name : string
+    ; description : string
+    ; configurations : Configuration.t list
+    ; pre_gen_actions : Actions.t list
+    ; post_gen_actions : Actions.t list
+    ; files : file list
+    ; message : Expr.t option
+    }
+
+  let decode_file = function
+    | Sexp.List [ Sexp.Atom source; destination ] ->
+      let open Result.Let_syntax in
+      let+ destination = Expr.decode destination in
+      { source; destination }
+    | sexp ->
+      decoder_error
+        ~msg:"Expected an s-expression with the form (<file> <expression>)"
+        sexp
+
+  let decode_files =
+    Decoder.one_of
+      [ "n files", Decoder.list decode_file
+      ; "one file", Decoder.map ~f:List.return decode_file
+      ]
+
+  let decode =
+    let open Decoder.Let_syntax in
+    let+ name = Decoder.field "name" ~f:Template_name.decode
+    and+ description = Decoder.field "description" ~f:Description.decode
+    and+ configurations = Decoder.fields "config" ~f:Configuration.decode
+    and+ pre_gen_actions = Decoder.fields "pre_gen" ~f:Actions.decode
+    and+ post_gen_actions = Decoder.fields "post_gen" ~f:Actions.decode
+    and+ files = Decoder.field "files" ~f:decode_files
+    and+ message = Decoder.field_opt "message" ~f:Expr.decode in
+    { name
+    ; description
+    ; configurations
+    ; pre_gen_actions
+    ; post_gen_actions
+    ; files
+    ; message
+    }
+end
+
 type t =
   { name : string
   ; description : string
@@ -439,6 +504,7 @@ type t =
   ; post_gen_actions : Actions.t list
   ; ignore_file_rules : Ignore_rule.t list
   ; example_commands : Example_command.t list
+  ; generators : Generator.t list
   }
 
 let decode =
@@ -455,7 +521,7 @@ let decode =
     Decoder.fields "example_commands" ~f:Example_commands.decode
   and+ example_command_list =
     Decoder.fields "example_command" ~f:Example_command.decode
-  in
+  and+ generators = Decoder.fields "generator" ~f:Generator.decode in
   let example_commands =
     example_command_list @ List.concat example_commands_list
   in
@@ -468,4 +534,5 @@ let decode =
   ; post_gen_actions
   ; ignore_file_rules
   ; example_commands
+  ; generators
   }

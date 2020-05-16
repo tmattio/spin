@@ -19,7 +19,21 @@ type t =
   ; source : source
   }
 
-val source_of_string : string -> source option
+val source_of_string : string -> source Option.t
+
+val source_of_dec : Dec_common.Source.t -> (source, string) Result.t
+
+val source_to_dec : source -> Dec_common.Source.t
+
+val read_source_spin_file
+  :  ?download_git:bool
+  -> source
+  -> (Dec_template.t, Spin_error.t) Lwt_result.t
+
+val read_source_template_files
+  :  ?download_git:bool
+  -> source
+  -> ((string, string) Hashtbl.t, Spin_error.t) Lwt_result.t
 
 val of_dec
   :  ?use_defaults:bool
@@ -28,7 +42,7 @@ val of_dec
   -> ?ignore_actions:bool
   -> ?ignore_example_commands:bool
   -> source:source
-  -> context:(string, string) Spin_std.Hashtbl.t
+  -> context:(string, string) Hashtbl.t
   -> Dec_template.t
   -> (t, Spin_error.t) Lwt_result.t
 
@@ -37,7 +51,7 @@ val read
   -> ?ignore_configs:bool
   -> ?ignore_actions:bool
   -> ?ignore_example_commands:bool
-  -> ?context:(string, string) Spin_std.Hashtbl.t
+  -> ?context:(string, string) Hashtbl.t
   -> source
   -> (t, Spin_error.t) Lwt_result.t
 

@@ -15,13 +15,9 @@ let run () =
         else
           String.compare t1 t2)
   in
-  let pp_name : string Fmt.t =
-    let open Fmt in
-    styled (`Fg `Blue) Fmt.string |> styled `Bold
-  in
   Logs.app (fun m -> m "");
   List.iter sorted_templates ~f:(fun { name; description } ->
-      Logs.app (fun m -> m "  %a" pp_name name);
+      Logs.app (fun m -> m "  %a" Pp.pp_blue name);
       Logs.app (fun m -> m "    %s" description);
       Logs.app (fun m -> m ""))
 

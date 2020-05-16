@@ -52,7 +52,8 @@ let validate_of_rule ~context ~config_name (rule : Configuration.rule) =
       if result then
         Lwt.return (Ok v)
       else
-        Lwt.return (Error rule.message)
+        let+ error_message = Template_expr.eval rule.message ~context in
+        Error error_message
 
 let prompt_config ?(use_defaults = false) ~context (config : Configuration.t) =
   let open Lwt_result.Syntax in
@@ -120,6 +121,22 @@ let fold_with_enabled_if ~context ~expr ~f l =
           f el :: acc
         else
           acc)
+
+let fold_lwt_with_enabled_if ~context ~expr ~f l =
+  let open Lwt_result.Syntax in
+  List.fold_right l ~init:(Lwt_result.return []) ~f:(fun el acc ->
+      let* acc = acc in
+      match expr el with
+      | None ->
+        Lwt.bind (f el) (fun result -> Lwt_result.return (result :: acc))
+      | Some expr ->
+        let* result =
+          evaluate_expr_with expr ~f:Template_expr.to_bool ~context
+        in
+        if result then
+          Lwt.bind (f el) (fun result -> Lwt_result.return (result :: acc))
+        else
+          Lwt_result.return acc)
 
 let populate_context ?(use_defaults = false) ~context (dec : Dec_template.t) =
   let open Lwt_result.Syntax in
@@ -194,18 +211,18 @@ let populate_template_files files =
   |> Hashtbl.of_alist_exn (module String)
 
 let populate_pre_gen_actions ~context (dec : Dec_template.t) =
-  fold_with_enabled_if
+  fold_lwt_with_enabled_if
     dec.pre_gen_actions
     ~context
     ~expr:(fun el -> el.Actions.enabled_if)
-    ~f:Template_actions.of_dec
+    ~f:(Template_actions.of_dec ~context)
 
 let populate_post_gen_actions ~context (dec : Dec_template.t) =
-  fold_with_enabled_if
+  fold_lwt_with_enabled_if
     dec.post_gen_actions
     ~context
     ~expr:(fun el -> el.Actions.enabled_if)
-    ~f:Template_actions.of_dec
+    ~f:(Template_actions.of_dec ~context)
 
 let populate_example_commands ~context (dec : Dec_template.t) =
   fold_with_enabled_if
@@ -247,6 +264,45 @@ let source_of_string s =
         Some (Local_dir s)
       else
         None)
+
+let read_source_spin_file ?(download_git = false) source =
+  let open Lwt_result.Syntax in
+  match source with
+  | Official (module T) ->
+    Official_template.read_spin_file (module T) |> Lwt.return
+  | Local_dir dir ->
+    Local_template.read_spin_file dir
+  | Git repo ->
+    let* template_dir =
+      if download_git then
+        Git_template.donwload_git_repo repo
+      else
+        Git_template.cache_dir_of_repo repo |> Lwt.return
+    in
+    Local_template.read_spin_file template_dir
+
+let read_source_template_files ?(download_git = false) source =
+  let open Lwt_result.Syntax in
+  match source with
+  | Official (module T) ->
+    Ok
+      (Official_template.files_with_content (module T)
+      |> Hashtbl.of_alist_exn (module String))
+    |> Lwt.return
+  | Local_dir dir ->
+    let+ files = Local_template.files_with_content dir |> Lwt_result.ok in
+    Hashtbl.of_alist_exn (module String) files
+  | Git repo ->
+    let* template_dir =
+      if download_git then
+        Git_template.donwload_git_repo repo
+      else
+        Git_template.cache_dir_of_repo repo |> Lwt.return
+    in
+    let+ files =
+      Local_template.files_with_content template_dir |> Lwt_result.ok
+    in
+    Hashtbl.of_alist_exn (module String) files
 
 let rec of_dec
     ?(use_defaults = false)
@@ -341,51 +397,17 @@ and read
   let context =
     Option.value context ~default:(Hashtbl.create (module String))
   in
-  match source with
-  | Official (module T) ->
-    let* spin_file =
-      Official_template.read_spin_file (module T) |> Lwt.return
-    in
-    let files =
-      Official_template.files_with_content (module T)
-      |> Hashtbl.of_alist_exn (module String)
-    in
-    of_dec
-      spin_file
-      ~ignore_configs
-      ~ignore_actions
-      ~ignore_example_commands
-      ~files
-      ~context
-      ~source
-      ~use_defaults
-  | Local_dir dir ->
-    let* spin_file = Local_template.read_spin_file dir in
-    let* files = Local_template.files_with_content dir |> Lwt_result.ok in
-    of_dec
-      spin_file
-      ~ignore_configs
-      ~ignore_actions
-      ~ignore_example_commands
-      ~files:(Hashtbl.of_alist_exn (module String) files)
-      ~context
-      ~source
-      ~use_defaults
-  | Git repo ->
-    let* template_dir = Git_template.donwload_git_repo repo in
-    let* spin_file = Local_template.read_spin_file template_dir in
-    let* files =
-      Local_template.files_with_content template_dir |> Lwt_result.ok
-    in
-    of_dec
-      spin_file
-      ~ignore_configs
-      ~ignore_actions
-      ~ignore_example_commands
-      ~files:(Hashtbl.of_alist_exn (module String) files)
-      ~context
-      ~source
-      ~use_defaults
+  let* spin_file = read_source_spin_file source ~download_git:true in
+  let* files = read_source_template_files source ~download_git:false in
+  of_dec
+    spin_file
+    ~ignore_configs
+    ~ignore_actions
+    ~ignore_example_commands
+    ~files
+    ~context
+    ~source
+    ~use_defaults
 
 let generate ~path:generation_root template =
   let open Lwt_result.Syntax in
@@ -404,7 +426,7 @@ let generate ~path:generation_root template =
     |> Lwt.return
   in
   (* Run pre-gen commands *)
-  let* () =
+  let* _ =
     Spin_lwt.result_fold_left
       template.pre_gen_actions
       ~f:(Template_actions.run ~path:generation_root)
@@ -419,7 +441,7 @@ let generate ~path:generation_root template =
           generation_root)
     |> Lwt_result.ok
   in
-  let* () =
+  let* _ =
     template.template_files
     |> Hashtbl.to_alist
     |> Spin_lwt.result_fold_left ~f:(fun (path, content) ->
@@ -430,7 +452,7 @@ let generate ~path:generation_root template =
     Logs_lwt.app (fun m -> m "%a" Pp.pp_bright_green "Done!\n") |> Lwt_result.ok
   in
   (* Run post-gen commands *)
-  let* () =
+  let* _ =
     Spin_lwt.result_fold_left
       template.post_gen_actions
       ~f:(Template_actions.run ~path:generation_root)
@@ -465,7 +487,7 @@ let generate ~path:generation_root template =
              Here are some example commands that you can run inside this \
              directory:")
   in
-  let* () =
+  let* _ =
     Spin_lwt.fold_left
       template.example_commands
       ~f:(fun (el : example_command) ->

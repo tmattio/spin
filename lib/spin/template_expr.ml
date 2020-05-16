@@ -61,14 +61,12 @@ and eval_fn ~context =
     String.suffix e 1
   | Expr.Run (cmd, args) ->
     let* cmd = eval cmd in
-    let* args =
-      List.fold_left args ~init:(Lwt.return []) ~f:(fun acc el ->
-          let* acc = acc in
-          let+ result = eval el in
-          result :: acc)
-    in
+    let* args = Spin_lwt.fold_left args ~f:eval in
     let+ p_out = Spin_lwt.exec cmd args in
     (match p_out.status with WEXITED 0 -> "false" | _ -> "true")
+  | Expr.Concat l ->
+    let+ l = Spin_lwt.fold_left l ~f:eval in
+    String.concat l
 
 and to_bool ~context expr =
   let open Lwt.Syntax in

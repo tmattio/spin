@@ -12,15 +12,27 @@ type t =
   ; actions : action list
   }
 
-let of_dec (dec_actions : Dec_template.Actions.t) : t =
-  { message = dec_actions.message
-  ; actions =
-      List.map dec_actions.actions ~f:(function
-          | Dec_template.Actions.Run { name; args } ->
-            Run { name; args }
-          | Dec_template.Actions.Refmt files ->
-            Refmt files)
-  }
+let of_dec ~context (dec_actions : Dec_template.Actions.t) =
+  let open Lwt.Syntax in
+  let* message =
+    match dec_actions.message with
+    | Some message ->
+      let+ evaluated = Template_expr.eval message ~context in
+      Some evaluated
+    | None ->
+      Lwt.return None
+  in
+  let+ actions =
+    Spin_lwt.fold_left dec_actions.actions ~f:(function
+        | Dec_template.Actions.Run { name; args } ->
+          Run { name; args } |> Lwt.return
+        | Dec_template.Actions.Refmt files ->
+          let+ files =
+            Spin_lwt.fold_left files ~f:(Template_expr.eval ~context)
+          in
+          Refmt files)
+  in
+  { message; actions }
 
 let action_run ~root_path cmd =
   Spin_lwt.with_chdir ~dir:root_path (fun () ->
