@@ -29,7 +29,7 @@ A project generator for Reason and OCaml
   cmdliner
   logs
   sexplib
-  lwt
+  (lwt (>= 5.3.0))
   jingoo
   reason
   (inquire (>= 0.2.0))))
