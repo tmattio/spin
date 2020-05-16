@@ -22,12 +22,35 @@ let generate_string ~context s =
     ~env:{ Jg_types.std_env with filters = Jg_types.std_env.filters @ filters }
 
 let generate ~context ~content path =
-  let open Lwt.Syntax in
-  let content = try generate_string content ~context with e -> raise e in
+  let open Lwt_result.Syntax in
+  let* content =
+    (try Ok (generate_string content ~context) with
+    | _ ->
+      Error
+        (Spin_error.failed_to_generate
+           (Printf.sprintf
+              "Error while running the template engine on content of %S."
+              path)))
+    |> Lwt.return
+  in
   (* Need to normalize the file separation because "\\" will escape the
      expressions to evaluate in the template engine *)
-  let path = String.substr_replace_all path ~pattern:"\\" ~with_:"/" in
-  let path = generate_string path ~context in
-  let* () = Logs_lwt.debug (fun m -> m "Generating %s" path) in
-  Filename.dirname path |> Spin_unix.mkdir_p;
-  Lwt_io.with_file path (fun oc -> Lwt_io.write oc content) ~mode:Lwt_io.Output
+  let normalized_path =
+    String.substr_replace_all path ~pattern:"\\" ~with_:"/"
+  in
+  let* normalized_path =
+    (try Ok (generate_string normalized_path ~context) with
+    | _ ->
+      Error
+        (Spin_error.failed_to_generate
+           (Printf.sprintf
+              "Error while running the template engine on the path of %S"
+              path)))
+    |> Lwt.return
+  in
+  let* () = Logs_lwt.debug (fun m -> m "Generating %s" path) |> Lwt_result.ok in
+  Filename.dirname normalized_path |> Spin_unix.mkdir_p;
+  Lwt_io.with_file
+    normalized_path
+    (fun oc -> Lwt_io.write oc content |> Lwt_result.ok)
+    ~mode:Lwt_io.Output

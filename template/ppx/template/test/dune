@@ -11,6 +11,8 @@
  (name test_runner)
  (libraries {% if test_framework == 'Rely' %}rely.lib{% else %}alcotest{% endif %} {{ project_snake }}_test)
  (modules test_runner)
+ (preprocess
+  (pps {{ project_slug }}))
  (flags (:standard -open StdLabels)))
 
 (rule

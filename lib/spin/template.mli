@@ -16,6 +16,7 @@ type t =
   ; pre_gen_actions : Template_actions.t list
   ; post_gen_actions : Template_actions.t list
   ; example_commands : example_command list
+  ; source : source
   }
 
 val source_of_string : string -> source option
@@ -26,6 +27,7 @@ val of_dec
   -> ?ignore_configs:bool
   -> ?ignore_actions:bool
   -> ?ignore_example_commands:bool
+  -> source:source
   -> context:(string, string) Spin_std.Hashtbl.t
   -> Dec_template.t
   -> (t, Spin_error.t) Lwt_result.t

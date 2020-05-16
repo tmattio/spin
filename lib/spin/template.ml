@@ -18,6 +18,7 @@ type t =
   ; pre_gen_actions : Template_actions.t list
   ; post_gen_actions : Template_actions.t list
   ; example_commands : example_command list
+  ; source : source
   }
 
 let evaluate_expr_with ~context ~f expr =
@@ -225,6 +226,14 @@ let source_of_dec = function
     | None ->
       Error (Printf.sprintf "The official template does not exist: %s" s))
 
+let source_to_dec = function
+  | Git s ->
+    Dec_common.Source.Git s
+  | Local_dir s ->
+    Dec_common.Source.Local_dir s
+  | Official (module T) ->
+    Dec_common.Source.Official T.name
+
 let source_of_string s =
   match Official_template.of_name s with
   | Some v ->
@@ -245,6 +254,7 @@ let rec of_dec
     ?(ignore_configs = false)
     ?(ignore_actions = false)
     ?(ignore_example_commands = false)
+    ~source
     ~context
     (dec : Dec_template.t)
   =
@@ -274,6 +284,8 @@ let rec of_dec
         ; pre_gen_actions = []
         ; post_gen_actions = []
         ; example_commands = []
+        ; source
+          (* This is not the correct value, but we are not supposed to use this. *)
         }
   in
   let* () =
@@ -314,6 +326,7 @@ let rec of_dec
   ; pre_gen_actions = base.pre_gen_actions @ pre_gen_actions
   ; post_gen_actions = base.post_gen_actions @ post_gen_actions
   ; example_commands = base.example_commands @ example_commands
+  ; source
   }
 
 and read
@@ -344,6 +357,7 @@ and read
       ~ignore_example_commands
       ~files
       ~context
+      ~source
       ~use_defaults
   | Local_dir dir ->
     let* spin_file = Local_template.read_spin_file dir in
@@ -355,6 +369,7 @@ and read
       ~ignore_example_commands
       ~files:(Hashtbl.of_alist_exn (module String) files)
       ~context
+      ~source
       ~use_defaults
   | Git repo ->
     let* template_dir = Git_template.donwload_git_repo repo in
@@ -369,6 +384,7 @@ and read
       ~ignore_example_commands
       ~files:(Hashtbl.of_alist_exn (module String) files)
       ~context
+      ~source
       ~use_defaults
 
 let generate ~path:generation_root template =
@@ -406,10 +422,9 @@ let generate ~path:generation_root template =
   let* () =
     template.template_files
     |> Hashtbl.to_alist
-    |> Spin_lwt.fold_left ~f:(fun (path, content) ->
+    |> Spin_lwt.result_fold_left ~f:(fun (path, content) ->
            let path = Filename.concat generation_root path in
            File_generator.generate path ~context:template.context ~content)
-    |> Lwt_result.ok
   in
   let* () =
     Logs_lwt.app (fun m -> m "%a" Pp.pp_bright_green "Done!\n") |> Lwt_result.ok
@@ -419,6 +434,18 @@ let generate ~path:generation_root template =
     Spin_lwt.result_fold_left
       template.post_gen_actions
       ~f:(Template_actions.run ~path:generation_root)
+  in
+  let () =
+    let project_config =
+      Dec_project.
+        { source = source_to_dec template.source
+        ; configs = Hashtbl.to_alist template.context
+        }
+    in
+    Encoder.encode_file
+      project_config
+      ~path:(Filename.concat generation_root ".spin")
+      ~f:Dec_project.encode
   in
   let* () =
     Logs_lwt.app (fun m ->
