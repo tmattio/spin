@@ -29,7 +29,7 @@
 
 (config ci_cd
   (select
-    (prompt "Which test framework do you prefer?")
+    (prompt "Which CI/CD do you use?")
     (values Github None))
   (default Github))
 
