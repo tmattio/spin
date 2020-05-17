@@ -59,7 +59,7 @@ let man =
   [ `S Manpage.s_description
   ; `P
       "$(tname) generates projects from templates. The template can be either \
-       a native template, local directory or a remote git repository."
+       an official template, local directory or a remote git repository."
   ; `P "You can use spin-ls(1) to list the official templates."
   ]
 

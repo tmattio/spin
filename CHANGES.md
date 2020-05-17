@@ -1,22 +1,29 @@
-# Unreleased
+# 0.6.0 - 2020-05-17
 
 This release is a complete rewrite of Spin.
 
 Since the beginning of the project, a lot of learnings have been made and this new version incorporates these learning to build a solid foundation for the future of Spin.
 
-- Documentation of the CLI, template DSL and template engine.
-- Better man page documentation
-- Calling `spin` without a subcommand now displays a simpler usage documentation. The `man` page is available with `spin --help`
-- The CLI now provides a verbose flag to increase the verbosity
+## Added
+
 - New template DSL
-- Template extension
+- Template inheritance with the `(inherit ...)` stanza
+- Documentation of the CLI and template DSL.
+- The CLI now provides a verbose flag to increase the verbosity
+- The git templates are now cached
+
+## Changed
+
+- Calling `spin` without a subcommand now displays a simpler usage documentation. The `man` page is available with `spin --help`
+- Better man page documentation
 - Better error messages
 - Improvements of the configuration prompts using Inquire
 - Update native templates to follow best practices (e.g. name of libraries)
-- Versionning of the templates
-- Bucklescript templates now fallback to using `npm` when `yarn` is absent
-- Windows is now supported
 - The official templates are now embedded. No need to download a git repository, and the project generation works offline.
+
+## Fixed
+
+- Bucklescript templates now fallback to using `npm` when `yarn` is absent
 
 # 0.5.1 - 2020-03-17
 
@@ -25,7 +32,7 @@ Since the beginning of the project, a lot of learnings have been made and this n
 - Add versionning for the official templates to ensure updates on the templates don't break old version of Spin.
 - Sort `spin ls` result by name.
 
-### Templates
+## Templates
 
 - Rename react to bs-react. All the upcoming Bucklescript templates will be prefixed by bs-.
 - Add a lib template that is releasable on Opam.

@@ -3,7 +3,7 @@ open Jingoo
 let jg_string_fn ?kwargs:_ ?defaults:_ fn value =
   let value = Jg_runtime.string_of_tvalue value in
   let slug = fn value in
-  (Jg_types.Tstr slug [@explicit_arity])
+  Jg_types.Tstr slug
 
 let filters =
   [ "slugify", Helpers.slugify |> jg_string_fn |> Jg_types.func_arg1_no_kw

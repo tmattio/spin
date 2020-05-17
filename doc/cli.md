@@ -129,8 +129,7 @@ spin new [OPTION]... TEMPLATE [PATH]
 
 ### Description
 
-`new` generates projects from templates. The template can be either a
-native template, local directory or a remote git repository.
+`new` generates projects from templates. The template can be either an official template, local directory or a remote git repository.
 
 You can use `ls` to list the official templates.
 

@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://github.com/tmattio/spin/actions">
-    <img src="https://github.com/tmattio/spin/workflows/Continuous%20Integration/badge.svg" alt="Build Status" />
+    <img src="https://github.com/tmattio/spin/workflows/CI/badge.svg" alt="Build Status" />
   </a>
   <a href="https://badge.fury.io/js/%40tmattio%2Fspin">
     <img src="https://badge.fury.io/js/%40tmattio%2Fspin.svg" alt="npm version" />
@@ -72,10 +72,10 @@ curl -fsSL https://github.com/tmattio/spin/raw/master/scripts/install.sh | bash
 You can generate a new project using a template with `spin new`. For instance:
 
 ```bash
-spin new native my_app
+spin new bin my_app
 ```
 
-Will create a new native application in the directory `./my_app/`
+Will create a new binary application in the directory `./my_app/`
 
 Anyone can create new Spin templates, but we provide official templates for a lot of use cases.
 The official templates for each type of applications are listed below.
