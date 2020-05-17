@@ -53,7 +53,7 @@ for (const file of filesToTouch) {
 
 const pkgJson = {
   name: "@{{ npm_username }}/{{ project_slug }}",
-  version: "%%VERSION%%",
+  version: "%%{% raw %}VERSION{% endraw %}%%",
   description: "{{ project_description }}",
   author: "{{ username }}{% if author_email %} <{{ author_email }}>{% endif %}",
   license: "MIT",
