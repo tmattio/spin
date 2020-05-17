@@ -33,7 +33,7 @@ let default_cmd =
     @@ let+ _ = Common.term in
        `Help (`Pager, None)
   in
-  let info = Term.info "spin" ~version:"%%VERSION%%" ~doc ~sdocs ~exits ~man ~envs in
+  let info = Term.info "spin" ~version:"%%{% raw %}VERSION{% endraw %}%%" ~doc ~sdocs ~exits ~man ~envs in
   term, info
 
 let () = Term.(exit_status @@ eval_choice default_cmd cmds)
