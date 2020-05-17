@@ -1,6 +1,5 @@
 (name test)
 (description "Test template")
-(spin_version 0.6.0)
 
 (ignore
  (files f2 dir/f3 dir2/* */f5))

@@ -1,6 +1,5 @@
 (name test)
 (description "Test template")
-(spin_version 0.6.0)
 
 (config test (default ""))
 

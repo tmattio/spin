@@ -1,8 +1,6 @@
 (name bs-react)
 (description "React application in Reason")
 
-(spin_version 0.6.0)
-
 (config project_name
   (input (prompt "Project name")))
 

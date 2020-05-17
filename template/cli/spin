@@ -3,8 +3,6 @@
 (name cli)
 (description "Command Line Interface releasable on Opam")
 
-(spin_version 0.6.0)
-
 (generator
   (name cmd)
   (description "Generate a subcommand for the CLI.")
