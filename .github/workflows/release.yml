@@ -14,71 +14,43 @@ jobs:
         # os: [ubuntu-latest, macos-latest, windows-latest]
         os: [ubuntu-latest, macos-latest]
     steps:
+      - uses: avsm/setup-ocaml@master
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}
+
       - uses: actions/checkout@v2
 
       - name: Fetch git tags
         run: git fetch --tags --force
 
-      - name: Use Node.js 12.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-          registry-url: "https://registry.npmjs.org"
+      - name: Pin package
+        run: opam pin add spin.dev -n .
 
-      - name: Set macOS deployment target
-        run: |
-          echo "::set-env name=MACOSX_DEPLOYMENT_TARGET=10.9"
-          
-      - name: Cache esy dependencies
-        uses: actions/cache@v1
-        id: cache
-        with:
-          path: _export
-          key: ${{ runner.OS }}-build-${{ hashFiles('esy.lock/index.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
-
-      - name: Install esy
-        run: npm install -g esy@latest
-
-      - name: Import dependencies
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: esy import-build _export/*
+      - name: Query and install external dependencies
+        run: opam depext -yt spin
 
       - name: Install dependencies
-        run: esy install
+        run: make dev
+          
+      - name: Substitute watermarks
+        run: opam exec -- dune subst
 
       - name: Build
-        run: esy build --release
+        run: opam exec -- dune build --release
 
-      - name: Substitute watermarks
-        run: esy dune subst
-
-      - name: Build subst changes
-        run: esy dune build
-
-      - name: Get Esy binary path
-        id: esy_binary_path
+      - name: Get binary path
+        id: binary_path
         shell: bash
         run: |
-          # from https://stackoverflow.com/a/24848739/617787
-          s=$(pwd); d=$(dirname $(esy x which spin));
-          while [ "${d#$s/}" == "${d}" ]
-          do s=$(dirname $s);b="../${b}"; done; 
-          ESY__BINARY_PATH=${b}${d#$s/}/spin
-          echo "ESY__BINARY_PATH: $ESY__BINARY_PATH"
-          echo "##[set-output name=path;]$ESY__BINARY_PATH"
+          BINARY_PATH=${opam exec -- dune exec which spin}
+          echo "BINARY_PATH: $BINARY_PATH"
+          echo "##[set-output name=path;]$BINARY_PATH"
 
       - name: Upload artifacts for ${{ matrix.os }}
         uses: actions/upload-artifact@master
         with:
           name: ${{ matrix.os }}
-          path: ${{ steps.esy_binary_path.outputs.path }}
-
-      - name: Export dependencies
-        run: esy export-dependencies
+          path: ${{ steps.binary_path.outputs.path }}
 
   publish:
     needs: build
