@@ -36,7 +36,7 @@
     {%- if syntax == 'Reason' %}
     "refmterr": ">= 3.3.0",
     {%- endif %}
-    "ocaml": "~4.9.1000"
+    "ocaml": "~4.8.1000"
   },
   "scripts": {
     "start": "esy x {{ project_slug }}",
