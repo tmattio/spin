@@ -1,0 +1,5 @@
+(env
+ (dev
+  (flags (:standard -open StdLabels -w +A-48-42 -warn-error +A-3-44)))
+ (release
+  (flags (:standard -O3))))
