@@ -70,9 +70,52 @@ and eval_fn ~context =
 
 and to_bool ~context expr =
   let open Lwt.Syntax in
-  let+ e = eval expr ~context in
-  try Bool.of_string e with
-  | Invalid_expr _ as e ->
-    raise e
-  | _ ->
-    raise (Invalid_expr "The expression cannot be evaluated to a boolean")
+  let* e = eval expr ~context in
+  Lwt.catch
+    (fun () -> Bool.of_string e |> Lwt.return)
+    (function
+      | Invalid_expr _ as e ->
+        raise e
+      | _ ->
+        Lwt.fail
+          (Invalid_expr "The expression cannot be evaluated to a boolean"))
+
+let to_result ~context ~f expr =
+  Lwt.catch
+    (fun () -> f ~context expr |> Lwt_result.ok)
+    (function
+      | Invalid_expr reason ->
+        Error (Spin_error.failed_to_generate reason) |> Lwt.return
+      | _ ->
+        Error
+          (Spin_error.failed_to_generate
+             "Failed to evaluate an expression for unknown reason")
+        |> Lwt.return)
+
+let filter_map ~context ~condition ~f l =
+  let open Lwt_result.Syntax in
+  List.fold_right l ~init:(Lwt_result.return []) ~f:(fun el acc ->
+      let* acc = acc in
+      match condition el with
+      | None ->
+        Lwt_result.return (f el :: acc)
+      | Some expr ->
+        let+ result = to_result expr ~f:to_bool ~context in
+        if result then
+          f el :: acc
+        else
+          acc)
+
+let lwt_filter_map ~context ~condition ~f l =
+  let open Lwt_result.Syntax in
+  List.fold_right l ~init:(Lwt_result.return []) ~f:(fun el acc ->
+      let* acc = acc in
+      match condition el with
+      | None ->
+        Lwt.bind (f el) (fun result -> Lwt_result.return (result :: acc))
+      | Some condition ->
+        let* result = to_result condition ~f:to_bool ~context in
+        if result then
+          Lwt.bind (f el) (fun result -> Lwt_result.return (result :: acc))
+        else
+          Lwt_result.return acc)

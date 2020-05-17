@@ -17,4 +17,9 @@ val of_dec
   -> Dec_template.Actions.t
   -> t Lwt.t
 
+val of_decs_with_condition
+  :  context:(string, string) Hashtbl.t
+  -> Dec_template.Actions.t list
+  -> (t list, Spin_error.t) Lwt_result.t
+
 val run : path:string -> t -> (unit, Spin_error.t) Lwt_result.t

@@ -1,27 +1,40 @@
 open Spin
 
-let run ~ignore_config:_ ~use_defaults:_ ~generator =
+let run ~ignore_config ~use_defaults:_ ~generator =
   let open Result.Let_syntax in
-  match generator with
+  let* context =
+    if ignore_config then
+      Ok None
+    else
+      let* user_config = User_config.read () in
+      match user_config with
+      | None ->
+        Ok None
+      | Some user_config ->
+        let context = User_config.to_context user_config in
+        Ok (Some context)
+  in
+  let* project_config = Project.read_project_config () in
+  match project_config with
   | None ->
-    (match Project.read_project_config () with
+    Logs.app (fun m -> m "The current directory is not in a Spin project.");
+    Logs.app (fun m ->
+        m "The \"gen\" command can only be used within a Spin project.");
+    Ok ()
+  | Some project_config ->
+    (match generator with
     | None ->
-      Logs.app (fun m -> m "The current directory is not in a Spin project.");
-      Logs.app (fun m ->
-          m "The \"gen\" command can only be used within a Spin project.");
-      Ok ()
-    | Some project_config ->
-      let* project_config = project_config in
       let+ generators =
-        Project.project_generators project_config |> Lwt_main.run
+        Project.project_generators project_config.dec |> Lwt_main.run
       in
       Logs.app (fun m -> m "");
       List.iter generators ~f:(fun (name, description) ->
           Logs.app (fun m -> m "  %a" Pp.pp_blue name);
           Logs.app (fun m -> m "    %s" description);
-          Logs.app (fun m -> m "")))
-  | Some _ ->
-    failwith "Missing implementation"
+          Logs.app (fun m -> m ""))
+    | Some generator ->
+      Project.run_generator ?context ~project:project_config generator
+      |> Lwt_main.run)
 
 (* Command line interface *)
 

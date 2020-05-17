@@ -1,0 +1,9 @@
+(name test)
+(description "Test template")
+(spin_version 0.6.0)
+
+(config test (default ""))
+
+(generator
+  (name cmd)
+  (description "Generate a subcommand for the CLI."))

@@ -59,6 +59,7 @@ module Base_template = struct
     ; ignore_configs : bool
     ; ignore_actions : bool
     ; ignore_example_commands : bool
+    ; ignore_generators : bool
     }
 
   let decode_overwrite sexp =
@@ -82,15 +83,27 @@ module Base_template = struct
     and+ overwrites = field_opt "overwrites" ~f:(list decode_overwrite) in
     let overwrites = Option.value overwrites ~default:[] in
     let ignore_configs =
-      List.exists overwrites ~f:(function Actions -> true | _ -> false)
+      List.exists overwrites ~f:(function Configs -> true | _ -> false)
     in
     let ignore_actions =
       List.exists overwrites ~f:(function Actions -> true | _ -> false)
     in
     let ignore_example_commands =
-      List.exists overwrites ~f:(function Actions -> true | _ -> false)
+      List.exists overwrites ~f:(function
+          | Example_commands ->
+            true
+          | _ ->
+            false)
     in
-    { source; ignore_configs; ignore_actions; ignore_example_commands }
+    let ignore_generators =
+      List.exists overwrites ~f:(function Generators -> true | _ -> false)
+    in
+    { source
+    ; ignore_configs
+    ; ignore_actions
+    ; ignore_example_commands
+    ; ignore_generators
+    }
 end
 
 module Expr = struct
@@ -173,7 +186,7 @@ module Expr = struct
             let+ decoded = decode el in
             decoded :: acc)
       in
-      Function (Concat d_args)
+      Function (Concat (List.rev d_args))
     | Sexp.List (Sexp.Atom fn :: _) as sexp ->
       decoder_error
         ~msg:(Printf.sprintf "The function %S does not exist." fn)
@@ -482,14 +495,14 @@ module Generator = struct
     and+ configurations = Decoder.fields "config" ~f:Configuration.decode
     and+ pre_gen_actions = Decoder.fields "pre_gen" ~f:Actions.decode
     and+ post_gen_actions = Decoder.fields "post_gen" ~f:Actions.decode
-    and+ files = Decoder.field "files" ~f:decode_files
+    and+ files = Decoder.field_opt "files" ~f:decode_files
     and+ message = Decoder.field_opt "message" ~f:Expr.decode in
     { name
     ; description
     ; configurations
     ; pre_gen_actions
     ; post_gen_actions
-    ; files
+    ; files = Option.value files ~default:[]
     ; message
     }
 end

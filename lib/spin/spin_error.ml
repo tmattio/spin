@@ -3,6 +3,7 @@ type t =
   | `Failed_to_parse of string * string
   | `Invalid_template of string * string
   | `Failed_to_generate of string
+  | `Generator_error of string * string
   ]
 
 let to_string = function
@@ -37,6 +38,8 @@ let to_string = function
       var
   | `Failed_to_generate msg ->
     Printf.sprintf "The template generation failed:\n%s" msg
+  | `Generator_error (generator, reason) ->
+    Printf.sprintf "Failed to run the generator %S:\n%s" generator reason
 
 let missing_env env = `Missing_env_var env
 
@@ -45,6 +48,8 @@ let failed_to_parse ~msg file = `Failed_to_parse (file, msg)
 let failed_to_generate msg = `Failed_to_generate msg
 
 let invalid_template ~msg template = `Invalid_template (template, msg)
+
+let generator_error ~msg generator = `Generator_error (generator, msg)
 
 let of_decoder_error ~file e =
   let msg = Decoder.string_of_error e in
