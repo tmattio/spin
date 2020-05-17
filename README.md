@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="300" src="https://raw.githubusercontent.com/tmattio/spin/master/docs/logo.svg?sanitize=true" alt="Logo">
+    <img width="300" src="https://raw.githubusercontent.com/tmattio/spin/master/doc/logo.svg?sanitize=true" alt="Logo">
   	<br><br>
     Reason and OCaml project generator.
 </p>
@@ -26,7 +26,7 @@
 </p>
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/tmattio/spin/master/docs/demo.svg?sanitize=true" alt="Demo">
+  <img src="https://raw.githubusercontent.com/tmattio/spin/master/doc/demo.svg?sanitize=true" alt="Demo">
 </div>
 
 ## Features
