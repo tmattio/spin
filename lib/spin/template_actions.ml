@@ -49,18 +49,22 @@ let action_refmt ~root_path globs =
   let files = Spin_sys.ls_dir root_path in
   let+ _ =
     Spin_lwt.fold_left files ~f:(fun input_path ->
-        let+ () =
-          Logs_lwt.debug (fun m -> m "Running refmt on %s" input_path)
-        in
         let normalized_path =
-          String.chop_prefix_exn input_path ~prefix:root_path
+          input_path
+          |> Fpath.v
+          |> (fun p ->
+               Option.value_exn (Fpath.rem_prefix (Fpath.v root_path) p))
+          |> Fpath.to_string
           |> String.substr_replace_all ~pattern:"\\" ~with_:"/"
         in
         if Glob.matches_globs normalized_path ~globs then (
+          let+ () =
+            Logs_lwt.debug (fun m -> m "Running refmt on %s" input_path)
+          in
           Spin_refmt.convert input_path;
           Caml.Sys.remove input_path)
         else
-          ())
+          Lwt.return ())
   in
   ()
 
