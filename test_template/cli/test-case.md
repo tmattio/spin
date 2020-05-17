@@ -26,6 +26,14 @@ Here are some example commands that you can run inside this directory:
 Happy hacking!
 $ cd _generated && make test
 ...
+$ export SPIN_CMD_NAME=test && \
+> spin gen cmd -C _generated --ignore-config
+
+🏗️  Running the generator cmd
+Done!
+
+You need to add `Cmd_test.cmd` to your list of commands in bin/main.ml
+$ test -f _generated/bin/commands/cmd_test.ml
 $ rm -rf _generated
 ```
 
@@ -57,6 +65,14 @@ Here are some example commands that you can run inside this directory:
 Happy hacking!
 $ cd _generated && make test
 ...
+$ export SPIN_CMD_NAME=test && \
+> spin gen cmd -C _generated --ignore-config
+
+🏗️  Running the generator cmd
+Done!
+
+You need to add `Cmd_test.cmd` to your list of commands in bin/main.re
+$ test -f _generated/bin/commands/cmd_test.re
 $ rm -rf _generated
 ```
 
@@ -88,6 +104,14 @@ Here are some example commands that you can run inside this directory:
 Happy hacking!
 $ cd _generated && esy test
 ...
+$ export SPIN_CMD_NAME=test && \
+> spin gen cmd -C _generated --ignore-config
+
+🏗️  Running the generator cmd
+Done!
+
+You need to add `Cmd_test.cmd` to your list of commands in bin/main.ml
+$ test -f _generated/bin/commands/cmd_test.ml
 $ rm -rf _generated
 ```
 
@@ -119,6 +143,14 @@ Here are some example commands that you can run inside this directory:
 Happy hacking!
 $ cd _generated && esy test
 ...
+$ export SPIN_CMD_NAME=test && \
+> spin gen cmd -C _generated --ignore-config
+
+🏗️  Running the generator cmd
+Done!
+
+You need to add `Cmd_test.cmd` to your list of commands in bin/main.re
+$ test -f _generated/bin/commands/cmd_test.re
 $ rm -rf _generated
 ```
 
@@ -150,6 +182,14 @@ Here are some example commands that you can run inside this directory:
 Happy hacking!
 $ cd _generated && make test
 ...
+$ export SPIN_CMD_NAME=test && \
+> spin gen cmd -C _generated --ignore-config
+
+🏗️  Running the generator cmd
+Done!
+
+You need to add `Cmd_test.cmd` to your list of commands in bin/main.ml
+$ test -f _generated/bin/commands/cmd_test.ml
 $ rm -rf _generated
 ```
 
@@ -181,6 +221,14 @@ Here are some example commands that you can run inside this directory:
 Happy hacking!
 $ cd _generated && make test
 ...
+$ export SPIN_CMD_NAME=test && \
+> spin gen cmd -C _generated --ignore-config
+
+🏗️  Running the generator cmd
+Done!
+
+You need to add `Cmd_test.cmd` to your list of commands in bin/main.re
+$ test -f _generated/bin/commands/cmd_test.re
 $ rm -rf _generated
 ```
 
@@ -212,6 +260,14 @@ Here are some example commands that you can run inside this directory:
 Happy hacking!
 $ cd _generated && esy test
 ...
+$ export SPIN_CMD_NAME=test && \
+> spin gen cmd -C _generated --ignore-config
+
+🏗️  Running the generator cmd
+Done!
+
+You need to add `Cmd_test.cmd` to your list of commands in bin/main.ml
+$ test -f _generated/bin/commands/cmd_test.ml
 $ rm -rf _generated
 ```
 
@@ -243,5 +299,13 @@ Here are some example commands that you can run inside this directory:
 Happy hacking!
 $ cd _generated && esy test
 ...
+$ export SPIN_CMD_NAME=test && \
+> spin gen cmd -C _generated --ignore-config
+
+🏗️  Running the generator cmd
+Done!
+
+You need to add `Cmd_test.cmd` to your list of commands in bin/main.re
+$ test -f _generated/bin/commands/cmd_test.re
 $ rm -rf _generated
 ```

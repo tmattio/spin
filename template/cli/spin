@@ -27,5 +27,5 @@
     (enabled_if (eq :syntax Reason)))
 
   (files
-    (cmd.ml (concat bin/commands/cmd_ (snake_case :cmd_name) .ml)))
+    (main.ml (concat bin/commands/cmd_ (snake_case :cmd_name) .ml)))
 )

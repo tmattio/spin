@@ -366,8 +366,8 @@ module Actions = struct
     let open Result.Let_syntax in
     let+ files =
       Decoder.one_of
-        [ ("string list", Decoder.(list Expr.decode))
-        ; "string", Decoder.map Expr.decode ~f:List.return
+        [ "string", Decoder.map Expr.decode ~f:List.return
+        ; ("string list", Decoder.(list Expr.decode))
         ]
         sexp
     in

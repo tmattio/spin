@@ -95,12 +95,21 @@ let run_generator ?context:additionnal_context ~project:t generator =
         ~f:(Template_actions.run ~path:t.project_root)
     in
     (* Generate files *)
+    let* () =
+      Logs_lwt.app (fun m ->
+          m "\n🏗️  Running the generator %a" Pp.pp_blue generator.name)
+      |> Lwt_result.ok
+    in
     let* _ =
       generator.files
       |> Hashtbl.to_alist
       |> Spin_lwt.result_fold_left ~f:(fun (path, content) ->
              let path = Filename.concat t.project_root path in
              File_generator.generate path ~context:generator.context ~content)
+    in
+    let* () =
+      Logs_lwt.app (fun m -> m "%a" Pp.pp_bright_green "Done!\n")
+      |> Lwt_result.ok
     in
     (* Run post-gen commands *)
     let* _ =
@@ -114,6 +123,6 @@ let run_generator ?context:additionnal_context ~project:t generator =
       | None ->
         Lwt.return () |> Lwt_result.ok
       | Some message ->
-        Logs_lwt.app (fun m -> m "%s" message) |> Lwt_result.ok
+        Logs_lwt.app (fun m -> m "%a" Pp.pp_yellow message) |> Lwt_result.ok
     in
     ()
