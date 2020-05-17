@@ -3,13 +3,13 @@
  (libraries {% if test_framework == 'Rely' %}rely.lib{% else %}alcotest{% endif %} {{ project_slug }})
  (modules
   (:standard \ test_runner))
- (flags (:standard -linkall -g -open StdLabels)))
+ (flags (:standard -linkall -g -open StdLabels{% if test_framework == 'Rely' %} -w +A-48-42-40{% endif %})))
 
 (executable
  (name test_runner)
  (libraries {% if test_framework == 'Rely' %}rely.lib{% else %}alcotest{% endif %} {{ project_snake }}_test)
  (modules test_runner)
- (flags (:standard -open StdLabels)))
+ (flags (:standard -open StdLabels{% if test_framework == 'Rely' %} -w +A-48-42-40{% endif %})))
 
 (rule
  (alias runtest)

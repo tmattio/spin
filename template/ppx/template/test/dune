@@ -5,7 +5,7 @@
   (:standard \ test_runner))
  (preprocess
   (pps {{ project_slug }}))
- (flags (:standard -linkall -g -open StdLabels)))
+ (flags (:standard -linkall -g -open StdLabels{% if test_framework == 'Rely' %} -w +A-48-42-40{% endif %})))
 
 (executable
  (name test_runner)
@@ -13,7 +13,7 @@
  (modules test_runner)
  (preprocess
   (pps {{ project_slug }}))
- (flags (:standard -open StdLabels)))
+ (flags (:standard -open StdLabels{% if test_framework == 'Rely' %} -w +A-48-42-40{% endif %})))
 
 (rule
  (alias runtest)
