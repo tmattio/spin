@@ -8,38 +8,6 @@ module Description = struct
   let decode = Decoder.string
 end
 
-module Spin_version = struct
-  module Errors = struct
-    let invalid_format =
-      "The version format is not correct. I expected a string in the form \
-       \"0.0.0\"."
-  end
-
-  type t =
-    { major : int
-    ; minor : int
-    ; patch : int
-    }
-
-  let decode = function
-    | Sexp.Atom v as sexp ->
-      (match String.split v ~on:'.' with
-      | [ major; minor; patch ] ->
-        (try
-           Ok
-             { major = Int.of_string major
-             ; minor = Int.of_string minor
-             ; patch = Int.of_string patch
-             }
-         with
-        | _ ->
-          decoder_error sexp ~msg:Errors.invalid_format)
-      | _ ->
-        decoder_error sexp ~msg:Errors.invalid_format)
-    | sexp ->
-      decoder_error sexp ~msg:Errors.invalid_format
-end
-
 module Base_template = struct
   module Errors = struct
     let invalid_overwite =
@@ -510,7 +478,6 @@ end
 type t =
   { name : string
   ; description : string
-  ; spin_version : Spin_version.t
   ; base_template : Base_template.t option
   ; configurations : Configuration.t list
   ; pre_gen_actions : Actions.t list
@@ -524,7 +491,6 @@ let decode =
   let open Decoder.Let_syntax in
   let+ name = Decoder.field "name" ~f:Template_name.decode
   and+ description = Decoder.field "description" ~f:Description.decode
-  and+ spin_version = Decoder.field "spin_version" ~f:Spin_version.decode
   and+ base_template = Decoder.field_opt "inherit" ~f:Base_template.decode
   and+ configurations = Decoder.fields "config" ~f:Configuration.decode
   and+ pre_gen_actions = Decoder.fields "pre_gen" ~f:Actions.decode
@@ -540,7 +506,6 @@ let decode =
   in
   { name
   ; description
-  ; spin_version
   ; base_template
   ; configurations
   ; pre_gen_actions

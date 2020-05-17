@@ -4,18 +4,6 @@ A spin file is used to define a template.
 
 It is composed of the following stanzas.
 
-## spin_version
-
-Defines the targeted Spin version.
-
-The template will be compatible with all the versions of Spin with the given major (or minor if the major is 0).
-
-For instance, a template defining `(spin_version 0.5.0)` will be compatible with Spin `0.5.0`, `0.5.1`, etc. But will it will not be compatible with Spin `0.4.X` or `0.6.X`.
-
-```
-(spin_version <major>.<minor>.<patch>)
-```
-
 ## name
 
 Defines the name of the template.

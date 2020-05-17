@@ -2,6 +2,5 @@
 
 (name test)
 (description "Test template")
-(spin_version 0.6.0)
 
 (ignore (files ignored_base_file))
