@@ -3,7 +3,6 @@
 const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
-const package = require("../package.json");
 
 const filesToCopy = ["LICENSE", "README.md", "CHANGES.md"];
 
@@ -37,7 +36,7 @@ for (const file of filesToCopy) {
 }
 
 fs.copyFileSync(
-  path.join(src, "scripts", "release-postinstall.js"),
+  path.join(src, "script", "release-postinstall.js"),
   path.join(dst, "postinstall.js")
 );
 
@@ -54,10 +53,14 @@ for (const file of filesToTouch) {
 const pkgJson = {
   name: "@tmattio/spin",
   version: "%%VERSION%%",
-  description: package.description,
-  homepage: package.homepage,
-  license: package.license,
-  repository: package.repository,
+  description: "Reason and OCaml project generator.",
+  author: "Thibaut Mattio",
+  homepage: "https://github.com/tmattio/spin",
+  license: "MIT",
+  repository: {
+    type: "git",
+    url: "https://github.com/tmattio/spin.git"
+  },
   scripts: {
     postinstall: "node postinstall.js"
   },

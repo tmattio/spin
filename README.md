@@ -1,7 +1,7 @@
 <p align="center">
     <img width="300" src="https://raw.githubusercontent.com/tmattio/spin/master/docs/logo.svg?sanitize=true" alt="Logo">
   	<br><br>
-    Project scaffolding tool and set of templates for Reason and OCaml.
+    Reason and OCaml project generator.
 </p>
 
 
