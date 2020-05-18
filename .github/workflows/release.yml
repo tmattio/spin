@@ -14,11 +14,16 @@ jobs:
         ocaml-version: ['4.10.0']
 
     steps:
+      - uses: actions/checkout@v2
+
       - uses: avsm/setup-ocaml@master
         with:
           ocaml-version: ${{ matrix.ocaml-version }}
 
-      - uses: actions/checkout@v2
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
 
       - name: Fetch git tags
         run: git fetch --tags --force
@@ -38,12 +43,16 @@ jobs:
       - name: Build
         run: opam exec -- dune build --release
 
-      - name: Upload script/release-make-skeleton.js
+      - name: Make NPM release skeleton
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: node script/release-make-skeleton.js
+
+      - name: Upload _release
         if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: actions/upload-artifact@master
         with:
-          name: release-make-skeleton
-          path: script/release-make-skeleton.js
+          name: _release
+          path: _release
 
       - name: Upload artifacts for ${{ matrix.os }}
         uses: actions/upload-artifact@master
@@ -63,17 +72,11 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: Remove existing script/release-make-skeleton.js
-        run: rm script/release-make-skeleton.js
-
-      - name: Download script/release-make-skeleton.js
+      - name: Download _release
         uses: actions/download-artifact@master
         with:
-          name: release-make-skeleton
-          path: script/release-make-skeleton.js
-
-      - name: Make NPM release skeleton
-        run: node script/release-make-skeleton.js
+          name: _release
+          path: _release
 
       - name: Download linux artifacts
         uses: actions/download-artifact@master
