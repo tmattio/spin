@@ -28,6 +28,10 @@ test:
 	opam exec -- dune build @test/runtest -f
 	opam exec -- dune build @test_bin/runtest -f
 
+.PHONY: test-template
+test-template:
+	opam exec -- dune build @test_template/runtest -f
+
 .PHONY: clean
 clean:
 	opam exec -- dune clean

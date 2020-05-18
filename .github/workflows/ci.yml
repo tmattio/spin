@@ -52,6 +52,3 @@ jobs:
 
       - name: Run tests
         run: make test
-
-      - name: Run template tests
-        run: opam exec -- dune runtest -j 1 test_template
