@@ -63,14 +63,14 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: Download scripts/release-make-skeleton.js
+      - name: Download script/release-make-skeleton.js
         uses: actions/download-artifact@master
         with:
           name: release-make-skeleton
-          path: scripts/release-make-skeleton.js
+          path: script/release-make-skeleton.js
 
       - name: Make NPM release skeleton
-        run: node scripts/release-make-skeleton.js
+        run: node script/release-make-skeleton.js
 
       - name: Download linux artifacts
         uses: actions/download-artifact@master
