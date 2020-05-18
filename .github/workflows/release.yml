@@ -63,6 +63,9 @@ jobs:
         with:
           node-version: 12.x
 
+      - name: Remove existing script/release-make-skeleton.js
+        run: rm script/release-make-skeleton.js
+
       - name: Download script/release-make-skeleton.js
         uses: actions/download-artifact@master
         with:
