@@ -38,14 +38,6 @@ jobs:
       - name: Build
         run: opam exec -- dune build --release
 
-      - name: Get binary path
-        id: binary_path
-        shell: bash
-        run: |
-          BINARY_PATH=${opam exec -- dune exec which spin}
-          echo "BINARY_PATH: $BINARY_PATH"
-          echo "##[set-output name=path;]$BINARY_PATH"
-
       - name: Upload script/release-make-skeleton.js
         if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: actions/upload-artifact@master
@@ -57,7 +49,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: ${{ matrix.os }}
-          path: ${{ steps.binary_path.outputs.path }}
+          path: _build/install/default/bin/spin
 
   publish:
     needs: build
