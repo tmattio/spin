@@ -64,7 +64,7 @@
   (enabled_if (neq :test_framework Rely)))
 
 (ignore
-  (files .github/*)
+  (files github/*)
   (enabled_if (neq :ci_cd Github)))
 
 (ignore
@@ -79,6 +79,12 @@
   (actions 
     (refmt */*.ml */*.mli))
   (enabled_if (eq :syntax Reason)))
+
+; We need to do this because Dune won't copy .github during build
+(post_gen
+  (actions 
+    (run mv github .github))
+  (enabled_if (eq :ci_cd Github)))
 
 (post_gen
   (actions 

@@ -1,5 +1,6 @@
 (lang dune 2.0)
 (name {{ project_slug }})
+(documentation "https://{{ github_username }}.github.io/{{ project_slug }}/")
 (source (github {{ github_username }}/{{ project_slug }}))
 (license MIT)
 (authors "{{ username }}{% if author_email %} <{{ author_email }}>{% endif %}")

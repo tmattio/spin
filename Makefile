@@ -16,6 +16,7 @@ dev:
 build:
 	opam exec -- dune build
 
+.PHONY: start
 start: all
 	opam exec -- dune exec bin/main.exe $(START_ARGS)
 

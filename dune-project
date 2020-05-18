@@ -1,7 +1,7 @@
 (lang dune 2.4)
 (name spin)
 (source (github tmattio/spin))
-(documentation "https://github.com/tmattio/spin")
+(documentation "https://tmattio.github.io/spin/")
 (license MIT)
 (authors "Thibaut Mattio")
 (maintainers "Thibaut Mattio")

@@ -8,7 +8,7 @@ maintainer: ["Thibaut Mattio"]
 authors: ["Thibaut Mattio"]
 license: "MIT"
 homepage: "https://github.com/tmattio/spin"
-doc: "https://github.com/tmattio/spin"
+doc: "https://tmattio.github.io/spin/"
 bug-reports: "https://github.com/tmattio/spin/issues"
 depends: [
   "ocaml" {>= "4.08.0"}
