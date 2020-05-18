@@ -21,6 +21,7 @@ jobs:
           ocaml-version: ${{ matrix.ocaml-version }}
 
       - name: Use Node.js 12.x
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
@@ -35,7 +36,7 @@ jobs:
         run: opam depext -yt spin
 
       - name: Install dependencies
-        run: make dev
+        run: opam install --deps-only -y .
           
       - name: Substitute watermarks
         run: opam exec -- dune subst
@@ -58,7 +59,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: ${{ matrix.os }}
-          path: _build/install/default/bin/spin
+          path: _build/default/bin/main.exe
 
   publish:
     needs: build
