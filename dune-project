@@ -24,6 +24,7 @@ A project generator for Reason and OCaml
   (odoc :with-doc)
   (crunch :build)
   base
+  stdio
   fmt
   fpath
   cmdliner
