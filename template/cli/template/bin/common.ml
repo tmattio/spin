@@ -34,7 +34,7 @@ let handle_errors = function
   | Ok () ->
     if Logs.err_count () > 0 then 3 else 0
   | Error err ->
-    Logs.err (fun m -> m "%s" ({{ project_snake | capitalize }}.Error.to_string err));
+    Logs.err (fun m -> m "%s" ({{ project_snake | capitalize }}.{{ project_snake | capitalize }}_error.to_string err));
     error_to_code err
 
 let exits =

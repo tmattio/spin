@@ -3,7 +3,6 @@
 const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
-const package = require("../package.json");
 
 const filesToCopy = ["LICENSE", "README.md", "CHANGES.md"];
 
