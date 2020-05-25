@@ -1,9 +1,16 @@
 (lang dune 2.4)
+
 (name spin)
-(source (github tmattio/spin))
+
+(source
+ (github tmattio/spin))
+
 (documentation "https://tmattio.github.io/spin/")
+
 (license MIT)
+
 (authors "Thibaut Mattio")
+
 (maintainers "Thibaut Mattio")
 
 (generate_opam_files true)
@@ -13,12 +20,12 @@
 (package
  (name spin)
  (synopsis "A project generator for Reason and OCaml")
- (description "\
-A project generator for Reason and OCaml
-")
+ (description "A project generator for Reason and OCaml\n")
  (depends
-  (ocaml (>= 4.08.0))
-  (dune (>= 2.4))
+  (ocaml
+   (>= 4.08.0))
+  (dune
+   (>= 2.4))
   (mdx :with-test)
   (alcotest :with-test)
   (odoc :with-doc)
@@ -30,7 +37,9 @@ A project generator for Reason and OCaml
   cmdliner
   logs
   sexplib
-  (lwt (>= 5.3.0))
+  (lwt
+   (>= 5.3.0))
   jingoo
   reason
-  (inquire (>= 0.2.0))))
+  (inquire
+   (>= 0.2.0))))
