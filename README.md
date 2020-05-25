@@ -64,7 +64,7 @@ npm -g install @tmattio/spin
 ### Using a script
 
 ```bash
-curl -fsSL https://github.com/tmattio/spin/raw/master/scripts/install.sh | bash
+curl -fsSL https://github.com/tmattio/spin/raw/master/script/install.sh | bash
 ```
 
 ## Templates
