@@ -91,5 +91,5 @@ let exits =
   :: Term.exit_info 5 ~doc:"on failure to parse a file."
   :: Term.exit_info 6 ~doc:"on invalid spin template."
   :: Term.exit_info 7 ~doc:"on failure to generate project."
-  :: Term.exit_info 78 ~doc:"on failure to run a generator."
+  :: Term.exit_info 8 ~doc:"on failure to run a generator."
   :: Term.default_exits
