@@ -76,7 +76,7 @@
   (enabled_if (neq :package_manager Opam)))
 
 (post_gen
-  (actions 
+  (actions
     (refmt */*.ml */*.mli))
   (enabled_if (eq :syntax Reason)))
 
