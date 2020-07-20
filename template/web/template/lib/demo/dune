@@ -1,0 +1,10 @@
+(library
+ (name demo)
+ (public_name demo)
+ (libraries logs lwt caqti caqti-driver-postgresql caqti-lwt ptime
+   ppx_rapper.runtime sexplib0)
+ (preprocess
+  (pps ppx_rapper ppx_sexp_conv ppx_deriving.show ppx_deriving.eq
+    ppx_deriving.make)))
+
+(include_subdirs unqualified)

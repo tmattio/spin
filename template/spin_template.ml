@@ -36,5 +36,17 @@ module Spa : Template = struct
   let name = "spa"
 end
 
+module Web : Template = struct
+  include Web
+
+  let name = "web"
+end
+
 let all : (module Template) list =
-  [ (module Cli); (module Lib); (module Bin); (module Ppx); (module Spa) ]
+  [ (module Cli)
+  ; (module Lib)
+  ; (module Bin)
+  ; (module Ppx)
+  ; (module Spa)
+  ; (module Web)
+  ]

@@ -1,0 +1,16 @@
+(library
+ (name demo_web)
+ (public_name demo.web)
+ (libraries lwt opium_kernel tyxml demo)
+ (flags -open Demo.Std))
+
+(rule
+ (targets asset.ml)
+ (deps
+  ../../asset/main.css
+  (:data
+   (source_tree ../../asset/static)))
+ (action
+  (run %{bin:ocaml-crunch} -m plain ../../asset/static -o %{targets})))
+
+(include_subdirs unqualified)

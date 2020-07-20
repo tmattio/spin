@@ -1,0 +1,6 @@
+(tests
+ (names account_test)
+ (libraries test_support alcotest alcotest-lwt ppx_rapper.runtime demo)
+ (flags -open Demo.Std)
+ (preprocess
+  (pps ppx_rapper)))

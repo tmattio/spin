@@ -1,0 +1,6 @@
+(tests
+ (names account_handler_test page_handler_test)
+ (libraries test_support alcotest alcotest-lwt demo.web)
+ (flags -open Demo.Std))
+
+(include_subdirs unqualified)

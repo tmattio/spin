@@ -1,0 +1,39 @@
+# ocamlbuild working directory
+_build/
+
+# ocamlbuild targets
+*.byte
+*.native
+
+# Merlin configuring file for Vim and Emacs
+.merlin
+
+# Dune generated files
+*.install
+
+# Local OPAM switch
+_opam/
+
+# Secret .env
+.env
+
+# Development assets
+asset/node_modules/
+
+# Git
+.github/
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+CHANGES.md
+CONTRIBUTING.md
+LICENSE
+
+# Development
+Dockerfile
+.ocamlformat
+script/
+test/

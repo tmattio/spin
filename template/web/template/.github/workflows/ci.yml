@@ -1,0 +1,58 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build and test
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        ocaml-version: ['4.10.0']
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: avsm/setup-ocaml@master
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}
+
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - uses: actions/checkout@v2
+
+      - name: Pin package
+        run: opam pin add demo.dev -n .
+
+      - name: Query and install external dependencies
+        run: opam depext -yt demo
+
+      - name: Install dependencies
+        run: make dev
+
+      - name: Build
+        run: make build
+
+      - name: Check formatting
+        run: make format
+
+      - name: Run test database migrations
+        run: make migrate-test setup
+
+      - name: Run tests
+        run: make test

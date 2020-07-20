@@ -1,0 +1,4 @@
+(inherit (official bin))
+
+(name web)
+(description "Web server with Opium")

@@ -1,0 +1,13 @@
+(rule
+ (targets main.css)
+ (deps
+  (:data
+   tailwind.css
+   tailwind.config.js
+   (source_tree node_modules)))
+ (mode fallback)
+ (action
+  (progn
+   (run %{bin:npx} tailwindcss build tailwind.css -c tailwind.config.js -o
+     %{targets})
+   (run cp main.css static/main.css))))
