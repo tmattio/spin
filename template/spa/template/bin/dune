@@ -1,0 +1,5 @@
+(executable
+ (name main)
+ (libraries demo)
+ (modules main)
+ (modes js))
