@@ -2,11 +2,12 @@
 
 ## Added
 
-- Dune's `--root` argument in Makefile to better compose generated projects
+- Dune's `--root` argument in templates' Makefiles to better compose generated projects
 
 ## Fixed
 
 - Fixed NPM release by vendoring a Chamomille-free version of Inquire
+- Remove wrong release flags from all templates
 
 
 # 0.6.0 - 2020-05-17
