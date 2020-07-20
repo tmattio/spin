@@ -41,5 +41,17 @@
    (>= 5.3.0))
   jingoo
   reason
-  (inquire
-   (>= 0.2.0))))
+  ; Vendored zed
+  base-bytes
+  uucd
+  uutf
+  uuseg
+  react
+  ; Vendored lambda-term
+  lwt_log
+  lwt_react
+  (mew_vi
+   (= 0.3.0))
+  uucp
+  uunf
+  uchar))
