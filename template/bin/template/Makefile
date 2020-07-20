@@ -1,15 +1,14 @@
-ifeq (start,$(firstword $(MAKECMDGOALS)))
-  START_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  $(eval $(START_ARGS):;@:)
-endif
+ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+$(eval $(ARGS):;@:)
 
 .PHONY: all
 all:
-	opam exec -- dune build @install
+	opam exec -- dune build --root . @install
 
 .PHONY: dev
 dev:
-	opam install -y dune-release merlin ocamlformat utop
+	opam pin add ocaml-lsp-server https://github.com/ocaml/ocaml-lsp.git
+	opam install -y dune-release merlin ocamlformat utop ocaml-lsp-server
 	{%- if test_framework == 'Rely' %}
 	opam pin add -y pastel https://github.com/facebookexperimental/reason-native.git
 	opam pin add -y cli https://github.com/facebookexperimental/reason-native.git
@@ -20,15 +19,15 @@ dev:
 
 .PHONY: build
 build:
-	opam exec -- dune build
+	opam exec -- dune build --root .
 
 .PHONY: install
 install:
-	opam exec -- dune install
+	opam exec -- dune install --root .
 
 .PHONY: start
 start: all
-	opam exec -- dune exec bin/main.exe $(START_ARGS)
+	opam exec -- dune exec --root . bin/main.exe $(ARGS)
 
 .PHONY: test
 test:
@@ -36,11 +35,11 @@ test:
 
 .PHONY: clean
 clean:
-	opam exec -- dune clean
+	opam exec -- dune clean --root .
 
 .PHONY: doc
 doc:
-	opam exec -- dune build @doc
+	opam exec -- dune build --root . @doc
 
 .PHONY: doc-path
 doc-path:
@@ -48,12 +47,12 @@ doc-path:
 
 .PHONY: format
 format:
-	opam exec -- dune build @fmt --auto-promote
+	opam exec -- dune build --root . --auto-promote @fmt
 
 .PHONY: watch
 watch:
-	opam exec -- dune build --watch
+	opam exec -- dune build --root . --watch
 
 .PHONY: utop
 utop:
-	opam exec -- dune utop lib -- -implicit-bindings
+	opam exec -- dune utop --root . lib -- -implicit-bindings

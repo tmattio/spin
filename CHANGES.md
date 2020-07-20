@@ -1,3 +1,9 @@
+# 0.6.1 - Unreleased
+
+## Added
+
+- Dune's `--root` argument in Makefile to better compose generated projects
+
 # 0.6.0 - 2020-05-17
 
 This release is a complete rewrite of Spin.
