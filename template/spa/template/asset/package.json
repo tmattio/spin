@@ -1,0 +1,17 @@
+{
+  "devDependencies": {
+    {% if css_framework == 'TailwindCSS' -%}
+    "@fullhuman/postcss-purgecss": "^2.3.0",
+    "autoprefixer": "^9.8.6",
+    "cssnano": "^4.1.10",
+    "cross-env": "^7.0.2",
+    "serve": "^11.3.2",
+    "tailwindcss": "^1.6.2"
+    {%- else -%}
+    "serve": "^11.3.2"
+    {%- endif %}
+  },
+  "scripts": {
+    "start": "serve -s static"
+  }
+}

@@ -1,0 +1,10 @@
+(library
+ (name {{ project_snake }})
+ (public_name {{ project_slug }})
+ (libraries async_kernel incr_dom js_of_ocaml)
+ (preprocess
+  (pps ppx_jane js_of_ocaml-ppx))
+ (flags
+  (:standard -open Base)))
+
+(include_subdirs unqualified)

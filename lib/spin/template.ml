@@ -267,8 +267,8 @@ let rec of_dec
           ())
   in
   let files = populate_template_files files in
-  Hashtbl.merge_into ~src:base.files ~dst:files ~f:(fun ~key:_ src ->
-    function Some dst -> Set_to dst | None -> Set_to src);
+  Hashtbl.merge_into ~src:base.files ~dst:files ~f:(fun ~key:_ src -> function
+    | Some dst -> Set_to dst | None -> Set_to src);
   let+ files = ignore_files files ~dec ~context in
   Hashtbl.merge_into ~src:base.generators ~dst:generators ~f:(fun ~key:_ src ->
     function Some dst -> Set_to dst | None -> Set_to src);
