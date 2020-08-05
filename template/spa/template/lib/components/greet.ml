@@ -29,9 +29,20 @@ let on_startup ~schedule_action:_ _ : State.t Async_kernel.Deferred.t =
 let view model ~inject =
   let open Tyxml.Html in
   div
-    ~a:[ a_class [ "text-center mt-12" ] ]
+    ~a:[ a_class [ 
+      {%- if css_framework == 'TailwindCSS' -%}
+      "text-center mt-12"
+      {%- else -%}
+      "greet__container"
+      {%- endif %} ] ]
     [ p
-        ~a:[ a_class [ "text-3xl text-gray-900 mb-4" ] ]
+        ~a:[ a_class [ 
+          {%- if css_framework == 'TailwindCSS' -%}
+          "text-3xl text-gray-900 mb-4"
+          {%- else -%}
+          "greet__welcome-message"
+          {%- endif %}
+         ] ]
         [ txt "👋 Welcome You! You can edit me in"
         ; code
             [ txt
@@ -40,30 +51,52 @@ let view model ~inject =
             ]
         ]
     ; p
-        ~a:[ a_class [ "text-xl text-gray-900 mb-4" ] ]
+        ~a:[ a_class [ 
+          {%- if css_framework == 'TailwindCSS' -%}
+          "text-xl text-gray-900 mb-4"
+          {%- else -%}
+          "greet__text"
+          {%- endif %}  
+         ] ]
         [ txt
             "Here a simple counter example that you can look at to get started:"
         ]
     ; div
-        ~a:[ a_class [ "space-x-6 mb-4" ] ]
+        ~a:[ a_class [ 
+          {%- if css_framework == 'TailwindCSS' -%}
+          "space-x-6 mb-4"
+          {%- else -%}
+          "greet__button-container"
+          {%- endif %}  
+         ] ]
         [ button
             ~a:
               [ a_button_type `Button
               ; a_onclick (fun _event -> inject Action.Decrement)
               ; a_class
-                  [ "inline-flex items-center px-4 py-2 border border-gray-300 \
-                     text-sm leading-5 font-medium rounded-md text-gray-700 \
-                     bg-white hover:text-gray-500"
+                  [ 
+                    {%- if css_framework == 'TailwindCSS' -%}
+                      "inline-flex items-center px-4 py-2 border border-gray-300 \
+                       text-sm leading-5 font-medium rounded-md text-gray-700 \
+                       bg-white hover:text-gray-500"
+                    {%- else -%}
+                    "greet__button"
+                    {%- endif %}    
                   ]
               ]
             [ txt "-" ]
         ; span
             ~a:
               [ a_class
-                  [ "inline-flex items-center px-4 py-2 border border-gray-300 \
-                     text-sm leading-5 font-medium rounded-md text-gray-700 \
-                     bg-white hover:text-gray-500"
-                  ]
+                [ 
+                  {%- if css_framework == 'TailwindCSS' -%}
+                  "inline-flex items-center px-4 py-2 border border-gray-300 \
+                    text-sm leading-5 font-medium rounded-md text-gray-700 \
+                    bg-white hover:text-gray-500"
+                  {%- else -%}
+                  "greet__button"
+                  {%- endif %}    
+                ]
               ]
             [ txt (Int.to_string model) ]
         ; button
@@ -71,16 +104,27 @@ let view model ~inject =
               [ a_button_type `Button
               ; a_onclick (fun _event -> inject Action.Increment)
               ; a_class
-                  [ "inline-flex items-center px-4 py-2 border border-gray-300 \
-                     text-sm leading-5 font-medium rounded-md text-gray-700 \
-                     bg-white hover:text-gray-500"
-                  ]
+                [ 
+                  {%- if css_framework == 'TailwindCSS' -%}
+                  "inline-flex items-center px-4 py-2 border border-gray-300 \
+                   text-sm leading-5 font-medium rounded-md text-gray-700 \
+                   bg-white hover:text-gray-500"
+                  {%- else -%}
+                  "greet__button"
+                  {%- endif %}    
+                ]
               ]
             [ txt "+" ]
         ]
     ; div
         [ span
-            ~a:[ a_class [ "text-xl text-gray-900 mb-4" ] ]
+            ~a:[ a_class [
+              {%- if css_framework == 'TailwindCSS' -%}
+              "text-xl text-gray-900 mb-4"
+              {%- else -%}
+              "greet__text"
+              {%- endif %}
+              ] ]
             [ txt "And here's a link to demonstrate navigation: "
             ; Router.link ~route:Home [ txt "Home" ]
             ]

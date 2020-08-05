@@ -1,3 +1,4 @@
+{% if css_framework == 'TailwindCSS' -%}
 (rule
  (targets main.css)
  (deps
@@ -8,8 +9,9 @@
  (mode
   (promote-until-clean-into static/))
  (action
-  (run %{bin:npx} tailwindcss build tailwind.css -c tailwind.config.js -o
+  (run %{bin:npx} tailwindcss build -c tailwind.config.js -o main.css
     %{targets})))
+{%- endif %}
 
 (rule
  (target main.js)
