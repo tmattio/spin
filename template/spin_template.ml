@@ -36,5 +36,17 @@ module Ppx : Template = struct
   let name = "ppx"
 end
 
+module Spa : Template = struct
+  include Spa
+
+  let name = "spa"
+end
+
 let all : (module Template) list =
-  [ (module Bs_react); (module Cli); (module Lib); (module Bin); (module Ppx) ]
+  [ (module Bs_react)
+  ; (module Cli)
+  ; (module Lib)
+  ; (module Bin)
+  ; (module Ppx)
+  ; (module Spa)
+  ]

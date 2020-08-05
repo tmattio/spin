@@ -62,8 +62,12 @@
   (default None))
 
 (ignore 
-  (files config/postcss.config.js config/tailwind.config.js)
+  (files asset/tailwind.config.js)
   (enabled_if (neq :css_framework TailwindCSS)))
+
+(ignore 
+  (files asset/static/main.css)
+  (enabled_if (eq :css_framework TailwindCSS)))
 
 (ignore 
   (files .ocamlformat)
