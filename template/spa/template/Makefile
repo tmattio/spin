@@ -7,7 +7,8 @@ all:
 
 .PHONY: dev
 dev:
-	opam install -y dune-release merlin ocamlformat utop
+	opam pin add -y ocaml-lsp-server https://github.com/ocaml/ocaml-lsp.git
+	opam install -y dune-release merlin ocamlformat utop ocaml-lsp-server
 	opam install --deps-only --with-test --with-doc -y .
 
 .PHONY: build
@@ -19,8 +20,8 @@ install:
 	opam exec -- dune install --root .
 
 .PHONY: start
-start: all
-	opam exec -- dune exec --root . bin/main.exe $(ARGS)
+start: build
+	cd asset && npm start
 
 .PHONY: test
 test:

@@ -5,6 +5,10 @@
     "autoprefixer": "^9.8.4",
     "cssnano": "^4.1.10",
     "cross-env": "^7.0.2",
+    "serve": "^11.3.2",
     "tailwindcss": "^1.4.6"
+  },
+  "scripts": {
+    "start": "serve -s static"
   }
 }
