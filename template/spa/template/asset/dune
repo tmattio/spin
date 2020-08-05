@@ -1,16 +1,17 @@
-{% if css_framework == 'TailwindCSS' -%}
+{%- if css_framework == 'TailwindCSS' -%}
 (rule
  (targets main.css)
  (deps
   (:data
-   tailwind.css
    tailwind.config.js
+   {%- if package_manager == 'Opam' %}
+   package-lock.json
+   {%- endif %}
    (source_tree node_modules)))
  (mode
   (promote-until-clean-into static/))
  (action
-  (run %{bin:npx} tailwindcss build -c tailwind.config.js -o main.css
-    %{targets})))
+  (run %{bin:npx} tailwindcss build -c tailwind.config.js -o %{targets})))
 {%- endif %}
 
 (rule

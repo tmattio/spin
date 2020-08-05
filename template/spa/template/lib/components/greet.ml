@@ -40,7 +40,7 @@ let view model ~inject =
           "greet__welcome-message"
           {%- endif %}
          ] ]
-        [ txt "👋 Welcome You! You can edit me in"
+        [ txt "👋 Welcome Visitor! You can edit me in"
         ; code
             [ txt
                 {|

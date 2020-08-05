@@ -76,7 +76,7 @@
   (enabled_if (neq :package_manager Esy)))
 
 (ignore
-  (files Makefile)
+  (files asset/package.json Makefile)
   (enabled_if (neq :package_manager Opam)))
 
 (post_gen

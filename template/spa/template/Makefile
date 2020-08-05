@@ -9,6 +9,7 @@ all:
 dev:
 	opam pin add -y ocaml-lsp-server https://github.com/ocaml/ocaml-lsp.git
 	opam install -y dune-release merlin ocamlformat utop ocaml-lsp-server
+	cd asset && npm install
 	opam install --deps-only --with-test --with-doc -y .
 
 .PHONY: build
