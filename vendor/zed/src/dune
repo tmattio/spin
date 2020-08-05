@@ -1,6 +1,7 @@
 (library
-  (name zed)
-  (public_name spin.zed)
-  (wrapped false)
-  (flags (:standard -safe-string))
-  (libraries bytes react result uutf uucp uuseg))
+ (name zed)
+ (public_name spin.zed)
+ (wrapped false)
+ (flags
+  (:standard -safe-string))
+ (libraries bytes react result uutf uucp uuseg))

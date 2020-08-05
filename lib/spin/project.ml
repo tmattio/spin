@@ -57,8 +57,8 @@ let run_generator ?context:additionnal_context ~project:t generator =
       Hashtbl.merge_into
         ~src:additionnal_context
         ~dst:context
-        ~f:(fun ~key:_ src ->
-        function Some dst -> Set_to dst | None -> Set_to src)
+        ~f:(fun ~key:_ src -> function
+        | Some dst -> Set_to dst | None -> Set_to src)
     | None ->
       ()
   in
