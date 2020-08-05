@@ -2,10 +2,10 @@
 
 ```sh
 $ export SPIN_PROJECT_NAME=demo && \
-> SPIN_USERNAME=user && \
-> SPIN_SYNTAX=OCaml && \
-> SPIN_PACKAGE_MANAGER=Opam && \
-> SPIN_CSS_FRAMEWORK=TailwindCSS && \
+> export SPIN_USERNAME=user && \
+> export SPIN_SYNTAX=OCaml && \
+> export SPIN_PACKAGE_MANAGER=Opam && \
+> export SPIN_CSS_FRAMEWORK=TailwindCSS && \
 > spin new spa _generated -d --ignore-config
 
 🏗️  Creating a new project from spa in _generated
@@ -37,10 +37,10 @@ $ rm -rf _generated
 
 ```sh
 $ export SPIN_PROJECT_NAME=demo && \
-> SPIN_USERNAME=user && \
-> SPIN_SYNTAX=Reason && \
-> SPIN_PACKAGE_MANAGER=Opam && \
-> SPIN_CSS_FRAMEWORK=TailwindCSS && \
+> export SPIN_USERNAME=user && \
+> export SPIN_SYNTAX=Reason && \
+> export SPIN_PACKAGE_MANAGER=Opam && \
+> export SPIN_CSS_FRAMEWORK=TailwindCSS && \
 > spin new spa _generated -d --ignore-config
 
 🏗️  Creating a new project from spa in _generated
@@ -72,10 +72,10 @@ $ rm -rf _generated
 
 ```sh
 $ export SPIN_PROJECT_NAME=demo && \
-> SPIN_USERNAME=user && \
-> SPIN_SYNTAX=OCaml && \
-> SPIN_PACKAGE_MANAGER=Esy && \
-> SPIN_CSS_FRAMEWORK=TailwindCSS && \
+> export SPIN_USERNAME=user && \
+> export SPIN_SYNTAX=OCaml && \
+> export SPIN_PACKAGE_MANAGER=Esy && \
+> export SPIN_CSS_FRAMEWORK=TailwindCSS && \
 > spin new spa _generated -d --ignore-config
 
 🏗️  Creating a new project from spa in _generated
@@ -107,10 +107,10 @@ $ rm -rf _generated
 
 ```sh
 $ export SPIN_PROJECT_NAME=demo && \
-> SPIN_USERNAME=user && \
-> SPIN_SYNTAX=Reason && \
-> SPIN_PACKAGE_MANAGER=Esy && \
-> SPIN_CSS_FRAMEWORK=TailwindCSS && \
+> export SPIN_USERNAME=user && \
+> export SPIN_SYNTAX=Reason && \
+> export SPIN_PACKAGE_MANAGER=Esy && \
+> export SPIN_CSS_FRAMEWORK=TailwindCSS && \
 > spin new spa _generated -d --ignore-config
 
 🏗️  Creating a new project from spa in _generated
@@ -142,10 +142,10 @@ $ rm -rf _generated
 
 ```sh
 $ export SPIN_PROJECT_NAME=demo && \
-> SPIN_USERNAME=user && \
-> SPIN_SYNTAX=OCaml && \
-> SPIN_PACKAGE_MANAGER=Opam && \
-> SPIN_CSS_FRAMEWORK=None && \
+> export SPIN_USERNAME=user && \
+> export SPIN_SYNTAX=OCaml && \
+> export SPIN_PACKAGE_MANAGER=Opam && \
+> export SPIN_CSS_FRAMEWORK=None && \
 > spin new spa _generated -d --ignore-config
 
 🏗️  Creating a new project from spa in _generated
@@ -177,10 +177,10 @@ $ rm -rf _generated
 
 ```sh
 $ export SPIN_PROJECT_NAME=demo && \
-> SPIN_USERNAME=user && \
-> SPIN_SYNTAX=Reason && \
-> SPIN_PACKAGE_MANAGER=Opam && \
-> SPIN_CSS_FRAMEWORK=None && \
+> export SPIN_USERNAME=user && \
+> export SPIN_SYNTAX=Reason && \
+> export SPIN_PACKAGE_MANAGER=Opam && \
+> export SPIN_CSS_FRAMEWORK=None && \
 > spin new spa _generated -d --ignore-config
 
 🏗️  Creating a new project from spa in _generated
@@ -212,10 +212,10 @@ $ rm -rf _generated
 
 ```sh
 $ export SPIN_PROJECT_NAME=demo && \
-> SPIN_USERNAME=user && \
-> SPIN_SYNTAX=OCaml && \
-> SPIN_PACKAGE_MANAGER=Esy && \
-> SPIN_CSS_FRAMEWORK=None && \
+> export SPIN_USERNAME=user && \
+> export SPIN_SYNTAX=OCaml && \
+> export SPIN_PACKAGE_MANAGER=Esy && \
+> export SPIN_CSS_FRAMEWORK=None && \
 > spin new spa _generated -d --ignore-config
 
 🏗️  Creating a new project from spa in _generated
@@ -247,10 +247,10 @@ $ rm -rf _generated
 
 ```sh
 $ export SPIN_PROJECT_NAME=demo && \
-> SPIN_USERNAME=user && \
-> SPIN_SYNTAX=Reason && \
-> SPIN_PACKAGE_MANAGER=Esy && \
-> SPIN_CSS_FRAMEWORK=None && \
+> export SPIN_USERNAME=user && \
+> export SPIN_SYNTAX=Reason && \
+> export SPIN_PACKAGE_MANAGER=Esy && \
+> export SPIN_CSS_FRAMEWORK=None && \
 > spin new spa _generated -d --ignore-config
 
 🏗️  Creating a new project from spa in _generated

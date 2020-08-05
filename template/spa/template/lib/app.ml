@@ -1,11 +1,9 @@
-open Base
-
 module Model = struct
   type t =
     { url : Router.url
     ; page_home_model : Page_home.Model.t
     }
-  [@@deriving sexp_of, show]
+  [@@deriving sexp_of]
 
   let cutoff
       { url = url_1; page_home_model = page_home_model_1 }
@@ -24,7 +22,7 @@ module Action = struct
   type t =
     | UrlChange of Router.url
     | Page_home_action of Page_home.Action.t
-  [@@deriving sexp_of, show]
+  [@@deriving sexp_of]
 
   let apply model action _state ~schedule_action : Model.t =
     match action with
@@ -43,7 +41,7 @@ module Action = struct
 end
 
 module State = struct
-  type t = { schedule : Action.t -> unit } [@@deriving sexp_of, show, fields]
+  type t = { schedule : Action.t -> unit } [@@deriving sexp_of, fields]
 end
 
 let on_startup ~schedule_action:schedule _ =

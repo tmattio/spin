@@ -1,10 +1,10 @@
 (library
- (name demo)
- (public_name demo)
- (libraries tyxml async_kernel core_kernel incr_dom js_of_ocaml)
+ (name {{ project_snake }})
+ (public_name {{ project_slug }})
+ (libraries async_kernel incr_dom js_of_ocaml)
  (preprocess
-  (pps ppx_jane js_of_ocaml-ppx ppx_deriving.show))
+  (pps ppx_jane js_of_ocaml-ppx))
  (flags
-  (:standard -open StdLabels)))
+  (:standard -open Base)))
 
 (include_subdirs unqualified)

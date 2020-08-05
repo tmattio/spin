@@ -1,4 +1,3 @@
-open Base
 open Js_of_ocaml
 
 type url =
@@ -6,7 +5,7 @@ type url =
   ; hash : string
   ; search : string
   }
-[@@deriving sexp, compare, show, fields]
+[@@deriving sexp, compare]
 
 type location =
   { href : string

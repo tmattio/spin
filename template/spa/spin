@@ -43,12 +43,6 @@
     (values Opam Esy))
   (default (if (eq :syntax Reason) Esy Opam)))
 
-(config test_framework
-  (select
-    (prompt "Which test framework do you prefer?")
-    (values Alcotest Rely))
-  (default (if (eq :syntax Reason) Rely Alcotest)))
-
 (config ci_cd
   (select
     (prompt "Which CI/CD do you use")
@@ -72,10 +66,6 @@
 (ignore 
   (files .ocamlformat)
   (enabled_if (neq :syntax OCaml)))
-
-(ignore 
-  (files test/support/test_framework.* *.opam.template)
-  (enabled_if (neq :test_framework Rely)))
 
 (ignore
   (files github/*)

@@ -1,8 +1,5 @@
-open Base
-open Incr_dom
-
 module Model = struct
-  type t = int [@@deriving sexp_of, show]
+  type t = int [@@deriving sexp_of]
 
   let cutoff : t -> t -> bool = ( = )
 
@@ -10,14 +7,14 @@ module Model = struct
 end
 
 module State = struct
-  type t = unit [@@deriving sexp_of, show]
+  type t = unit [@@deriving sexp_of]
 end
 
 module Action = struct
   type t =
     | Increment
     | Decrement
-  [@@deriving sexp_of, show]
+  [@@deriving sexp_of]
 
   let apply model action _state ~schedule_action:_ =
     match action with Increment -> model + 1 | Decrement -> model - 1
@@ -27,7 +24,7 @@ let on_startup ~schedule_action:_ _ : State.t Async_kernel.Deferred.t =
   Async_kernel.return ()
 
 let view model ~inject =
-  let open Tyxml.Html in
+  let open Incr_dom.Tyxml.Html in
   div
     ~a:[ a_class [ 
       {%- if css_framework == 'TailwindCSS' -%}
@@ -132,6 +129,7 @@ let view model ~inject =
     ]
 
 let create model ~old_model:_ ~inject =
+  let open Incr_dom in
   let%map.Incr model = model in
   let view = view model ~inject in
   Component.create

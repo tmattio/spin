@@ -1,5 +1,5 @@
 open! Incr_dom_testing
-open Demo
+open {{ project_snake | capitalize }}
 
 let%expect_test "can render home page" =
   let driver =

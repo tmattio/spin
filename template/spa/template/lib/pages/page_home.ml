@@ -1,8 +1,5 @@
-open Base
-open Incr_dom
-
 module Model = struct
-  type t = { greet_model : Greet.Model.t } [@@deriving sexp_of, show]
+  type t = { greet_model : Greet.Model.t } [@@deriving sexp_of]
 
   let cutoff { greet_model = greet_model_1 } { greet_model = greet_model_2 } =
     Greet.Model.cutoff greet_model_1 greet_model_2
@@ -11,11 +8,11 @@ module Model = struct
 end
 
 module State = struct
-  type t = unit [@@deriving sexp_of, show]
+  type t = unit [@@deriving sexp_of]
 end
 
 module Action = struct
-  type t = Greet_action of Greet.Action.t [@@deriving sexp_of, show]
+  type t = Greet_action of Greet.Action.t [@@deriving sexp_of]
 
   let apply model action _state ~schedule_action =
     match action with
@@ -34,13 +31,14 @@ end
 let on_startup ~schedule_action:_ _ = Async_kernel.return ()
 
 let view model ~inject =
-  let open Tyxml.Html in
+  let open Incr_dom.Tyxml.Html in
   div
     [ Greet.view model.Model.greet_model ~inject:(fun action ->
           inject (Action.Greet_action action))
     ]
 
 let create model ~old_model:_ ~inject =
+  let open Incr_dom in
   let%map.Incr model = model in
   let view = view model ~inject in
   Component.create
