@@ -1,4 +1,7 @@
-(tests
- (names page_home_test)
- (libraries demo alcotest async_kernel incr_dom incr_dom.testing js_of_ocaml)
- (flags -open StdLabels))
+(library
+ (name demo_test)
+ (inline_tests
+  (modes js))
+ (libraries demo async_kernel incr_dom.testing js_of_ocaml)
+ (preprocess
+  (pps ppx_expect)))

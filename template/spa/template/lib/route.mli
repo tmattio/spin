@@ -1,7 +1,5 @@
-type t = | Home
+type t = Home
 
 val from_url : string list -> t option
 
-type t'
-
-val home : t'
+val to_string : t -> string

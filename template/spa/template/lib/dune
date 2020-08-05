@@ -3,7 +3,7 @@
  (public_name demo)
  (libraries tyxml async_kernel core_kernel incr_dom js_of_ocaml)
  (preprocess
-  (pps ppx_jane js_of_ocaml-ppx))
+  (pps ppx_jane js_of_ocaml-ppx ppx_deriving.show))
  (flags
   (:standard -open StdLabels)))
 

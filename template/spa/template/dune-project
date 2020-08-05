@@ -17,12 +17,20 @@
 
 (package
  (name demo)
- (synopsis "description")
- (description "description.")
+ (synopsis "{{ project_description }}")
+ (description "{{ project_description }}")
  (depends
   (ocaml
    (>= 4.08.0))
   (dune
    (>= 2.0))
   (alcotest :with-test)
-  (odoc :with-doc)))
+  (odoc :with-doc)
+  tyxml
+  async_kernel
+  core_kernel
+  (incr_dom
+   (>= 0.14))
+  js_of_ocaml
+  ppx_jane
+  ppx_deriving))
