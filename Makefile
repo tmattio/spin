@@ -65,8 +65,11 @@ clean: ## Clean build artifacts and other generated files
 	opam exec -- dune clean --root .
 
 .PHONY: doc
-doc: ## Generate odoc documentation and open it with the default browser
+doc: ## Generate odoc documentation
 	opam exec -- dune build --root . @doc
+
+.PHONY: servedoc
+servedoc: doc ## Open odoc documentation with default web browser
 	$(BROWSER) _build/default/_doc/_html/index.html
 
 .PHONY: format
