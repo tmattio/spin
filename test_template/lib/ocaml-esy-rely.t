@@ -1,3 +1,4 @@
+  $ export OPAMSKIPUPDATE=true
   $ export SPIN_PROJECT_NAME=demo
   $ export SPIN_USERNAME=user
   $ export SPIN_SYNTAX=OCaml
@@ -25,4 +26,4 @@
       Starts the test runner.
 
   Happy hacking!
-  $ cd _generated && make test > /dev/null
+  $ cd _generated && make test > /dev/null 2>&1
