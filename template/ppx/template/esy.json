@@ -17,7 +17,7 @@
     {%- if syntax == 'Reason' %}
     "@opam/reason": "*",
     {%- endif %}
-    "ocaml": ">= 4.8.1000"
+    "@opam/ocaml": ">= 4.8.0"
   },
   "devDependencies": {
     {% if test_framework == 'Alcotest' -%}
@@ -34,9 +34,9 @@
     "@reason-native/rely": "*",
     {%- endif -%}
     {%- if syntax == 'Reason' %}
-    "refmterr": ">= 3.3.0",
+    "refmterr": "*",
     {%- endif %}
-    "ocaml": "~4.09.0"
+    "@opam/ocaml": "~4.10.1"
   },
   "scripts": {
     "start": "esy x {{ project_slug }}",

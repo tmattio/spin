@@ -21,7 +21,7 @@
     {%- if syntax == 'Reason' %}
     "@opam/reason": "*",
     {%- endif %}
-    "ocaml": ">= 4.8.1000"
+    "@opam/ocaml": ">= 4.8.0"
   },
   "devDependencies": {
     "@opam/dune-release": "*",
@@ -32,9 +32,9 @@
     "@opam/odoc": "*",
     "@opam/utop": "*",
     {%- if syntax == 'Reason' %}
-    "refmterr": ">= 3.3.0",
+    "refmterr": "*",
     {%- endif %}
-    "ocaml": "~4.09.0",
+    "@opam/ocaml": "~4.10.1",
     {%- if css_framework == 'TailwindCSS' %}
     "libnpx": "^10.2.4",
     "@fullhuman/postcss-purgecss": "^2.3.0",
