@@ -96,8 +96,8 @@ jobs:
       - name: Install dependencies
         if: steps.cache-opam.outputs.cache-hit != 'true'
         run: |
-          opam install . --deps-only --with-doc --with-test --locked
-          opam install ocamlformat
+          opam install . --deps-only --with-doc --with-test --locked --unlock-base
+          opam install ocamlformat --skip-updates
 
       - name: Upgrade dependencies
         run: opam upgrade --fixup
