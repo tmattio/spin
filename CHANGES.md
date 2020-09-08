@@ -2,7 +2,16 @@
 
 ## Added
 
+- Added a new `spa` template to generate Single-Page-Application with Js_of_ocaml
 - Dune's `--root` argument in templates' Makefiles to better compose generated projects
+- The templates now create a local cache to avoid conflicts with the global environment
+- The templates CI/CD is now caching Opam dependencies to improve build time
+- The templates are now installing locked dependencies by default during CI/CD
+- The Makefile of the templates include a small inlined python script to open the documentation with the default browser with the command `servedoc`
+
+## Changed
+
+- Removed the `bs-react` template from the official templates. The template now lives in [tmattio/spin-rescript](https://github.com/tmattio/spin-rescript).
 
 ## Fixed
 
