@@ -1,4 +1,4 @@
-(lang dune 2.4)
+(lang dune 2.7)
 
 (name spin)
 
@@ -16,6 +16,7 @@
 (generate_opam_files true)
 
 (using mdx 0.1)
+(cram enable)
 
 (package
  (name spin)
@@ -23,9 +24,9 @@
  (description "A project generator for Reason and OCaml\n")
  (depends
   (ocaml
-   (>= 4.08.0))
+   (and (>= 4.08.0) (< 4.11.0)))
   (dune
-   (>= 2.4))
+   (>= 2.7))
   (mdx :with-test)
   (alcotest :with-test)
   (odoc :with-doc)

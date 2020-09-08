@@ -1,4 +1,0 @@
-```sh
-$ spin --version
-%%VERSION%%
-```

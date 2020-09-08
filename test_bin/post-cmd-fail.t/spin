@@ -1,0 +1,6 @@
+(name test)
+(description "Test template")
+
+(post_gen
+  (actions 
+    (run (false))))
