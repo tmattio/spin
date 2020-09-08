@@ -38,6 +38,7 @@ all:
 
 .PHONY: dev
 dev: ## Install development dependencies
+	opam switch create --no-install .
 	opam pin add -y ocaml-lsp-server https://github.com/ocaml/ocaml-lsp.git
 	opam install -y dune-release merlin ocamlformat utop ocaml-lsp-server
 	{%- if test_framework == 'Rely' %}
