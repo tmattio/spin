@@ -11,12 +11,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        matrix:
-          os:
-            - macos-latest
-            - ubuntu-latest
-          ocaml-version:
-            - 4.10.1
+        os:
+          - macos-latest
+          - ubuntu-latest
+        ocaml-version:
+          - 4.10.1
 
     steps:
       - name: Checkout code
