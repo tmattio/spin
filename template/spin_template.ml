@@ -6,12 +6,6 @@ module type Template = sig
   val read : string -> string option
 end
 
-module Bs_react : Template = struct
-  include Bs_react
-
-  let name = "bs-react"
-end
-
 module Cli : Template = struct
   include Cli
 
@@ -43,8 +37,7 @@ module Spa : Template = struct
 end
 
 let all : (module Template) list =
-  [ (module Bs_react)
-  ; (module Cli)
+  [ (module Cli)
   ; (module Lib)
   ; (module Bin)
   ; (module Ppx)

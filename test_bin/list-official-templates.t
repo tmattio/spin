@@ -1,8 +1,5 @@
   $ spin ls
   
-    bs-react
-      React application in Reason
-  
     bin
       Native project containing a binary
   

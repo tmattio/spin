@@ -15,7 +15,6 @@
 
 (generate_opam_files true)
 
-(using mdx 0.1)
 (cram enable)
 
 (package
@@ -27,7 +26,6 @@
    (and (>= 4.08.0) (< 4.11.0)))
   (dune
    (>= 2.7))
-  (mdx :with-test)
   (alcotest :with-test)
   (odoc :with-doc)
   (crunch :build)

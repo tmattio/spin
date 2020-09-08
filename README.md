@@ -78,18 +78,25 @@ spin new bin my_app
 Will create a new binary application in the directory `./my_app/`
 
 Anyone can create new Spin templates, but we provide official templates for a lot of use cases.
-The official templates for each type of applications are listed below.
 
-### Templates for native applications
+### Official templates
+
+The official Spin templates templates are the following:
 
 - **bin** - Native project containing a binary.
 - **cli** - Command Line Interface releasable on Opam.
 - **lib** - Library releasable on Opam.
 - **ppx** - PPX library with prebuilt binaries for native and bucklescript.
+- **spa** - Single page application with Js_of_ocaml
 
-### Templates for Bucklescript applications
+If you'd like to add an official template, don't hesitate to open a PR!
 
-- **bs-react** - React application in Reason.
+### Other templates
+
+Here are some non-official Spin templates that you can:
+
+- [**spin-rescript**](https://github.com/tmattio/spin-rescript) - Spin template for ReScript applicatoins
+- [**spin-python-cli**](https://github.com/tmattio/spin-python-cli) - Spin template for Python CLIs
 
 ## Usage
 
