@@ -35,9 +35,10 @@ all:
 
 .PHONY: dev
 dev: ## Install development dependencies
+	opam switch create --no-install . ocaml-base-compiler.4.10.1
 	opam pin add -y ocaml-lsp-server https://github.com/ocaml/ocaml-lsp.git
 	opam install -y dune-release merlin ocamlformat utop ocaml-lsp-server
-	opam install --deps-only --with-test --with-doc -y .
+	opam install --locked --deps-only --with-test --with-doc -y .
 
 .PHONY: build
 build: ## Build the project, including non installable libraries and executables
