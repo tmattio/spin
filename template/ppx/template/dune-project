@@ -6,6 +6,7 @@
 (maintainers "{{ username }}{% if author_email %} <{{ author_email }}>{% endif %}")
 
 (generate_opam_files true)
+(allow_approximate_merlin)
 
 (package
  (name {{ project_slug }})
