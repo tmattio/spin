@@ -20,16 +20,9 @@ module User = struct
 
   let name_fixture = Name.fixture
 
-  let user_fixture ?user ?name () =
+  let user_fixture ?name () =
     let open Lwt.Syntax in
-    let* user =
-      match user with
-      | Some user ->
-        Lwt.return user
-      | None ->
-        Test_fixture_account.user_fixture ()
-    in
     let name = Option.value name ~default:(name_fixture ()) in
-    let+ d = User.create_user ~user ~name () in
+    let+ d = Account.create_user ~name () in
     Result.get_ok d
 end

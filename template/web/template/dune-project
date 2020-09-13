@@ -24,15 +24,13 @@
    (>= 4.08.0))
   (dune
    (>= 2.0))
-  (alcotest :with-test)
-  (alcotest-lwt :with-test)
   (odoc :with-doc)
   (crunch :build)
   opium
-  tyxml
-  sexplib0
-  lwt
   ppx_rapper
   caqti
   caqti-lwt
-  caqti-driver-postgresql))
+  caqti-driver-postgresql
+  (alcotest :with-test)
+  (alcotest-lwt :with-test)
+  (opium-testing :with-test)))

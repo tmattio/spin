@@ -1,6 +1,6 @@
 (library
  (name test_support)
- (libraries alcotest alcotest-lwt logs fmt.tty logs.fmt lwt demo demo.web)
+ (libraries alcotest alcotest-lwt opium-testing logs fmt.tty logs.fmt lwt demo demo.web)
  (wrapped false)
  (flags
   (:standard -open Demo.Std)))

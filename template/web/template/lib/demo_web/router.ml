@@ -21,12 +21,14 @@ let router =
   scope
     router
     ~route:"/users"
-    [ `GET, "", Account_handler.index
-    ; `GET, "/:id/settings", Account_handler.edit
-    ; `GET, "/new", Account_handler.new_
-    ; `GET, "/:id", Account_handler.show
-    ; `POST, "", Account_handler.create
-    ; `Other "PATCH", "/:id", Account_handler.update
-    ; `PUT, "/:id", Account_handler.update
-    ; `DELETE, "/:id", Account_handler.delete
+    [ `GET, "", Account_handler.index_user
+    ; `GET, "/:id/settings", Account_handler.edit_user
+    ; `GET, "/new", Account_handler.new_user
+    ; `GET, "/:id", Account_handler.show_user
+    ; `POST, "", Account_handler.create_user
+    ; `Other "PATCH", "/:id", Account_handler.update_user
+    ; `PUT, "/:id", Account_handler.update_user
+    ; `DELETE, "/:id", Account_handler.delete_user
     ]
+
+let router = scope router ~route:"/" [ `GET, "", Page_handler.index ]

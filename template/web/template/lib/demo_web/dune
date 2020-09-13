@@ -1,7 +1,7 @@
 (library
  (name demo_web)
  (public_name demo.web)
- (libraries lwt opium_kernel tyxml demo)
+ (libraries opium_kernel demo)
  (flags -open Demo.Std))
 
 (rule

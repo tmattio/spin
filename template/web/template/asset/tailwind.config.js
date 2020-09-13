@@ -1,5 +1,3 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
-
 module.exports = {
   purge: {
     enabled: process.env.DEMO_ENV === 'production',
@@ -13,14 +11,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sans: ['Inter var'],
       },
     },
-  },
-  variants: {
-    margin: ['responsive', 'first'],
-  },
-  plugins: [
-    require('@tailwindcss/ui'),
-  ],
+  }
 }

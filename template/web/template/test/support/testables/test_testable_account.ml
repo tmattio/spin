@@ -1,6 +1,6 @@
 open Demo
 
-let error = Alcotest.of_pp User.Error.pp
+let error = Alcotest.of_pp Account.Error.pp
 
 let user = Alcotest.of_pp Account.User.pp
 

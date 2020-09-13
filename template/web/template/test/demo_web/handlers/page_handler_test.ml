@@ -1,27 +1,30 @@
 open Alcotest
 open Lwt.Syntax
 open Opium_kernel
+open Opium_testing
 
-let test_case n = Test_support.test_case_db n `Quick
+let test n = Test_support.test_case_db n `Quick
+
+let app = Demo_web.app ()
+
+let handle_request = handle_request app
 
 let suite =
   [ ( "GET /"
-    , [ test_case "renders the index page" (fun _switch () ->
-            let req = Rock.Request.make "/" `GET () in
-            let* res = Test_support.handle_request req in
-            Test_support.check_status `OK res.status;
-            Test_support.check_body_contains
+    , [ test "renders the index page" (fun _switch () ->
+            let req = Request.make "/" `GET in
+            let* res = handle_request req in
+            check_status `OK res.status;
+            check_body_contains
               "<title>{{ project_description }} · Demo</title>"
               res.body)
       ] )
   ; ( "GET /page_not_found"
-    , [ test_case "renders the not found error page" (fun _switch () ->
-            let req = Rock.Request.make "/page_not_found" `GET () in
-            let* res = Test_support.handle_request req in
-            Test_support.check_status `Not_found res.status;
-            Test_support.check_body_contains
-              "<title>Page not found · Demo</title>"
-              res.body)
+    , [ test "renders the not found error page" (fun _switch () ->
+            let req = Request.make "/page_not_found" `GET in
+            let* res = handle_request req in
+            check_status `Not_found res.status;
+            check_body_contains "<title>Page not found · Demo</title>" res.body)
       ] )
   ]
 

@@ -1,11 +1,9 @@
 open Alcotest
 open Lwt.Syntax
-open Test_testable_user
-open Test_fixture_user
+open Test_testable_account
+open Test_fixture_account.User
 
-let () =
-  Test_support.setup_logger ~log_level:Logs.Warning ();
-  Test_support.setup_rnd_generators ()
+let () = Test_support.setup_logger ~log_level:Logs.Warning ()
 
 let test_case n = Test_support.test_case_db n `Quick
 
@@ -18,24 +16,21 @@ let setup () =
 let suite =
   [ ( "list_users"
     , [ test_case "returns all user users" (fun _switch () ->
-            let* user_ = Test_fixture_account.user_fixture () in
-            let* user_ = user_fixture ~user:user_ () in
+            let* user_ = user_fixture () in
             let+ fetched_users =
-              Demo.User.list_user_users user_
+              Demo.Account.list_users ()
               |> Test_support.get_lwt_ok ~msg:"could not fetch list of users"
             in
             check (list user) "is same list" [ user_ ] fetched_users)
       ; test_case "does not return other users users" (fun _switch () ->
-            let* user_ = Test_fixture_account.user_fixture () in
-            let* user_ = user_fixture ~user:user_ () in
-            let* user_2 = Test_fixture_account.user_fixture () in
-            let* user_2 = user_fixture ~user:user_2 () in
+            let* user_ = user_fixture () in
+            let* user_2 = user_fixture () in
             let* fetched_users =
-              Demo.User.list_user_users user_
+              Demo.Account.list_users ()
               |> Test_support.get_lwt_ok ~msg:"could not fetch list of users"
             in
             let+ fetched_users2 =
-              Demo.User.list_user_users user_2
+              Demo.Account.list_users ()
               |> Test_support.get_lwt_ok ~msg:"could not fetch list of users"
             in
             check (list user) "is same list" [ user_ ] fetched_users;
@@ -45,7 +40,7 @@ let suite =
     , [ test_case "returns the user with given id" (fun _switch () ->
             let* user_ = setup () in
             let+ fetched_user =
-              Demo.User.get_user_by_id user_.id
+              Demo.Account.get_user_by_id user_.id
               |> Test_support.get_lwt_ok
                    ~msg:"could not fetch user with given id"
             in
@@ -53,16 +48,14 @@ let suite =
       ] )
   ; ( "create_user"
     , [ test_case "with valid data creates a user" (fun _switch () ->
-            let* user = Test_fixture_account.user_fixture () in
+            let* user = user_fixture () in
             let name = name_fixture () in
-            let+ result = Demo.User.create_user ~user ~name () in
+            let+ result = Demo.Account.create_user ~name () in
             check bool "is ok" true (Result.is_ok result))
       ; test_case "with invalid data returns error changeset" (fun _switch () ->
-            let* user = Test_fixture_account.user_fixture () in
-            (* Change ID of user to non-existing ID *)
-            let user = { user with id = 1234 } in
+            let* user = user_fixture () in
             let name = name_fixture () in
-            let+ result = Demo.User.create_user ~user ~name () in
+            let+ result = Demo.Account.create_user ~name () in
             check bool "is error" true (Result.is_error result))
       ] )
   ; ( "update_user"
@@ -70,7 +63,7 @@ let suite =
             let* user_ = user_fixture () in
             let name_ = name_fixture ~v:"new-name" () in
             let+ updated_user =
-              Demo.User.update_user ~name:name_ user_
+              Demo.Account.update_user ~name:name_ user_
               |> Test_support.get_lwt_ok ~msg:"could not update the user"
             in
             check
@@ -87,10 +80,10 @@ let suite =
     , [ test_case "deletes the user" (fun _switch () ->
             let* user_ = user_fixture () in
             let* () =
-              Demo.User.delete_user user_
+              Demo.Account.delete_user user_
               |> Test_support.get_lwt_ok ~msg:"could not delete user"
             in
-            let+ result_ = Demo.User.get_user_by_id user_.id in
+            let+ result_ = Demo.Account.get_user_by_id user_.id in
             check (result user error) "is not found" (Error `Not_found) result_)
       ] )
   ]

@@ -1,8 +1,7 @@
-let index_user ~user ?alert ~users () =
+let index_user ?alert ~users () =
   let open Tyxml.Html in
   Layout.make
     ~title:"User list · Demo"
-    ~user
     [ div
         ~a:[ a_class [ "w-full md:w-3/4 mt-6 md:mt-0 md:pl-6" ] ]
         [ h2
@@ -96,10 +95,8 @@ let new_user ?alert () =
 
 let show_user ~user ?alert () =
   let open Tyxml.Html in
-  User_layout.make
+  Layout.make
     ~title:"Show user · Demo"
-    ~user
-    ~user
     [ div
         ~a:[ a_class [ "w-full md:w-3/4 mt-6 md:mt-0 md:pl-6" ] ]
         [ h2
@@ -111,10 +108,8 @@ let show_user ~user ?alert () =
 
 let edit_user ~user ?alert () =
   let open Tyxml.Html in
-  User_layout.make
+  Layout.make
     ~title:"Edit user · Demo"
-    ~user
-    ~user
     [ div
         ~a:[ a_class [ "w-full md:w-3/4 mt-6 md:mt-0 md:pl-6" ] ]
         [ h2

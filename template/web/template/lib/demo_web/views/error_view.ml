@@ -1,7 +1,7 @@
 let fallback ~status ~error () =
   let open Tyxml.Html in
   let title_ = error ^ " · Demo" in
-  let code = Opium_kernel.Rock.Status.to_code status in
+  let code = Opium_kernel.Status.to_code status in
   html
     (head
        (title (txt title_))

@@ -59,7 +59,7 @@ let make ~title:title_ children =
              ; a_content "width=device-width, initial-scale=1"
              ]
            ()
-       ; meta ~a:[ a_name "theme-color"; a_content "#000000" ] ()
+       ; meta ~a:[ a_name "theme-color"; a_content "#ffffff" ] ()
        ; meta
            ~a:[ a_name "description"; a_content "{{ project_description }}" ]
            ()
