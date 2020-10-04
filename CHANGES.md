@@ -1,4 +1,4 @@
-# 0.6.1 - Unreleased
+# 0.7.0 - Unreleased
 
 ## Added
 
@@ -11,12 +11,12 @@
 ## Changed
 
 - Removed the `bs-react` template from the official templates. The template now lives in [tmattio/spin-rescript](https://github.com/tmattio/spin-rescript).
+- Removed dependency on Reason and use the generated project's Reason to convert `.ml` files to `.re`.
 
 ## Fixed
 
 - Fixed NPM release by vendoring a Chamomille-free version of Inquire
 - Remove wrong release flags from all templates
-
 
 # 0.6.0 - 2020-05-17
 
