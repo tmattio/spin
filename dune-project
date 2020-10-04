@@ -23,7 +23,9 @@
  (description "A project generator for Reason and OCaml\n")
  (depends
   (ocaml
-   (and (>= 4.08.0) (< 4.11.0)))
+   (and
+    (>= 4.08.0)
+    (< 4.11.0)))
   (dune
    (>= 2.7))
   (alcotest :with-test)
@@ -39,18 +41,4 @@
   (lwt
    (>= 5.3.0))
   jingoo
-  reason
-  ; Vendored zed
-  base-bytes
-  uucd
-  uutf
-  uuseg
-  react
-  ; Vendored lambda-term
-  lwt_log
-  lwt_react
-  (mew_vi
-   (= 0.3.0))
-  uucp
-  uunf
-  uchar))
+  inquire))

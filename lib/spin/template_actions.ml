@@ -45,10 +45,10 @@ let action_run ~root_path cmd =
   |> Lwt_result.map_err (fun err -> Spin_error.failed_to_generate err)
 
 let action_refmt ~root_path globs =
-  let open Lwt.Syntax in
+  let open Lwt_result.Syntax in
   let files = Spin_sys.ls_dir root_path in
   let+ _ =
-    Spin_lwt.fold_left files ~f:(fun input_path ->
+    Spin_lwt.result_fold_left files ~f:(fun input_path ->
         let normalized_path =
           input_path
           |> Fpath.v
@@ -57,14 +57,15 @@ let action_refmt ~root_path globs =
           |> Fpath.to_string
           |> String.substr_replace_all ~pattern:"\\" ~with_:"/"
         in
-        if Glob.matches_globs normalized_path ~globs then (
-          let+ () =
+        if Glob.matches_globs normalized_path ~globs then
+          let* () =
             Logs_lwt.debug (fun m -> m "Running refmt on %s" input_path)
+            |> Lwt_result.ok
           in
-          Spin_refmt.convert input_path;
-          Caml.Sys.remove input_path)
+          let+ () = Refmt.convert ~project_root:root_path input_path in
+          Caml.Sys.remove input_path
         else
-          Lwt.return ())
+          Lwt.return_ok ())
   in
   ()
 
@@ -84,7 +85,8 @@ let run ~path t =
         | Run cmd ->
           action_run ~root_path:path cmd
         | Refmt globs ->
-          Lwt_result.ok (action_refmt ~root_path:path globs))
+          action_refmt ~root_path:path globs
+          |> Lwt_result.map_err (fun err -> Spin_error.failed_to_generate err))
   in
   match t.message with
   | Some _ ->

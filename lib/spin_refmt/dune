@@ -1,4 +1,0 @@
-(library
- (name spin_refmt)
- (public_name spin.refmt)
- (libraries reason))

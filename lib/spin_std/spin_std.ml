@@ -179,7 +179,39 @@ module Spin_lwt = struct
         fold_left p_output.stderr ~f:(fun line ->
             Logs_lwt.err (fun m -> m "stderr of %s: %s" cmd line))
       in
-      Error (Printf.sprintf "The command %s did not run successfully." cmd)
+      Error
+        (Caml.Format.asprintf
+           "The command %s did not run successfully: %a"
+           cmd
+           (Caml.Format.pp_print_list Caml.Format.pp_print_string)
+           p_output.stderr)
+
+  let exec_with_stdout cmd args =
+    let open Lwt.Syntax in
+    let* p_output = exec cmd args in
+    let* _ =
+      fold_left p_output.stdout ~f:(fun line ->
+          Logs_lwt.debug (fun m -> m "stdout of %s: %s" cmd line))
+    in
+    match p_output.status with
+    | WEXITED 0 ->
+      let+ _ =
+        fold_left p_output.stderr ~f:(fun line ->
+            Logs_lwt.debug (fun m -> m "stderr of %s: %s" cmd line))
+      in
+      let stdout = String.concat ~sep:"\n" p_output.stdout in
+      Ok stdout
+    | _ ->
+      let+ _ =
+        fold_left p_output.stderr ~f:(fun line ->
+            Logs_lwt.err (fun m -> m "stderr of %s: %s" cmd line))
+      in
+      Error
+        (Caml.Format.asprintf
+           "The command %s did not run successfully: %a"
+           cmd
+           (Caml.Format.pp_print_list Caml.Format.pp_print_string)
+           p_output.stderr)
 
   let with_chdir ~dir t =
     let open Lwt.Syntax in

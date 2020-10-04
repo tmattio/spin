@@ -19,3 +19,5 @@ val invalid_template : msg:string -> string -> t
 val generator_error : msg:string -> string -> t
 
 val of_decoder_error : file:string -> Decoder.error -> t
+
+val pp : Formatter.t -> t -> unit [@@ocaml.toplevel_printer]

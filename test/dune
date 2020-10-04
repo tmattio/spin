@@ -1,7 +1,7 @@
 (library
  (name spin_test)
  (flags -linkall -g -w +42 -open Spin_std)
- (libraries spin spin_std spin_refmt alcotest stdio)
+ (libraries spin spin_std alcotest stdio)
  (modules
   (:standard \ test_runner)))
 
