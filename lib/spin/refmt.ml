@@ -1,10 +1,11 @@
-let run cmd args =
+let run ~root_path cmd args =
   let open Lwt.Syntax in
   let* () =
     Logs_lwt.debug (fun m ->
         m "Running %s %s" cmd (String.concat args ~sep:" "))
   in
-  Spin_lwt.exec_with_stdout cmd args
+  Spin_lwt.with_chdir ~dir:root_path (fun () ->
+      Spin_lwt.exec_with_stdout cmd args)
 
 let is_esy_project project_root =
   Caml.Sys.file_exists (Filename.concat project_root "package.json")
@@ -30,25 +31,27 @@ let get_refmt_command filename =
   else
     None
 
-let convert_with_esy filename =
+let convert_with_esy ~project_root filename =
   let open Lwt_result.Syntax in
   match get_refmt_command filename with
   | Some (command, output_filename) ->
-    let* stdout = run "esy" ([ "run" ] @ command) in
+    let* stdout = run ~root_path:project_root "esy" command in
     Lwt_io.with_file
-      output_filename
+      (Filename.concat project_root output_filename)
       (fun oc -> Lwt_io.write oc stdout |> Lwt_result.ok)
       ~mode:Lwt_io.Output
   | None ->
     Lwt.return_ok ()
 
-let convert_with_opam filename =
+let convert_with_opam ~project_root filename =
   let open Lwt_result.Syntax in
   match get_refmt_command filename with
   | Some (command, output_filename) ->
-    let* stdout = run "opam" ([ "exec"; "--" ] @ command) in
+    let* stdout =
+      run ~root_path:project_root "opam" ([ "exec"; "--" ] @ command)
+    in
     Lwt_io.with_file
-      output_filename
+      (Filename.concat project_root output_filename)
       (fun oc -> Lwt_io.write oc stdout |> Lwt_result.ok)
       ~mode:Lwt_io.Output
   | None ->
@@ -56,6 +59,6 @@ let convert_with_opam filename =
 
 let convert ~project_root file =
   if is_esy_project project_root then
-    convert_with_esy file
+    convert_with_esy ~project_root file
   else
-    convert_with_opam file
+    convert_with_opam ~project_root file

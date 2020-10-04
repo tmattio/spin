@@ -62,7 +62,7 @@ let action_refmt ~root_path globs =
             Logs_lwt.debug (fun m -> m "Running refmt on %s" input_path)
             |> Lwt_result.ok
           in
-          let+ () = Refmt.convert ~project_root:root_path input_path in
+          let+ () = Refmt.convert ~project_root:root_path normalized_path in
           Caml.Sys.remove input_path
         else
           Lwt.return_ok ())

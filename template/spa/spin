@@ -79,11 +79,6 @@
   (files asset/package.json Makefile)
   (enabled_if (neq :package_manager Opam)))
 
-(post_gen
-  (actions
-    (refmt */*.ml */*.mli))
-  (enabled_if (eq :syntax Reason)))
-
 ; We need to do this because Dune won't copy .github during build
 (post_gen
   (actions 
@@ -103,6 +98,11 @@
     (run make build))
   (message "🎁  Installing packages. This might take a couple minutes.")
   (enabled_if (eq :package_manager Opam)))
+
+(post_gen
+  (actions
+    (refmt bin/*.ml bin/*.mli lib/*.ml lib/*.mli test/*.ml test/*.mli bin/*/*.ml bin/*/*.mli))
+  (enabled_if (eq :syntax Reason)))
 
 (example_commands
   (commands 
