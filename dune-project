@@ -30,7 +30,6 @@
   (odoc :with-doc)
   (crunch :build)
   base
-  stdio
   fmt
   fpath
   cmdliner
