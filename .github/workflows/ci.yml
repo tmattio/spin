@@ -16,6 +16,7 @@ jobs:
           - ubuntu-latest
         ocaml-version:
           - 4.10.1
+          - 4.11.1
 
     steps:
       - name: Checkout code
