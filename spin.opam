@@ -25,18 +25,7 @@ depends: [
   "sexplib"
   "lwt" {>= "5.3.0"}
   "jingoo"
-  "reason"
-  "base-bytes"
-  "uucd"
-  "uutf"
-  "uuseg"
-  "react"
-  "lwt_log"
-  "lwt_react"
-  "mew_vi" {= "0.3.0"}
-  "uucp"
-  "uunf"
-  "uchar"
+  "inquire"
 ]
 dev-repo: "git+https://github.com/tmattio/spin.git"
 build: [

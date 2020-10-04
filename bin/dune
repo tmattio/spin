@@ -2,15 +2,6 @@
  (name main)
  (public_name spin)
  (libraries spin spin_std cmdliner fmt fmt.tty logs.fmt logs.cli)
- (modules
-  (:standard \ refmt))
- (flags
-  (:standard -open Spin_std)))
-
-(executable
- (name refmt)
- (libraries spin spin_std spin_refmt)
- (modules refmt)
  (flags
   (:standard -open Spin_std)))
 

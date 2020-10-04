@@ -54,3 +54,19 @@ let generator_error ~msg generator = `Generator_error (generator, msg)
 let of_decoder_error ~file e =
   let msg = Decoder.string_of_error e in
   failed_to_parse file ~msg
+
+let sexp_of_t t =
+  let open Sexplib0.Sexp in
+  match t with
+  | `Missing_env_var e ->
+    List [ Atom "Missing_env_var"; Atom e ]
+  | `Failed_to_parse (e1, e2) ->
+    List [ Atom "Missing_env_var"; Atom e1; Atom e2 ]
+  | `Invalid_template (e1, e2) ->
+    List [ Atom "Missing_env_var"; Atom e1; Atom e2 ]
+  | `Failed_to_generate e ->
+    List [ Atom "Failed_to_generate"; Atom e ]
+  | `Generator_error (e1, e2) ->
+    List [ Atom "Missing_env_var"; Atom e1; Atom e2 ]
+
+let pp fmt t = Sexplib0.Sexp.pp_hum fmt (sexp_of_t t)

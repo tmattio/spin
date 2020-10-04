@@ -1,7 +1,0 @@
-(library
- (name inquire)
- (public_name spin.inquire)
- (libraries lwt lambda_term)
- (flags -open StdLabels))
-
-(include_subdirs unqualified)
