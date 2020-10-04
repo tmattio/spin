@@ -23,9 +23,7 @@
  (description "A project generator for Reason and OCaml\n")
  (depends
   (ocaml
-   (and
-    (>= 4.08.0)
-    (< 4.11.0)))
+   (>= 4.08.0))
   (dune
    (>= 2.7))
   (alcotest :with-test)
