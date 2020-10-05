@@ -12,7 +12,7 @@ doc: "https://tmattio.github.io/spin/"
 bug-reports: "https://github.com/tmattio/spin/issues"
 depends: [
   "ocaml" {>= "4.08.0"}
-  "dune" {>= "2.7" & >= "2.7"}
+  "dune" {>= "2.7"}
   "alcotest" {with-test}
   "odoc" {with-doc}
   "crunch" {build}

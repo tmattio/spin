@@ -24,8 +24,7 @@
  (depends
   (ocaml
    (>= 4.08.0))
-  (dune
-   (>= 2.7))
+  dune
   (alcotest :with-test)
   (odoc :with-doc)
   (crunch :build)
