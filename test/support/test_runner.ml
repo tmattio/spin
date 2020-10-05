@@ -12,6 +12,5 @@ let () =
     ; "spin::Dec_user_config", Dec_user_config_test.suite
     ; "spin::Decoder", Decoder_test.suite
     ; "spin_std::Spin_sys", Spin_sys_test.suite
-      (* Disable because it depends on Reason. Only uncomment in development. *)
-      (* ; "spin::Template_actions", Template_actions_test.suite *)
+    ; "spin::Template_actions", Template_actions_test.suite
     ]

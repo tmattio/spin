@@ -38,4 +38,5 @@
   (lwt
    (>= 5.3.0))
   jingoo
-  inquire))
+  (inquire
+   (>= 0.2.1))))

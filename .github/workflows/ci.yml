@@ -16,7 +16,6 @@ jobs:
           - ubuntu-latest
         ocaml-version:
           - 4.10.1
-          - 4.11.1
 
     steps:
       - name: Checkout code
@@ -56,7 +55,7 @@ jobs:
         if: steps.cache-opam.outputs.cache-hit != 'true'
         run: |
           opam install . --deps-only --with-doc --with-test --locked --unlock-base
-          opam install ocamlformat --skip-updates
+          opam install ocamlformat reason --skip-updates
 
       - name: Upgrade dependencies
         run: opam upgrade --fixup
