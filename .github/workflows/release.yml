@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        ocaml-version: ['4.10.0']
+        ocaml-version: ['4.10.1']
 
     steps:
       - uses: actions/checkout@v2
@@ -121,12 +121,12 @@ jobs:
           asset_name: spin-linux-x64.zip
           asset_content_type: application/gzip
 
-      - name: Publish NPM package
-        run: |
-          npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
-          npm config set scope "@tmattio"
-          npm config list
-          npm publish --access public
-        working-directory: ./_release
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      # - name: Publish NPM package
+      #   run: |
+      #     npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
+      #     npm config set scope "@tmattio"
+      #     npm config list
+      #     npm publish --access public
+      #   working-directory: ./_release
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
