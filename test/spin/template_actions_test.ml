@@ -9,6 +9,7 @@ let test_refmt () =
   let temp_file = Caml.Filename.concat temp_dir "sample.ml" in
   let oc = open_out temp_file in
   Printf.fprintf oc "%s" {|let () = print_endline "Hello World"|};
+  close_out oc;
   let result_ =
     Template_actions.run
       Template_actions.
@@ -20,6 +21,7 @@ let test_refmt () =
   let output_file = Caml.Filename.chop_suffix temp_file ".ml" ^ ".re" in
   let ic = open_in output_file in
   let line = input_line ic in
+  close_in ic;
   check string "equals" "let () = print_endline(\"Hello World\");" line
 
 let suite = [ "can run a Refmt action", `Quick, test_refmt ]
