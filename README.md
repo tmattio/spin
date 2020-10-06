@@ -100,7 +100,7 @@ Here are some non-official Spin templates that you can:
 
 ## Usage
 
-For a detailed documentation of Spin's CLI, run `spin --help`, or refer to the [CLI documentation](https://github.com/tmattio/spin/tree/master/doc/cli.md].
+For a detailed documentation of Spin's CLI, run `spin --help`, or refer to the [CLI documentation](https://github.com/tmattio/spin/tree/master/doc/cli.md).
 
 ### `spin new TEMPLATE [PATH] [--default] [--ignore-config]`
 
