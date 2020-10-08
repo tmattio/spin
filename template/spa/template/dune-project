@@ -20,8 +20,7 @@
  (depends
   (ocaml
    (>= 4.08.0))
-  (dune
-   (>= 2.0))
+  dune
   (alcotest :with-test)
   (odoc :with-doc)
   async_kernel
