@@ -10,7 +10,7 @@
   🏗️  Creating a new project from bin in _generated
   Done!
 
-  🎁  Installing packages. This might take a couple minutes.
+  🎁  Installing packages globally. This might take a couple minutes.
   Done!
 
   🎉  Success! Your project is ready at _generated
