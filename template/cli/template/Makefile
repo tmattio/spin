@@ -58,6 +58,10 @@ create_switch:
 .PHONY: switch
 switch: create_switch deps ## Create an opam switch and install development dependencies
 
+.PHONY: lock
+lock: ## Generate a lock file
+	opam lock -y .
+
 .PHONY: build
 build: ## Build the project, including non installable libraries and executables
 	opam exec -- dune build --root .
