@@ -36,7 +36,6 @@ all:
 .PHONY: dev
 dev: ## Install development dependencies
 	opam switch create --no-install . ocaml-base-compiler.4.10.1
-	opam pin add -y ocaml-lsp-server https://github.com/ocaml/ocaml-lsp.git
 	opam install -y dune-release merlin ocamlformat utop ocaml-lsp-server reason
 	opam install --locked --deps-only --with-test --with-doc -y .
 
@@ -54,8 +53,8 @@ install: all ## Install the packages on the system
 
 .PHONY: test
 test: ## Run the unit tests
-	opam exec -- dune build --root . @test/runtest -f
-	opam exec -- dune build --root . @test_bin/runtest -f
+	opam exec -- dune build --root . @test/runtest
+	opam exec -- dune build --root . @test_bin/runtest
 
 .PHONY: test-template
 test-template: ## Run the template integration tests

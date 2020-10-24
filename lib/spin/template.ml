@@ -13,6 +13,8 @@ type example_command =
 type t =
   { name : string
   ; description : string
+  ; raw_files : string list
+  ; parse_binaries : bool
   ; files : (string, string) Hashtbl.t
   ; context : (string, string) Hashtbl.t
   ; pre_gen_actions : Template_actions.t list
@@ -216,6 +218,8 @@ let rec of_dec
       Lwt_result.return
         { name = ""
         ; description = ""
+        ; raw_files = []
+        ; parse_binaries = false
         ; context
         ; files = Hashtbl.create (module String)
         ; pre_gen_actions = []
@@ -266,6 +270,16 @@ let rec of_dec
           in
           ())
   in
+  let parse_binaries =
+    match dec.parse_binaries with Some v -> v | None -> base.parse_binaries
+  in
+  let raw_files =
+    match dec.raw_files with
+    | Some v ->
+      base.raw_files @ v
+    | None ->
+      base.raw_files
+  in
   let files = populate_template_files files in
   Hashtbl.merge_into ~src:base.files ~dst:files ~f:(fun ~key:_ src -> function
     | Some dst -> Set_to dst | None -> Set_to src);
@@ -274,6 +288,8 @@ let rec of_dec
     function Some dst -> Set_to dst | None -> Set_to src);
   { name = dec.name
   ; description = dec.description
+  ; parse_binaries
+  ; raw_files
   ; context
   ; files
   ; pre_gen_actions = base.pre_gen_actions @ pre_gen_actions
@@ -341,12 +357,45 @@ let generate ~path:generation_root template =
           generation_root)
     |> Lwt_result.ok
   in
+  let normalized_raw_files =
+    template.raw_files |> List.map ~f:File_generator.normalize_path
+  in
+  let files_to_copy, files_to_generate =
+    List.fold_left
+      (Hashtbl.to_alist template.files)
+      ~f:(fun (files_to_copy, files_to_generate) file ->
+        let file_path, file_content = file in
+        let normalized_file_path = File_generator.normalize_path file_path in
+        let file = normalized_file_path, file_content in
+        match
+          ( template.parse_binaries
+          , File_generator.is_binary_file file_path
+          , Glob.matches_globs normalized_file_path ~globs:normalized_raw_files
+          )
+        with
+        | _, _, true ->
+          (* No matter if the file is a binary, if it's in raw files, we just
+             want to copy it *)
+          file :: files_to_copy, files_to_generate
+        | false, true, _ ->
+          (* If the template config says we don't want to parse binary files and
+             the file is a binary *)
+          file :: files_to_copy, files_to_generate
+        | _, _, _ ->
+          files_to_copy, file :: files_to_generate)
+      ~init:([], [])
+  in
   let* _ =
-    template.files
-    |> Hashtbl.to_alist
+    files_to_copy
     |> Spin_lwt.result_fold_left ~f:(fun (path, content) ->
            let path = Filename.concat generation_root path in
-           File_generator.generate path ~context:template.context ~content)
+           File_generator.copy ~context:template.context ~content path)
+  in
+  let* _ =
+    files_to_generate
+    |> Spin_lwt.result_fold_left ~f:(fun (path, content) ->
+           let path = Filename.concat generation_root path in
+           File_generator.generate ~context:template.context ~content path)
   in
   let* () =
     Logs_lwt.app (fun m -> m "%a" Pp.pp_bright_green "Done!\n") |> Lwt_result.ok

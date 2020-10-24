@@ -74,6 +74,22 @@ module Base_template = struct
     }
 end
 
+module Parse_binaries = struct
+  type t = bool
+
+  let decode = Decoder.bool
+end
+
+module Raw_files = struct
+  type t = string list
+
+  let decode =
+    Decoder.one_of
+      [ "n files", Decoder.list Decoder.string
+      ; "one file", Decoder.map ~f:List.return Decoder.string
+      ]
+end
+
 module Expr = struct
   type t =
     | Var of string
@@ -479,6 +495,8 @@ type t =
   { name : string
   ; description : string
   ; base_template : Base_template.t option
+  ; parse_binaries : bool option
+  ; raw_files : string list option
   ; configurations : Configuration.t list
   ; pre_gen_actions : Actions.t list
   ; post_gen_actions : Actions.t list
@@ -492,6 +510,9 @@ let decode =
   let+ name = Decoder.field "name" ~f:Template_name.decode
   and+ description = Decoder.field "description" ~f:Description.decode
   and+ base_template = Decoder.field_opt "inherit" ~f:Base_template.decode
+  and+ parse_binaries =
+    Decoder.field_opt "parse_binaries" ~f:Parse_binaries.decode
+  and+ raw_files = Decoder.field_opt "raw_files" ~f:Raw_files.decode
   and+ configurations = Decoder.fields "config" ~f:Configuration.decode
   and+ pre_gen_actions = Decoder.fields "pre_gen" ~f:Actions.decode
   and+ post_gen_actions = Decoder.fields "post_gen" ~f:Actions.decode
@@ -507,6 +528,8 @@ let decode =
   { name
   ; description
   ; base_template
+  ; parse_binaries
+  ; raw_files
   ; configurations
   ; pre_gen_actions
   ; post_gen_actions
