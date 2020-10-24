@@ -35,11 +35,3 @@
    (source_tree ppx)))
  (action
   (run %{bin:ocaml-crunch} -m plain ppx -o %{targets})))
-
-(rule
- (targets spa.ml)
- (deps
-  (:data
-   (source_tree spa)))
- (action
-  (run %{bin:ocaml-crunch} -m plain spa -o %{targets})))
