@@ -3,6 +3,19 @@ open Spin
 let run ~ignore_config ~use_defaults ~template ~path =
   let open Result.Let_syntax in
   let path = Option.value path ~default:Filename.current_dir_name in
+  let* () =
+    try
+      match Caml.Sys.readdir path with
+      | [||] ->
+        Ok ()
+      | _ ->
+        Error
+          (Spin_error.failed_to_generate "The output directory is not empty.")
+    with
+    | Sys_error _ ->
+      Spin_unix.mkdir_p path;
+      Ok ()
+  in
   let* context =
     if ignore_config then
       Ok None
