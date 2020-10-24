@@ -11,6 +11,8 @@ type example_command =
 type t =
   { name : string
   ; description : string
+  ; raw_files : string list
+  ; parse_binaries : bool
   ; files : (string, string) Hashtbl.t
   ; context : (string, string) Hashtbl.t
   ; pre_gen_actions : Template_actions.t list

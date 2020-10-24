@@ -1,8 +1,14 @@
 # Unreleased
 
+## Added
+
+- Added a `parse_binaries` stanza that can be `true` to force Spin to parse binary files
+- Added a `raw_files` stanza that takes a list of file or glob expressions to instruct Spin to copy files instead of parsing them
+
 ## Changed
 
 - The `spa` template has been removed from the official templates and now lives at https://github.com/tmattio/spin-incr-dom
+- Spin does not parse binary files by default anymore, they are simply copied to the destination folder
 
 # 0.7.0
 
