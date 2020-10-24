@@ -21,10 +21,16 @@ This project uses [Dune](https://dune.build/) as a build system, if you add a de
 {%- else -%}
 You need Opam, you can install it by following [Opam's documentation](https://opam.ocaml.org/doc/Install.html).
 
-With Opam installed, you can install the dependencies with:
+With Opam installed, you can install the dependencies in a new local switch with:
 
 ```bash
-make dev
+make switch
+```
+
+Or globally, with:
+
+```bash
+make deps
 ```
 
 Then, build the project with:

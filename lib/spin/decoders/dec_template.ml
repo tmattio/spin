@@ -98,6 +98,8 @@ module Expr = struct
 
   and func =
     | If of t * t * t
+    | And of t * t
+    | Or of t * t
     | Eq of t * t
     | Neq of t * t
     | Not of t
@@ -121,6 +123,10 @@ module Expr = struct
       Ok (String s)
     | Sexp.List (Sexp.Atom ("if" as name) :: args) as sexp ->
       decode_fn3 name args ~sexp ~ctor:(fun a b c -> If (a, b, c))
+    | Sexp.List (Sexp.Atom ("and" as name) :: args) as sexp ->
+      decode_fn2 name args ~sexp ~ctor:(fun a b -> And (a, b))
+    | Sexp.List (Sexp.Atom ("or" as name) :: args) as sexp ->
+      decode_fn2 name args ~sexp ~ctor:(fun a b -> Or (a, b))
     | Sexp.List (Sexp.Atom ("eq" as name) :: args) as sexp ->
       decode_fn2 name args ~sexp ~ctor:(fun a b -> Eq (a, b))
     | Sexp.List (Sexp.Atom ("neq" as name) :: args) as sexp ->

@@ -12,7 +12,8 @@
 
 ## Fixes
 
-- The project generation will now not fail before the configurations prompt if the output directory is not empty
+- The project generation will now fail before the configurations prompt if the output directory is not empty
+- By default, Spin now creates a local switch for the generated projects. This can be changed with `spin config`, or by setting the env variable `SPIN_CREATE_SWITCH=false`
 
 # 0.7.0
 

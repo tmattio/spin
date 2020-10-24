@@ -36,9 +36,8 @@ $(eval $(ARGS):;@:)
 all:
 	opam exec -- dune build --root . @install
 
-.PHONY: dev
-dev: ## Install development dependencies
-	opam pin add -y ocaml-lsp-server https://github.com/ocaml/ocaml-lsp.git
+.PHONY: deps
+deps: ## Install development dependencies
 	opam install -y dune-release merlin ocamlformat utop ocaml-lsp-server
 	{%- if test_framework == 'Rely' %}
 	opam pin add -y pastel https://github.com/facebookexperimental/reason-native.git
@@ -47,6 +46,13 @@ dev: ## Install development dependencies
 	opam pin add -y rely https://github.com/facebookexperimental/reason-native.git
 	{%- endif %}
 	opam install --deps-only --with-test --with-doc -y .
+
+.PHONY: create_switch
+create_switch:
+	opam switch create . --no-install
+
+.PHONY: switch
+switch: create_switch deps ## Create an opam switch and install development dependencies
 
 .PHONY: build
 build: ## Build the project, including non installable libraries and executables

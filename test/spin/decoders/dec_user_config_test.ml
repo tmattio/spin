@@ -9,6 +9,7 @@ let test_encode_config () =
       ; email = Some "bill@email.com"
       ; github_username = Some "bill"
       ; npm_username = Some "bill"
+      ; create_switch = Some false
       }
   in
   let f = Dec_user_config.encode in
@@ -17,7 +18,8 @@ let test_encode_config () =
     "(username Bill)\n\n\
      (email bill@email.com)\n\n\
      (github_username bill)\n\n\
-     (npm_username bill)"
+     (npm_username bill)\n\n\
+     (create_switch false)"
   in
   check string "same value" expected encoded
 

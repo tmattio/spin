@@ -24,6 +24,14 @@ and eval_fn ~context =
   | Expr.If (e1, e2, e3) ->
     let* e1 = to_bool e1 in
     if e1 then eval e2 else eval e3
+  | Expr.And (e1, e2) ->
+    let* e1 = to_bool e1 in
+    let+ e2 = to_bool e2 in
+    (e1 && e2) |> Bool.to_string
+  | Expr.Or (e1, e2) ->
+    let* e1 = to_bool e1 in
+    let+ e2 = to_bool e2 in
+    (e1 || e2) |> Bool.to_string
   | Expr.Eq (e1, e2) ->
     let* e1 = eval e1 in
     let+ e2 = eval e2 in

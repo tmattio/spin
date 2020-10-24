@@ -1,4 +1,5 @@
   $ export OPAMSKIPUPDATE=true
+  $ export SPIN_CREATE_SWITCH=false
   $ export SPIN_PROJECT_NAME=demo
   $ export SPIN_USERNAME=user
   $ export SPIN_SYNTAX=OCaml
@@ -9,14 +10,14 @@
   🏗️  Creating a new project from lib in _generated
   Done!
 
-  🎁  Installing packages. This might take a couple minutes.
+  🎁  Installing packages globally. This might take a couple minutes.
   Done!
 
   🎉  Success! Your project is ready at _generated
 
   Here are some example commands that you can run inside this directory:
 
-    make dev
+    make deps
       Download runtime and development dependencies.
 
     make build
