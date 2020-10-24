@@ -3,6 +3,7 @@ type t =
   ; email : string option
   ; github_username : string option
   ; npm_username : string option
+  ; create_switch : bool option
   }
 
 let of_dec (dec : Dec_user_config.t) =
@@ -10,6 +11,7 @@ let of_dec (dec : Dec_user_config.t) =
   ; email = dec.email
   ; github_username = dec.github_username
   ; npm_username = dec.npm_username
+  ; create_switch = dec.create_switch
   }
 
 let path_of_opt value =
@@ -41,6 +43,7 @@ let save ?path t =
     ; email = t.email
     ; github_username = t.github_username
     ; npm_username = t.npm_username
+    ; create_switch = t.create_switch
     }
     ~path
     ~f:Dec_user_config.encode
@@ -72,16 +75,22 @@ let prompt ?default:d () =
       ?default:(Option.bind d ~f:(fun d -> d.github_username))
       ~validate:validate_strip
   in
-  let+ npm_username =
+  let* npm_username =
     Inquire.input
       "Your NPM username"
       ?default:(Option.bind d ~f:(fun d -> d.npm_username))
       ~validate:validate_strip
   in
+  let+ create_switch =
+    Inquire.confirm
+      "Create switches when generating projects"
+      ?default:(Option.bind d ~f:(fun d -> d.create_switch))
+  in
   { username = Some username
   ; email = Some email
   ; github_username = Some github_username
   ; npm_username = Some npm_username
+  ; create_switch = Some create_switch
   }
 
 let to_context t =

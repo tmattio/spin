@@ -3,6 +3,7 @@ type t =
   ; email : string option
   ; github_username : string option
   ; npm_username : string option
+  ; create_switch : bool option
   }
 
 val of_dec : Dec_user_config.t -> t

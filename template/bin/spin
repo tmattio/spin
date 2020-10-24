@@ -14,6 +14,9 @@
 (config project_snake
   (default (snake_case :project_slug)))
 
+(config create_switch
+  (default true))
+
 (config project_description
   (input (prompt "Description"))
   (default "A short, but powerful statement about your project")
@@ -90,10 +93,17 @@
 
 (post_gen
   (actions 
-    (run make dev)
+    (run make switch)
     (run make build))
   (message "🎁  Installing packages. This might take a couple minutes.")
-  (enabled_if (eq :package_manager Opam)))
+  (enabled_if (and (eq :package_manager Opam) (eq :create_switch true))))
+
+(post_gen
+  (actions 
+    (run make deps)
+    (run make build))
+  (message "🎁  Installing packages. This might take a couple minutes.")
+  (enabled_if (and (eq :package_manager Opam) (eq :create_switch false))))
 
 (post_gen
   (actions
@@ -109,7 +119,7 @@
 
 (example_commands
   (commands
-    ("make dev" "Download runtime and development dependencies.")
+    ("make deps" "Download runtime and development dependencies.")
     ("make build" "Build the dependencies and the project.")
     ("make test" "Starts the test runner."))
   (enabled_if (eq :package_manager Opam)))

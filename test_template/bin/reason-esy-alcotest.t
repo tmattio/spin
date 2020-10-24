@@ -1,4 +1,5 @@
   $ export OPAMSKIPUPDATE=true
+  $ export SPIN_CREATE_SWITCH=false
   $ export SPIN_PROJECT_NAME=demo
   $ export SPIN_USERNAME=user
   $ export SPIN_SYNTAX=Reason
@@ -16,7 +17,7 @@
 
   Here are some example commands that you can run inside this directory:
 
-    make dev
+    make deps
       Download runtime and development dependencies.
 
     make build
