@@ -87,15 +87,21 @@ The official Spin templates templates are the following:
 - **cli** - Command Line Interface releasable on Opam.
 - **lib** - Library releasable on Opam.
 - **ppx** - PPX library with prebuilt binaries for native and bucklescript.
-- **spa** - Single page application with Js_of_ocaml
 
 If you'd like to add an official template, don't hesitate to open a PR!
 
-### Other templates
+### Other Reason/OCaml templates
 
-Here are some non-official Spin templates that you can:
+Here are some non-official Spin templates that you can use:
 
 - [**spin-rescript**](https://github.com/tmattio/spin-rescript) - Spin template for ReScript applicatoins
+- [**spin-jsoo-react**](https://github.com/tmattio/spin-jsoo-react) - Spin template for React applicatoins with Js_of_ocaml
+- [**spin-incr-dom**](https://github.com/tmattio/spin-incr-dom) - Single page application with Js_of_ocaml using Incr_dom
+
+### Other non-OCaml templates
+
+Although the focus of Spin is to offer a great project generator for the OCaml ecosystem, it can also be used to generate non-OCaml templates. Here are a few examples:
+
 - [**spin-python-cli**](https://github.com/tmattio/spin-python-cli) - Spin template for Python CLIs
 
 ## Usage
