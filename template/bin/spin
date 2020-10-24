@@ -54,7 +54,7 @@
 
 (config ci_cd
   (select
-    (prompt "Which CI/CD do you use")
+    (prompt "Which CI/CD do you use?")
     (values Github None))
   (default Github))
 
@@ -95,14 +95,14 @@
   (actions 
     (run make switch)
     (run make build))
-  (message "🎁  Installing packages. This might take a couple minutes.")
+  (message "🎁  Installing packages in a switch. This might take a couple minutes.")
   (enabled_if (and (eq :package_manager Opam) (eq :create_switch true))))
 
 (post_gen
   (actions 
     (run make deps)
     (run make build))
-  (message "🎁  Installing packages. This might take a couple minutes.")
+  (message "🎁  Installing packages globally. This might take a couple minutes.")
   (enabled_if (and (eq :package_manager Opam) (eq :create_switch false))))
 
 (post_gen
