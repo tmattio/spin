@@ -1,7 +1,0 @@
-(library
- (name {{ project_snake }}_test)
- (inline_tests
-  (modes js))
- (libraries {{ project_snake }} incr_dom.testing)
- (preprocess
-  (pps ppx_expect)))

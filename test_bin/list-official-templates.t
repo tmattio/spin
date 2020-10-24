@@ -12,8 +12,3 @@
     ppx
       PPX library with prebuilt binaries for native and bucklescript
   
-    spa
-      Single page application with Js_of_ocaml
-  
-
-

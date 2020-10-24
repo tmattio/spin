@@ -30,11 +30,5 @@ module Ppx : Template = struct
   let name = "ppx"
 end
 
-module Spa : Template = struct
-  include Spa
-
-  let name = "spa"
-end
-
 let all : (module Template) list =
-  [ (module Cli); (module Lib); (module Bin); (module Ppx); (module Spa) ]
+  [ (module Cli); (module Lib); (module Bin); (module Ppx) ]
