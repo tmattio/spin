@@ -10,6 +10,10 @@
 - The `spa` template has been removed from the official templates and now lives at https://github.com/tmattio/spin-incr-dom
 - Spin does not parse binary files by default anymore, they are simply copied to the destination folder
 
+## Fixes
+
+- The project generation will now not fail before the configurations prompt if the output directory is not empty
+
 # 0.7.0
 
 ## Added

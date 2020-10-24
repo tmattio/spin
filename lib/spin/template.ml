@@ -327,20 +327,6 @@ and read
 
 let generate ~path:generation_root template =
   let open Lwt_result.Syntax in
-  let* () =
-    (try
-       match Caml.Sys.readdir generation_root with
-       | [||] ->
-         Ok ()
-       | _ ->
-         Error
-           (Spin_error.failed_to_generate "The output directory is not empty.")
-     with
-    | Sys_error _ ->
-      Spin_unix.mkdir_p generation_root;
-      Ok ())
-    |> Lwt.return
-  in
   (* Run pre-gen commands *)
   let* _ =
     Spin_lwt.result_fold_left
