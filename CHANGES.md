@@ -1,3 +1,9 @@
+# Unreleased
+
+## Changed
+
+- The `spa` template has been removed from the official templates and now lives at https://github.com/tmattio/spin-incr-dom
+
 # 0.7.0
 
 ## Added
