@@ -80,28 +80,31 @@
 
 ; We need to do this because Dune won't copy .github during build
 (post_gen
-  (actions 
+  (actions
     (run mv github .github))
   (enabled_if (eq :ci_cd Github)))
 
 (post_gen
-  (actions 
+  (actions
     (run esy install)
-    (run esy dune build))
+    (run esy dune build)
+    (run esy dune lock))
   (message "🎁  Installing packages. This might take a couple minutes.")
   (enabled_if (eq :package_manager Esy)))
 
 (post_gen
-  (actions 
+  (actions
     (run make switch)
-    (run make build))
+    (run make build)
+    (run make lock))
   (message "🎁  Installing packages in a switch. This might take a couple minutes.")
   (enabled_if (and (eq :package_manager Opam) (eq :create_switch true))))
 
 (post_gen
-  (actions 
+  (actions
     (run make deps)
-    (run make build))
+    (run make build)
+    (run make lock))
   (message "🎁  Installing packages globally. This might take a couple minutes.")
   (enabled_if (and (eq :package_manager Opam) (eq :create_switch false))))
 

@@ -18,8 +18,7 @@
   (ocaml (>= 4.08.0))
   dune
   {%- if test_framework == 'Rely' %}
-  ; Add Rely when released on Opam
-  ; (rely :with-test)
+  (rely :with-test)
   {%- else %}
   (alcotest :with-test)
   {%- endif %}
