@@ -10,6 +10,6 @@
  (libraries spin_test)
  (modules test_runner)
  (action
-  (run %{test} -q --color=always)))
+  (run %{test})))
 
 (include_subdirs unqualified)

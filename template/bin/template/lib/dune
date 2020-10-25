@@ -1,6 +1,5 @@
 (library
  (name {{ project_snake }})
- (public_name {{ project_slug }})
- (flags (:standard -open StdLabels)))
+ (public_name {{ project_slug }}))
 
 (include_subdirs unqualified)
