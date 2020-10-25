@@ -4,7 +4,9 @@
  (libraries ctypes {{ project_snake }}.stubs)
  (foreign_stubs
   (language c)
-  (names {{ project_snake }}_generated_stubs)))
+  (names {{ project_snake }}_generated_stubs))
+ (flags
+  (:standard -w -4)))
 
 (rule
  (targets {{ project_snake }}_generated_stubs.ml)
