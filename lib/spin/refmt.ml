@@ -8,8 +8,7 @@ let run ~root_path cmd args =
       Spin_lwt.exec_with_stdout cmd args)
 
 let is_esy_project project_root =
-  Caml.Sys.file_exists (Filename.concat project_root "package.json")
-  || Caml.Sys.file_exists (Filename.concat project_root "esy.json")
+  Caml.Sys.file_exists (Filename.concat project_root "esy.json")
 
 let get_refmt_command filename =
   if Filename.check_suffix filename ".ml" then

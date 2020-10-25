@@ -43,3 +43,11 @@
    (source_tree c-bindings)))
  (action
   (run %{bin:ocaml-crunch} -m plain c-bindings -o %{targets})))
+
+(rule
+ (targets js.ml)
+ (deps
+  (:data
+   (source_tree js)))
+ (action
+  (run %{bin:ocaml-crunch} -m plain js -o %{targets})))
