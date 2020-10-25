@@ -7,6 +7,7 @@
 - A lock file is now generated for Opam projects
 - Added `ocaml-lsp-server` in `esy.json` files
 - Added a new `c-bindings` template for C bindings using `ctypes`
+- Added a new `js` template for javascript applications with `js_of_ocaml`
 
 ## Changed
 

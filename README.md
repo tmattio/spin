@@ -88,6 +88,7 @@ The official Spin templates templates are the following:
 - **lib** - Library releasable on Opam.
 - **ppx** - PPX library with prebuilt binaries for native and bucklescript.
 - **c-bindings** - Bindings to a C library.
+- **js** - Js application with Js_of_ocaml.
 
 If you'd like to add an official template, don't hesitate to open a PR!
 
