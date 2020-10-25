@@ -20,6 +20,7 @@ depends: [
   {% if syntax == 'Reason' -%}
   "reason" {build}
   {% endif -%}
+  "ctypes"
 ]
 build: [
   ["dune" "subst"] {pinned}
