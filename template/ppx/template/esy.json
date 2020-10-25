@@ -36,6 +36,7 @@
     {%- if syntax == 'Reason' %}
     "refmterr": "*",
     {%- endif %}
+    "@opam/ocaml-lsp-server": "*",
     "ocaml": "~4.10.0"
   },
   "scripts": {

@@ -5,6 +5,7 @@
 - Added a `parse_binaries` stanza that can be `true` to force Spin to parse binary files
 - Added a `raw_files` stanza that takes a list of file or glob expressions to instruct Spin to copy files instead of parsing them
 - A lock file is now generated for Opam projects
+- Added `ocaml-lsp-server` in `esy.json` files
 
 ## Changed
 
