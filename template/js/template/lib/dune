@@ -1,0 +1,8 @@
+(library
+ (name {{ project_snake }})
+ (public_name {{ project_slug }})
+ (libraries js_of_ocaml)
+ (preprocess
+  (pps js_of_ocaml-ppx)))
+
+(include_subdirs unqualified)

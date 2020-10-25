@@ -36,10 +36,17 @@ module C_bindings : Template = struct
   let name = "c-bindings"
 end
 
+module Js : Template = struct
+  include Js
+
+  let name = "js"
+end
+
 let all : (module Template) list =
   [ (module Cli)
   ; (module Lib)
   ; (module Bin)
   ; (module Ppx)
   ; (module C_bindings)
+  ; (module Js)
   ]

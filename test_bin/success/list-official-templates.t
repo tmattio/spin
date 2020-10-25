@@ -9,6 +9,9 @@
     cli
       Command Line Interface releasable on Opam
   
+    js
+      Javascript application with Js_of_ocaml
+  
     lib
       Library releasable on Opam
   

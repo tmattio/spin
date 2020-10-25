@@ -2,6 +2,14 @@
 
 ## Setup your development environment
 
+First, you will need to install [npm](https://npmjs.com) to install Javascript dependencies.
+
+In `asset/`:
+
+```
+npm install
+```
+
 {% if package_manager == 'Esy' -%}
 You need Esy, you can install the latest version from [npm](https://npmjs.com):
 
@@ -40,9 +48,11 @@ make build
 ```
 {%- endif %}
 
-### Running Binary
+### Running the app
 
-After building the project, you can run the main binary that is produced.
+Building the project with `make build` will generate a file `main.js` that will inject our application in the `#root` element of `index.html`.
+
+To run the application, we install `serve` as a dev dependencies. You can run a web server with the content of `asset/` with:
 
 {% if package_manager == 'Esy' -%}
 ```bash
@@ -99,8 +109,11 @@ The following snippet describes {{ project_name }}'s repository structure.
 
 ```text
 .
+├── asset/
+|   Static assets of the application.
+│
 ├── bin/
-|   Source for {{ project_slug }}'s binary. This links to the library defined in `lib/`.
+|   Source for {{ project_slug }}'s compiled application. This links to the library defined in `lib/`.
 │
 ├── lib/
 |   Source for {{ project_name }}'s library. Contains {{ project_name }}'s core functionnalities.

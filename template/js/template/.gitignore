@@ -1,0 +1,31 @@
+# ocamlbuild working directory
+_build/
+
+# ocamlbuild targets
+*.byte
+*.native
+
+# Merlin configuring file for Vim and Emacs
+.merlin
+
+# Dune generated files
+*.install
+
+# Local OPAM switch
+_opam/
+
+# Normal npm stuff
+npm-debug.log
+yarn-error.log
+/node_modules/
+/.cache/
+/dist/
+/build/
+
+{%- if package_manager == 'Esy' %}
+
+# Esy generated files
+_esy/
+_release/
+_export/
+{% endif %}

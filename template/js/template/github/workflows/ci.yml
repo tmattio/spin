@@ -1,0 +1,115 @@
+name: CI
+
+on: [push, pull_request]
+
+{% if package_manager == 'Esy' -%}
+{% raw -%}
+jobs:
+  build:
+    name: Build and test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - uses: actions/checkout@v2
+      - name: Cache esy dependencies
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: _export
+          key: ${{ runner.OS }}-build-${{ hashFiles('esy.lock/index.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Install esy
+        run: npm install -g esy@latest
+
+      - name: Import dependencies
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: esy import-build _export/*
+
+      - name: Install dependencies
+        run: esy install
+
+      - name: Build
+        run: esy build --release
+
+      - name: Check formatting
+        run: esy format
+
+      - name: Run tests
+        run: esy test
+        
+      - name: Export dependencies
+        run: esy export-dependencies
+{%- endraw %}
+{% else -%}
+{% raw -%}
+jobs:
+  build:
+    name: Build and test
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+        ocaml-version:
+          - 4.11.1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Retrieve opam cache
+        uses: actions/cache@v2
+        if: runner.os != 'Windows'
+        id: cache-opam
+        with:
+          path: ~/.opam
+          key: v1-${{ runner.os }}-opam-${{ matrix.ocaml-version }}-${{ hashFiles('{% endraw %}{{ project_slug }}{% raw %}.opam.locked') }}
+          restore-keys: |
+            v1-${{ runner.os }}-opam-${{ matrix.ocaml-version }}-
+
+      - name: Use OCaml ${{ matrix.ocaml-version }}
+        uses: avsm/setup-ocaml@v1
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}
+
+      - name: Pin package
+        run: opam pin add {% endraw %}{{ project_slug }}{% raw %}.dev . --no-action
+
+      - name: Query and install external dependencies
+        run: opam depext {% endraw %}{{ project_slug }}{% raw %} --yes --with-doc --with-test
+
+      - name: Install dependencies
+        if: steps.cache-opam.outputs.cache-hit != 'true'
+        run: |
+          opam install . --deps-only --with-doc --with-test --locked --unlock-base
+          opam install ocamlformat
+
+      - name: Upgrade dependencies
+        run: opam upgrade --fixup
+        if: steps.cache-opam.outputs.cache-hit == 'true'
+
+      - name: Build
+        run: make build
+
+      - name: Check formatting
+        run: make format
+
+      - name: Run tests
+        run: make test
+{%- endraw %}
+{% endif %}
