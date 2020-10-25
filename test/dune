@@ -8,8 +8,6 @@
 (test
  (name test_runner)
  (libraries spin_test)
- (modules test_runner)
- (action
-  (run %{test})))
+ (modules test_runner))
 
 (include_subdirs unqualified)
