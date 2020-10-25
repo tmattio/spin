@@ -29,10 +29,16 @@ This project uses [Dune](https://dune.build/) as a build system, if you add a de
 {%- else -%}
 You need Opam, you can install it by following [Opam's documentation](https://opam.ocaml.org/doc/Install.html).
 
-With Opam installed, you can install the dependencies with:
+With Opam installed, you can install the dependencies in a new local switch with:
 
 ```bash
-make dev
+make switch
+```
+
+Or globally, with:
+
+```bash
+make deps
 ```
 
 Then, build the project with:
@@ -44,18 +50,9 @@ make build
 
 ### Running the app
 
-Building the project will perform the following steps:
+Building the project with `make build` will generate a file `main.js` that will inject our application in the `#root` element of `index.html`.
 
-- Generate a file `main.js` that will inject our application in the `#root` element of `index.html`.
-- Generate a file `main.css` that is required by `index.html`
-
-To run the application, we install `serve` as a dev dependencies. You can run a web server with the content of `asset/static` with:
-
-```sh
-cd asset && npm start
-```
-
-Or, alternatively, you can use the {% if package_manager == 'Esy' -%}`esy`{%- else %}`make`{%- endif %} alias: 
+To run the application, we install `serve` as a dev dependencies. You can run a web server with the content of `asset/` with:
 
 {% if package_manager == 'Esy' -%}
 ```bash
@@ -113,9 +110,6 @@ The following snippet describes {{ project_name }}'s repository structure.
 ```text
 .
 ├── asset/
-|   Contains the javascript environment and the static assets.
-
-├── asset/static/
 |   Static assets of the application.
 │
 ├── bin/
@@ -134,7 +128,7 @@ The following snippet describes {{ project_name }}'s repository structure.
 ├── LICENSE
 │
 {%- if package_manager == 'Esy' %}
-├── package.json
+├── esy.json
 |   Esy package definition.
 |   To know more about creating Esy packages, see https://esy.sh/docs/en/configuration.html.
 {%- else %}

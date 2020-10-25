@@ -115,7 +115,7 @@ The following snippet describes {{ project_name }}'s repository structure.
 ├── LICENSE
 │
 {%- if package_manager == 'Esy' %}
-├── package.json
+├── esy.json
 |   Esy package definition.
 |   To know more about creating Esy packages, see https://esy.sh/docs/en/configuration.html.
 {%- else %}
