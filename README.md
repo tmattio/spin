@@ -87,6 +87,7 @@ The official Spin templates templates are the following:
 - **cli** - Command Line Interface releasable on Opam.
 - **lib** - Library releasable on Opam.
 - **ppx** - PPX library with prebuilt binaries for native and bucklescript.
+- **c-bindings** - Bindings to a C library.
 
 If you'd like to add an official template, don't hesitate to open a PR!
 
