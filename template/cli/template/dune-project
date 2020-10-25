@@ -1,9 +1,17 @@
 (lang dune 2.0)
+
 (name {{ project_slug }})
-(source (github {{ github_username }}/{{ project_slug }}))
+
+(source
+ (github {{ github_username }}/{{ project_slug }}))
+
 (license MIT)
-(authors "{{ username }}{% if author_email %} <{{ author_email }}>{% endif %}")
-(maintainers "{{ username }}{% if author_email %} <{{ author_email }}>{% endif %}")
+
+(authors
+  "{{ username }}{% if author_email %} <{{ author_email }}>{% endif %}")
+
+(maintainers
+  "{{ username }}{% if author_email %} <{{ author_email }}>{% endif %}")
 
 (generate_opam_files true)
 
