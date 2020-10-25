@@ -1,7 +1,6 @@
 (executable
  (name main)
  (public_name {{ project_slug }})
- (libraries {{ project_slug }})
- (flags (:standard -open StdLabels)))
+ (libraries {{ project_slug }}))
 
 (include_subdirs unqualified)

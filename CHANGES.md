@@ -10,6 +10,8 @@
 
 - The `spa` template has been removed from the official templates and now lives at https://github.com/tmattio/spin-incr-dom
 - Spin does not parse binary files by default anymore, they are simply copied to the destination folder
+- Use `test` stanza for unit tests now that Alcotest prints colors by default
+- Remove unused flags defined in the root's `dune` file
 
 ## Fixes
 
