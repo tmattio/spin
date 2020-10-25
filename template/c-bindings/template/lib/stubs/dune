@@ -1,0 +1,11 @@
+(library
+ (name {{ project_snake }}_stubs)
+ (public_name {{ project_snake }}.stubs)
+ (modules
+  (:standard \ gen_stubs))
+ (libraries ctypes.stubs))
+
+(executable
+ (name gen_stubs)
+ (modules gen_stubs)
+ (libraries ctypes.stubs {{ project_snake }}.stubs))

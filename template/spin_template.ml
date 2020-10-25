@@ -30,5 +30,16 @@ module Ppx : Template = struct
   let name = "ppx"
 end
 
+module C_bindings : Template = struct
+  include C_bindings
+
+  let name = "c-bindings"
+end
+
 let all : (module Template) list =
-  [ (module Cli); (module Lib); (module Bin); (module Ppx) ]
+  [ (module Cli)
+  ; (module Lib)
+  ; (module Bin)
+  ; (module Ppx)
+  ; (module C_bindings)
+  ]

@@ -87,8 +87,7 @@
 (post_gen
   (actions
     (run esy install)
-    (run esy dune build)
-    (run esy dune lock))
+    (run esy dune build))
   (message "🎁  Installing packages. This might take a couple minutes.")
   (enabled_if (eq :package_manager Esy)))
 

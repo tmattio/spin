@@ -5,7 +5,7 @@
   (:standard \ test_runner))
  (preprocess
   (pps {{ project_slug }}))
- (flags (:standard -linkall -g {% if test_framework == 'Rely' %} -w +A-40{% endif %})))
+ (flags (:standard -linkall -g {% if test_framework == 'Rely' %} -w -40{% endif %})))
 
 (test
  (name test_runner)
@@ -13,6 +13,6 @@
  (modules test_runner)
  (preprocess
   (pps {{ project_slug }}))
- (flags (:standard {% if test_framework == 'Rely' %} -w +A-40{% endif %})))
+ (flags (:standard {% if test_framework == 'Rely' %} -w -40{% endif %})))
 
 (include_subdirs unqualified)

@@ -6,6 +6,7 @@
 - Added a `raw_files` stanza that takes a list of file or glob expressions to instruct Spin to copy files instead of parsing them
 - A lock file is now generated for Opam projects
 - Added `ocaml-lsp-server` in `esy.json` files
+- Added a new `c-bindings` template for C bindings using `ctypes`
 
 ## Changed
 
