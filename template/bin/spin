@@ -93,7 +93,8 @@
 
 (post_gen
   (actions
-    (run make switch)
+    (run make create_switch)
+    (run make deps)
     (run make build)
     (run make lock))
   (message "🎁  Installing packages in a switch. This might take a couple minutes.")

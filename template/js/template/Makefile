@@ -57,7 +57,9 @@ create_switch:
 	{%- endif %}
 
 .PHONY: switch
-switch: create_switch deps ## Create an opam switch and install development dependencies
+switch: ## Create an opam switch and install development dependencies
+	opam install . --deps-only --with-doc --with-test --locked
+	opam install -y dune-release merlin ocamlformat utop ocaml-lsp-server
 
 .PHONY: lock
 lock: ## Generate a lock file
