@@ -40,11 +40,11 @@
   },
   "scripts": {
     "start": "esy x main",
-    "test": "esy {% if test_framework == 'Rely' %}dune exec test/test_runner.exe{% else %}dune build @test/runtest -f{% endif %}",
-    "doc": "esy dune build @doc",
+    "test": "esy dune --root . runtest",
+    "doc": "esy dune --root . build @doc",
     "doc-path": "esy echo #{self.target_dir}/default/_doc/_html/index.html",
-    "format": "esy dune build @fmt --auto-promote",
-    "watch": "esy dune build -p #{self.name} --watch",
-    "utop": "esy dune utop lib -- -implicit-bindings"
+    "format": "esy dune --root . build @fmt --auto-promote",
+    "watch": "esy dune --root . build -p #{self.name} --watch",
+    "utop": "esy dune --root . utop lib -- -implicit-bindings"
   }
 }
