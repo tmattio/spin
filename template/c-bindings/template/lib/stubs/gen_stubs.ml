@@ -15,6 +15,6 @@ let () =
     | _ ->
       assert false
   in
-  fn ~concurrency:Cstubs.unlocked format ~prefix:"{{ project_snake }}" (module Demo_stubs.Def);
+  fn ~concurrency:Cstubs.unlocked format ~prefix:"{{ project_snake }}" (module {{ project_snake | capitalize }}_stubs.Def);
   Format.pp_print_flush format ();
   close_out oc
