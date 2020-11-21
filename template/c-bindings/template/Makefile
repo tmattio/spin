@@ -76,7 +76,7 @@ example: all ## Run the example
 
 .PHONY: test
 test: ## Run the unit tests
-	opam exec -- {% if test_framework == 'Rely' %}dune exec --root . test/test_runner.exe{% else %}dune build --root . @test/runtest -f{% endif %}
+	opam exec -- dune --root . runtest
 
 .PHONY: clean
 clean: ## Clean build artifacts and other generated files
