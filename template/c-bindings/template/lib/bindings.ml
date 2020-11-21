@@ -1,1 +1,1 @@
-include Demo_stubs.Def (Demo_generated_stubs)
+include {{ project_snake | capitalize }}_stubs.Def ({{ project_snake | capitalize }}_generated_stubs)

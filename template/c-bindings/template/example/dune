@@ -1,4 +1,4 @@
 (executable
  (name main)
- (libraries demo)
+ (libraries {{ project_snake }})
  (modules main))
