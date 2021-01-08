@@ -96,9 +96,10 @@ If you'd like to add an official template, don't hesitate to open a PR!
 
 Here are some non-official Spin templates that you can use:
 
-- [**spin-rescript**](https://github.com/tmattio/spin-rescript) - Spin template for ReScript applicatoins
-- [**spin-jsoo-react**](https://github.com/tmattio/spin-jsoo-react) - Spin template for React applicatoins with Js_of_ocaml
+- [**spin-rescript**](https://github.com/tmattio/spin-rescript) - Spin template for ReScript applications
+- [**spin-jsoo-react**](https://github.com/tmattio/spin-jsoo-react) - Spin template for React applications with Js_of_ocaml
 - [**spin-incr-dom**](https://github.com/tmattio/spin-incr-dom) - Single page application with Js_of_ocaml using Incr_dom
+- [**spin-sihl**](https://github.com/oxidizing/spin-sihl) - Spin template for [Sihl](https://github.com/oxidizing/sihl) applications
 
 ### Other non-OCaml templates
 
