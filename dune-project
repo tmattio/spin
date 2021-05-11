@@ -26,6 +26,7 @@
    (>= 4.08.0))
   dune
   (alcotest :with-test)
+  (reason :with-test)
   (odoc :with-doc)
   (crunch :build)
   base

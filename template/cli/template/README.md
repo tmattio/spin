@@ -3,7 +3,6 @@
 {% if ci_cd == 'Github' -%}
 [![Actions Status](https://github.com/{{ github_username }}/{{ project_slug }}/workflows/CI/badge.svg)](https://github.com/{{ github_username }}/{{ project_slug }}/actions)
 {%- endif %}
-[![NPM Version](https://badge.fury.io/js/%40{{ npm_username }}%2F{{ project_slug }}.svg)](https://badge.fury.io/js/%40{{ npm_username }}%2F{{ project_slug }})
 
 {%- if project_description %}
 
@@ -20,14 +19,6 @@
 
 ```bash
 opam install {{ project_slug }}
-```
-
-### Using npm
-
-```bash
-yarn global add @{{ npm_username }}/{{ project_slug }}
-# Or
-npm -g install @{{ npm_username }}/{{ project_slug }}
 ```
 
 ### Using a script

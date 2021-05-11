@@ -2,7 +2,6 @@ type t =
   { username : string option
   ; email : string option
   ; github_username : string option
-  ; npm_username : string option
   ; create_switch : bool option
   }
 
@@ -10,7 +9,6 @@ let of_dec (dec : Dec_user_config.t) =
   { username = dec.username
   ; email = dec.email
   ; github_username = dec.github_username
-  ; npm_username = dec.npm_username
   ; create_switch = dec.create_switch
   }
 
@@ -42,7 +40,6 @@ let save ?path t =
     { username = t.username
     ; email = t.email
     ; github_username = t.github_username
-    ; npm_username = t.npm_username
     ; create_switch = t.create_switch
     }
     ~path
@@ -75,12 +72,6 @@ let prompt ?default:d () =
       ?default:(Option.bind d ~f:(fun d -> d.github_username))
       ~validate:validate_strip
   in
-  let* npm_username =
-    Inquire.input
-      "Your NPM username"
-      ?default:(Option.bind d ~f:(fun d -> d.npm_username))
-      ~validate:validate_strip
-  in
   let+ create_switch =
     Inquire.confirm
       "Create switches when generating projects"
@@ -89,7 +80,6 @@ let prompt ?default:d () =
   { username = Some username
   ; email = Some email
   ; github_username = Some github_username
-  ; npm_username = Some npm_username
   ; create_switch = Some create_switch
   }
 
@@ -101,6 +91,4 @@ let to_context t =
       Hashtbl.add context ~key:"email" ~data:v |> ignore);
   Option.iter t.github_username ~f:(fun v ->
       Hashtbl.add context ~key:"github_username" ~data:v |> ignore);
-  Option.iter t.npm_username ~f:(fun v ->
-      Hashtbl.add context ~key:"npm_username" ~data:v |> ignore);
   context

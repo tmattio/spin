@@ -73,11 +73,7 @@ The, you can run the script `script/release.sh`. The script will perform the fol
 - Publish the distribution archive to a Github Release.
 - Submit a PR on Opam's repository.
 
-When the release is published on Github, the CI/CD will trigger the `Release` workflow which will perform the following actions
-
-- Compile binaries for all supported platforms.
-- Create an NPM release containing the pre-built binaries.
-- Publish the NPM release to the registry.
+When the release is published on Github, the CI/CD will trigger the `Release` workflow which will compile binaries for all supported platforms and add them to the Github Release as assets.
 
 ### Repository Structure
 

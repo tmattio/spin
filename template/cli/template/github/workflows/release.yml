@@ -8,7 +8,6 @@ on:
 {% if package_manager == 'Esy' -%}
 jobs:
   build:
-    name: Build and test
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -56,10 +55,6 @@ jobs:
       - name: Build subst changes
         run: esy dune build --release
 
-      - name: Make NPM release skeleton
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: node script/release-make-skeleton.js
-
       - name: Upload _release
         if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: actions/upload-artifact@master
@@ -76,71 +71,50 @@ jobs:
       - name: Export dependencies
         run: esy export-dependencies
 {% else -%}
-jobs:
   build:
-    name: Build and test
-    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
+
       matrix:
         os:
           - macos-latest
           - ubuntu-latest
           - windows-latest
-        ocaml-version:
-          - 4.11.1
+
+        ocaml-compiler:
+          - 4.12.x
+
+    runs-on: ${{ matrix.os }}
 
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Retrieve opam cache
-        uses: actions/cache@v2
-        if: runner.os != 'Windows'
-        id: cache-opam
+      - name: Use OCaml ${{ matrix.ocaml-compiler }}
+        uses: avsm/setup-ocaml@v2
         with:
-          path: ~/.opam
-          key: v1-${{ runner.os }}-opam-${{ matrix.ocaml-version }}-${{ hashFiles('{% endraw %}{{ project_slug }}{% raw %}.opam.locked') }}
-          restore-keys: |
-            v1-${{ runner.os }}-opam-${{ matrix.ocaml-version }}-
-
-      - name: Use OCaml ${{ matrix.ocaml-version }}
-        uses: avsm/setup-ocaml@v1
-        with:
-          ocaml-version: ${{ matrix.ocaml-version }}
-
-      - name: Use Node.js 12.x
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+          dune-cache: ${{ matrix.os != 'macos-latest' }}
+          opam-depext-flags: --with-test
 
       - name: Fetch git tags
         run: git fetch --tags --force
 
-      - name: Pin package
-        run: opam pin add {% endraw %}{{ project_slug }}{% raw %}.dev . --no-action
-
-      - name: Query and install external dependencies
-        run: opam depext {% endraw %}{{ project_slug }}{% raw %} --yes --with-doc --with-test
-
-      - name: Install dependencies
-        if: steps.cache-opam.outputs.cache-hit != 'true'
-        run: opam install . --deps-only --with-doc --with-test --locked --unlock-base
-
-      - name: Upgrade dependencies
-        run: opam upgrade --fixup
-        if: steps.cache-opam.outputs.cache-hit == 'true'
+      - name: Install opam packages
+        run: opam install .
           
+      - name: Substitute watermarks
+        run: opam exec -- dune subst
+
+      - name: Run build
+        run: opam exec -- dune build --release
+
       - name: Substitute watermarks
         run: opam exec -- dune subst
 
       - name: Build
         run: opam exec -- dune build --release
-
-      - name: Make NPM release skeleton
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: node script/release-make-skeleton.js
 
       - name: Upload _release
         if: ${{ matrix.os == 'ubuntu-latest' }}
@@ -226,13 +200,13 @@ jobs:
           asset_name: {% endraw %}{{ project_slug }}{% raw %}-linux-x64.zip
           asset_content_type: application/gzip
 
-      - name: Publish NPM package
-        run: |
-          npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
-          npm config set scope "@tmattio"
-          npm config list
-          npm publish --access public
-        working-directory: ./_release
+      - name: Upload {% endraw %}{{ project_slug }}{% raw %}-windows-x64.zip to Github release 
+        uses: actions/upload-release-asset@v1
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: {% endraw %}{{ project_slug }}{% raw %}-windows-x64.zip
+          asset_name: {% endraw %}{{ project_slug }}{% raw %}-windows-x64.zip
+          asset_content_type: application/gzip
 {% endraw -%}

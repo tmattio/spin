@@ -1,5 +1,4 @@
 (library
  (name {{ project_snake }})
- (public_name {{ project_slug }}))
-
-(include_subdirs unqualified)
+ (public_name {{ project_slug }})
+ (libraries))

@@ -1,6 +1,6 @@
 # PPX
 
-PPX library with prebuilt binaries for native and bucklescript.
+PPX library
 
 ```bash
 spin new ppx

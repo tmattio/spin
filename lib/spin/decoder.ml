@@ -277,7 +277,7 @@ let one_of decoders sexp =
       | Error error ->
         go
           (tag_errors ~msg:(Printf.sprintf "%S decoder" name) [ error ]
-          :: errors)
+           :: errors)
           rest)
     | [] ->
       Error

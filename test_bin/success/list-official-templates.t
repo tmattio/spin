@@ -16,5 +16,5 @@
       Library releasable on Opam
   
     ppx
-      PPX library with prebuilt binaries for native and bucklescript
+      PPX library
   

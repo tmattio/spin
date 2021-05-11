@@ -31,10 +31,6 @@
   (input (prompt "Github username"))
   (default :username))
 
-(config npm_username
-  (input (prompt "NPM username"))
-  (default :username))
-
 (config syntax
   (select
     (prompt "Which syntax do you use?")
@@ -49,7 +45,7 @@
 (config test_framework
   (select
     (prompt "Which test framework do you prefer?")
-    (values Alcotest Rely))
+    (values Alcotest Rely None))
   (default (if (eq :syntax Reason) Rely Alcotest)))
 
 (config ci_cd
@@ -61,6 +57,10 @@
 (ignore 
   (files .ocamlformat)
   (enabled_if (neq :syntax OCaml)))
+
+(ignore 
+  (files test/)
+  (enabled_if (eq :test_framework None)))
 
 (ignore 
   (files test/support/test_framework.* *.opam.template)
@@ -93,17 +93,16 @@
 
 (post_gen
   (actions
-    (run make switch)
-    (run make build)
-    (run make lock))
+    (run make create_switch)
+    (run make deps)
+    (run make build))
   (message "🎁  Installing packages in a switch. This might take a couple minutes.")
   (enabled_if (and (eq :package_manager Opam) (eq :create_switch true))))
 
 (post_gen
   (actions
     (run make deps)
-    (run make build)
-    (run make lock))
+    (run make build))
   (message "🎁  Installing packages globally. This might take a couple minutes.")
   (enabled_if (and (eq :package_manager Opam) (eq :create_switch false))))
 

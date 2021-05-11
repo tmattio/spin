@@ -53,14 +53,6 @@ brew install tmattio/tap/spin
 opam install spin
 ```
 
-### Using npm
-
-```bash
-yarn global add @tmattio/spin
-# Or
-npm -g install @tmattio/spin
-```
-
 ### Using a script
 
 ```bash
@@ -86,7 +78,7 @@ The official Spin templates templates are the following:
 - **bin** - Native project containing a binary.
 - **cli** - Command Line Interface releasable on Opam.
 - **lib** - Library releasable on Opam.
-- **ppx** - PPX library with prebuilt binaries for native and bucklescript.
+- **ppx** - PPX library.
 - **c-bindings** - Bindings to a C library.
 - **js** - Js application with Js_of_ocaml.
 
