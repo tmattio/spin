@@ -1,33 +1,7 @@
 .DEFAULT_GOAL := all
 
-define BROWSER_PYSCRIPT
-import os, webbrowser, sys
-
-from urllib.request import pathname2url
-
-webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
-endef
-export BROWSER_PYSCRIPT
-
-define PRINT_HELP_PYSCRIPT
-import re, sys
-
-for line in sys.stdin:
-	match = re.match(r'^([a-zA-Z_-]+):.*?## (.*)$$', line)
-	if match:
-		target, help = match.groups()
-		print("%-20s %s" % (target, help))
-endef
-export PRINT_HELP_PYSCRIPT
-
-BROWSER := python -c "$$BROWSER_PYSCRIPT"
-
 ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 $(eval $(ARGS):;@:)
-
-.PHONY: help
-help: ## Print this help message
-	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 .PHONY: all
 all:
@@ -35,9 +9,9 @@ all:
 
 .PHONY: dev
 dev: ## Install development dependencies
-	opam switch create --no-install . ocaml-base-compiler.4.10.1
-	opam install -y dune-release merlin ocamlformat utop ocaml-lsp-server reason
-	opam install --locked --deps-only --with-test --with-doc -y .
+	opam switch create --no-install . ocaml-base-compiler.4.12.0
+	opam install -y dune-release ocamlformat utop ocaml-lsp-server
+	opam install --deps-only --with-test --with-doc -y .
 
 .PHONY: build
 build: ## Build the project, including non installable libraries and executables
@@ -50,6 +24,7 @@ start: all ## Start the project
 .PHONY: install
 install: all ## Install the packages on the system
 	opam exec -- dune install --root .
+	bash -c "cp $$(opam exec -- which spin) /usr/local/bin/spin"
 
 .PHONY: test
 test: ## Run the unit tests
@@ -70,7 +45,7 @@ doc: ## Generate odoc documentation
 
 .PHONY: servedoc
 servedoc: doc ## Open odoc documentation with default web browser
-	$(BROWSER) _build/default/_doc/_html/index.html
+	open _build/default/_doc/_html/index.html
 
 .PHONY: format
 format: ## Format the codebase with ocamlformat
@@ -86,4 +61,8 @@ utop: ## Run a REPL and link with the project's libraries
 
 .PHONY: release
 release: ## Run the release script
-	opam exec -- sh script/release.sh
+	opam exec -- dune-release tag
+	opam exec -- dune-release distrib
+	opam exec -- dune-release publish distrib -y
+	opam exec -- dune-release opam pkg
+	opam exec -- dune-release opam submit --no-auto-open -y

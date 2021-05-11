@@ -1,10 +1,10 @@
 (inherit (official bin))
 
 (name ppx)
-(description "PPX library with prebuilt binaries for native and bucklescript")
+(description "PPX library")
 
 (ignore 
-  (files test/utils_test.ml))
+  (files (concat "test/" :package_snake "_test.ml")))
 
 (ignore
   (files esy.json)

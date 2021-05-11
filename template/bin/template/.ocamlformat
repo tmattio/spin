@@ -1,4 +1,4 @@
-version = 0.16.0
+version = 0.18.0
 profile = conventional
 parse-docstrings = true
 wrap-comments = true

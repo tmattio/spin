@@ -6,19 +6,30 @@ on:
 
 jobs:
   build:
-    name: Build and test
-    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
+
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        ocaml-version: ['4.10.1']
+        os:
+          - macos-latest
+          - ubuntu-latest
+
+        ocaml-compiler:
+          - 4.12.x
+
+    runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
 
-      - uses: avsm/setup-ocaml@master
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use OCaml ${{ matrix.ocaml-compiler }}
+        uses: avsm/setup-ocaml@v2
         with:
-          ocaml-version: ${{ matrix.ocaml-version }}
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+          dune-cache: ${{ matrix.os != 'macos-latest' }}
+          opam-depext-flags: --with-test
 
       - name: Use Node.js 12.x
         if: ${{ matrix.os == 'ubuntu-latest' }}
@@ -29,24 +40,20 @@ jobs:
       - name: Fetch git tags
         run: git fetch --tags --force
 
-      - name: Pin package
-        run: opam pin add spin.dev -n .
-
-      - name: Query and install external dependencies
-        run: opam depext -yt spin
-
-      - name: Install dependencies
-        run: opam install --deps-only -y .
+      - name: Install opam packages
+        run: opam install .
           
+      - name: Substitute watermarks
+        run: opam exec -- dune subst
+
+      - name: Run build
+        run: opam exec -- dune build --release
+
       - name: Substitute watermarks
         run: opam exec -- dune subst
 
       - name: Build
         run: opam exec -- dune build --release
-
-      - name: Make NPM release skeleton
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: node script/release-make-skeleton.js
 
       - name: Upload _release
         if: ${{ matrix.os == 'ubuntu-latest' }}
@@ -121,12 +128,12 @@ jobs:
           asset_name: spin-linux-x64.zip
           asset_content_type: application/gzip
 
-      - name: Publish NPM package
-        run: |
-          npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
-          npm config set scope "@tmattio"
-          npm config list
-          npm publish --access public
-        working-directory: ./_release
+      - name: Upload spin-windows-x64.zip to Github release 
+        uses: actions/upload-release-asset@v1
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: spin-windows-x64.zip
+          asset_name: spin-windows-x64.zip
+          asset_content_type: application/gzip

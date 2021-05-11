@@ -2,7 +2,6 @@ type t =
   { username : string option
   ; email : string option
   ; github_username : string option
-  ; npm_username : string option
   ; create_switch : bool option
   }
 

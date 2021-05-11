@@ -2,5 +2,3 @@
  (name main)
  (public_name {{ project_slug }})
  (libraries {{ project_slug }}))
-
-(include_subdirs unqualified)

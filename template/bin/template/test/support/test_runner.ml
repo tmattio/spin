@@ -10,13 +10,11 @@
 
 let () = {{ project_snake | capitalize }}_test.Test_framework.cli ()
 {%- else -%}
-open {{ project_snake | capitalize }}_test
-
 (** Main entry point for our test runner.
 
     This aggregates all the test suites and call Alcotes to run them. When
     creating a new test suite, don't forget to add it here! *)
 
 let () =
-  Alcotest.run "{{ project_slug }}" [ "Utils", Utils_test.suite ]
+  Alcotest.run "{{ project_slug }}" [ "{{ project_snake | capitalize }}", {{ project_snake | capitalize }}_test.suite ]
 {% endif -%}

@@ -31,10 +31,6 @@
   (input (prompt "Github username"))
   (default :username))
 
-(config npm_username
-  (input (prompt "NPM username"))
-  (default :username))
-
 (config syntax
   (select
     (prompt "Which syntax do you use?")
@@ -99,16 +95,14 @@
   (actions
     (run make create_switch)
     (run make deps)
-    (run make build)
-    (run make lock))
+    (run make build))
   (message "🎁  Installing packages in a switch. This might take a couple minutes.")
   (enabled_if (and (eq :package_manager Opam) (eq :create_switch true))))
 
 (post_gen
   (actions
     (run make deps)
-    (run make build)
-    (run make lock))
+    (run make build))
   (message "🎁  Installing packages globally. This might take a couple minutes.")
   (enabled_if (and (eq :package_manager Opam) (eq :create_switch false))))
 

@@ -1,34 +1,5 @@
 .DEFAULT_GOAL := all
 
-define BROWSER_PYSCRIPT
-import os, webbrowser, sys
-
-from urllib.request import pathname2url
-
-webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
-endef
-export BROWSER_PYSCRIPT
-
-define PRINT_HELP_PYSCRIPT
-import re, sys
-
-for line in sys.stdin:
-	match = re.match(r'^([a-zA-Z_-]+):.*?## (.*)$$', line)
-	if match:
-		target, help = match.groups()
-		print("%-20s %s" % (target, help))
-endef
-export PRINT_HELP_PYSCRIPT
-
-BROWSER := python -c "$$BROWSER_PYSCRIPT"
-
-ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-$(eval $(ARGS):;@:)
-
-.PHONY: help
-help: ## Print this help message
-	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
-
 ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 $(eval $(ARGS):;@:)
 
@@ -38,7 +9,7 @@ all:
 
 .PHONY: deps
 deps: ## Install development dependencies
-	opam install -y dune-release merlin ocamlformat utop ocaml-lsp-server
+	opam install -y dune-release ocamlformat utop ocaml-lsp-server
 	{%- if test_framework == 'Rely' %}
 	opam pin add -y pastel https://github.com/facebookexperimental/reason-native.git
 	opam pin add -y cli https://github.com/facebookexperimental/reason-native.git
@@ -48,7 +19,7 @@ deps: ## Install development dependencies
 	opam install --deps-only --with-test --with-doc -y .
 
 .PHONY: create_switch
-create_switch:
+create_switch: ## Create an opam switch without any dependency
 	{%- if syntax == 'Reason' %}
 	opam switch create . 4.10.0 --no-install
 	{%- else %}
@@ -57,8 +28,8 @@ create_switch:
 
 .PHONY: switch
 switch: ## Create an opam switch and install development dependencies
-	opam install . --deps-only --with-doc --with-test --locked
-	opam install -y dune-release merlin ocamlformat utop ocaml-lsp-server
+	opam install . --deps-only --with-doc --with-test
+	opam install -y dune-release ocamlformat utop ocaml-lsp-server
 
 .PHONY: lock
 lock: ## Generate a lock file
@@ -90,7 +61,7 @@ doc: ## Generate odoc documentation
 
 .PHONY: servedoc
 servedoc: doc ## Open odoc documentation with default web browser
-	$(BROWSER) _build/default/_doc/_html/index.html
+	open _build/default/_doc/_html/index.html
 
 .PHONY: format
 format: ## Format the codebase with ocamlformat
@@ -106,4 +77,8 @@ utop: ## Run a REPL and link with the project's libraries
 
 .PHONY: release
 release: all ## Run the release script 
-	opam exec -- sh script/release.sh
+	opam exec -- dune-release tag
+	opam exec -- dune-release distrib
+	opam exec -- dune-release publish distrib -y
+	opam exec -- dune-release opam pkg
+	opam exec -- dune-release opam submit --no-auto-open -y
