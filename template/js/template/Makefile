@@ -64,8 +64,8 @@ doc: ## Generate odoc documentation
 servedoc: doc ## Open odoc documentation with default web browser
 	open _build/default/_doc/_html/index.html
 
-.PHONY: format
-format: ## Format the codebase with ocamlformat
+.PHONY: fmt
+fmt: ## Format the codebase with ocamlformat
 	opam exec -- dune build --root . --auto-promote @fmt
 
 .PHONY: watch

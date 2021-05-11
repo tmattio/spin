@@ -85,7 +85,7 @@ jobs:
           opam-depext-flags: --with-test
 
       - name: Install ocamlformat
-        run: opam depext ocamlformat=$(cat .ocamlformat | grep version | cut -d '=' -f 2) --install
+        run: opam install ocamlformat.0.18.0
         if: ${{ matrix.os == 'ubuntu-latest' }}
 
       - name: Install opam packages
