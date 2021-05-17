@@ -28,6 +28,7 @@
 
 - The project generation will now fail before the configurations prompt if the output directory is not empty
 - By default, Spin now creates a local switch for the generated projects. This can be changed with `spin config`, or by setting the env variable `SPIN_CREATE_SWITCH=false`
+- Fix an CLI incompatibility between `opam.2.0.X` and `opam.2.1.X` that made Spin unusable with the former.
 
 # 0.7.0
 
