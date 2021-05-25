@@ -8,7 +8,7 @@ type doc =
 let read_spin_file (module T : Spin_template.Template) =
   match T.read "spin" with
   | Some content ->
-    (match Decoder.decode_sexps_string content ~f:Dec_template.decode with
+    (match Decoder.decode_sexps_string content Dec_template.decode with
     | Ok spin_file ->
       Ok spin_file
     | Error e ->
@@ -31,8 +31,13 @@ let all_doc () =
   aux [] all
 
 let files_with_content (module T : Spin_template.Template) =
-  List.map T.file_list ~f:(fun path ->
-      let content = Option.value_exn (T.read path) in
+  List.map
+    (fun path ->
+      let content = Option.get (T.read path) in
       path, content)
+    T.file_list
 
-let of_name s = List.find all ~f:(fun (module T) -> String.equal s T.name)
+let of_name s =
+  List.find_opt
+    (fun (module T : Spin_template.Template) -> String.equal s T.name)
+    all

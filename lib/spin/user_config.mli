@@ -11,6 +11,6 @@ val read : ?path:string -> unit -> (t option, Spin_error.t) Result.t
 
 val save : ?path:string -> t -> (unit, Spin_error.t) Result.t
 
-val prompt : ?default:t -> unit -> t Lwt.t
+val prompt : ?default:t -> unit -> t
 
 val to_context : t -> (string, string) Hashtbl.t

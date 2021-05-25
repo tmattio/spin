@@ -29,14 +29,14 @@
   (reason :with-test)
   (odoc :with-doc)
   (crunch :build)
-  base
+  (sexplib0
+   (>= v0.13))
+  (inquire
+   (>= 0.3.0))
+  (spawn
+   (>= v0.13))
   fmt
   fpath
   cmdliner
   logs
-  sexplib
-  (lwt
-   (>= 5.3.0))
-  jingoo
-  (inquire
-   (>= 0.2.1))))
+  jingoo))

@@ -40,21 +40,21 @@ module Source = struct
     let open Decoder in
     one_of
       [ ( "official"
-        , let+ v = field "official" ~f:Template_name.decode in
+        , let+ v = field "official" Template_name.decode in
           Official v )
       ; ( "local"
-        , let+ v = field "local" ~f:string in
+        , let+ v = field "local" string in
           Local_dir v )
       ; ( "git"
-        , let+ v = field "git" ~f:Git_repo.decode in
+        , let+ v = field "git" Git_repo.decode in
           Local_dir v )
       ]
 
   let encode = function
     | Git v ->
-      Sexp.List [ Sexp.Atom "git"; Sexp.Atom v ]
+      Sexplib.Sexp.List [ Sexplib.Sexp.Atom "git"; Sexplib.Sexp.Atom v ]
     | Local_dir v ->
-      Sexp.List [ Sexp.Atom "local"; Sexp.Atom v ]
+      Sexplib.Sexp.List [ Sexplib.Sexp.Atom "local"; Sexplib.Sexp.Atom v ]
     | Official v ->
-      Sexp.List [ Sexp.Atom "official"; Sexp.Atom v ]
+      Sexplib.Sexp.List [ Sexplib.Sexp.Atom "official"; Sexplib.Sexp.Atom v ]
 end

@@ -1,5 +1,7 @@
 open Cmdliner
 
+let () = Printexc.record_backtrace true
+
 let cmds = [ Cmd_config.cmd; Cmd_gen.cmd; Cmd_ls.cmd; Cmd_new.cmd ]
 
 let run () =
@@ -25,7 +27,7 @@ For a complete documentation, refer to the manual with `spin --help`.
 
 Use `spin COMMAND --help` for help on a single command.|}
   in
-  Caml.print_endline message;
+  print_endline message;
   0
 
 (* Command line interface *)
@@ -74,7 +76,7 @@ let man =
 
 let default_cmd =
   let term =
-    let open Common.Let_syntax in
+    let open Common.Syntax in
     let+ _term = Common.term in
     run ()
   in

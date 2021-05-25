@@ -28,7 +28,7 @@ let man =
 
 let default_cmd =
   let term =
-    let open Common.Let_syntax in
+    let open Common.Syntax in
     Term.ret
     @@ let+ _ = Common.term in
        `Help (`Pager, None)

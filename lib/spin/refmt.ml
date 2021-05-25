@@ -1,14 +1,18 @@
-let run ~root_path cmd args =
-  let open Lwt.Syntax in
-  let* () =
-    Logs_lwt.debug (fun m ->
-        m "Running %s %s" cmd (String.concat args ~sep:" "))
-  in
-  Spin_lwt.with_chdir ~dir:root_path (fun () ->
-      Spin_lwt.exec_with_stdout cmd args)
+let run ~cwd ~stdout cmd args =
+  Logs.debug (fun m -> m "Running \"%s %s\"" cmd (String.concat " " args));
+  Spawn.exec cmd args ~stdout ~cwd:(Path cwd)
+  |> Result.map_error (fun err ->
+         let msg =
+           Printf.sprintf
+             "an error occured while running \"%s %s\": %s"
+             cmd
+             (String.concat " " args)
+             err
+         in
+         Spin_error.failed_to_generate msg)
 
 let is_esy_project project_root =
-  Caml.Sys.file_exists (Filename.concat project_root "esy.json")
+  Sys.file_exists (Filename.concat project_root "esy.json")
 
 let get_refmt_command filename =
   if Filename.check_suffix filename ".ml" then
@@ -31,30 +35,32 @@ let get_refmt_command filename =
     None
 
 let convert_with_esy ~project_root filename =
-  let open Lwt_result.Syntax in
   match get_refmt_command filename with
   | Some (command, output_filename) ->
-    let* stdout = run ~root_path:project_root "esy" command in
-    Lwt_io.with_file
-      (Filename.concat project_root output_filename)
-      (fun oc -> Lwt_io.write oc stdout |> Lwt_result.ok)
-      ~mode:Lwt_io.Output
+    let oc = open_out (Filename.concat project_root output_filename) in
+    let res =
+      run ~cwd:project_root ~stdout:(Unix.descr_of_out_channel oc) "esy" command
+    in
+    close_out oc;
+    res
   | None ->
-    Lwt.return_ok ()
+    Ok ()
 
 let convert_with_opam ~project_root filename =
-  let open Lwt_result.Syntax in
   match get_refmt_command filename with
   | Some (command, output_filename) ->
-    let* stdout =
-      run ~root_path:project_root "opam" ([ "exec"; "--" ] @ command)
+    let oc = open_out (Filename.concat project_root output_filename) in
+    let res =
+      run
+        ~cwd:project_root
+        ~stdout:(Unix.descr_of_out_channel oc)
+        "opam"
+        ([ "exec"; "--" ] @ command)
     in
-    Lwt_io.with_file
-      (Filename.concat project_root output_filename)
-      (fun oc -> Lwt_io.write oc stdout |> Lwt_result.ok)
-      ~mode:Lwt_io.Output
+    close_out oc;
+    res
   | None ->
-    Lwt.return_ok ()
+    Ok ()
 
 let convert ~project_root file =
   if is_esy_project project_root then

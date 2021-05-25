@@ -56,7 +56,7 @@ let of_decoder_error ~file e =
   failed_to_parse file ~msg
 
 let sexp_of_t t =
-  let open Sexplib0.Sexp in
+  let open Sexplib.Sexp in
   match t with
   | `Missing_env_var e ->
     List [ Atom "Missing_env_var"; Atom e ]
@@ -69,4 +69,4 @@ let sexp_of_t t =
   | `Generator_error (e1, e2) ->
     List [ Atom "Missing_env_var"; Atom e1; Atom e2 ]
 
-let pp fmt t = Sexplib0.Sexp.pp_hum fmt (sexp_of_t t)
+let pp fmt t = Sexplib.Sexp.pp_hum fmt (sexp_of_t t)

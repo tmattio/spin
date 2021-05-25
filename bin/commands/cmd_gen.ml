@@ -1,7 +1,7 @@
 open Spin
 
 let run ~ignore_config ~use_defaults:_ ~generator =
-  let open Result.Let_syntax in
+  let open Result.Syntax in
   let* context =
     if ignore_config then
       Ok None
@@ -24,17 +24,16 @@ let run ~ignore_config ~use_defaults:_ ~generator =
   | Some project_config ->
     (match generator with
     | None ->
-      let+ generators =
-        Project.project_generators project_config.dec |> Lwt_main.run
-      in
+      let+ generators = Project.project_generators project_config.dec in
       Logs.app (fun m -> m "");
-      List.iter generators ~f:(fun (name, description) ->
+      List.iter
+        (fun (name, description) ->
           Logs.app (fun m -> m "  %a" Pp.pp_blue name);
           Logs.app (fun m -> m "    %s" description);
           Logs.app (fun m -> m ""))
+        generators
     | Some generator ->
-      Project.run_generator ?context ~project:project_config generator
-      |> Lwt_main.run)
+      Project.run_generator ?context ~project:project_config generator)
 
 (* Command line interface *)
 
@@ -71,7 +70,7 @@ let man =
 let info = Term.info "gen" ~doc ~sdocs ~exits ~envs ~man ~man_xrefs
 
 let term =
-  let open Common.Let_syntax in
+  let open Common.Syntax in
   let+ _term = Common.term
   and+ ignore_config = Common.ignore_config_arg
   and+ use_defaults = Common.use_defaults_arg

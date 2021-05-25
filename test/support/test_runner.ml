@@ -11,6 +11,6 @@ let () =
     [ "spin::Dec_common", Dec_common_test.suite
     ; "spin::Dec_user_config", Dec_user_config_test.suite
     ; "spin::Decoder", Decoder_test.suite
-    ; "spin_std::Spin_sys", Spin_sys_test.suite
+    ; "spin_std::Sys", Sys_test.suite
     ; "spin::Template_actions", Template_actions_test.suite
     ]

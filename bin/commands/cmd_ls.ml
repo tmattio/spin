@@ -1,10 +1,11 @@
 open Spin
 
 let run () =
-  let open Result.Let_syntax in
+  let open Result.Syntax in
   let+ templates = Official_template.all_doc () in
   let sorted_templates =
-    List.sort templates ~compare:(fun { name = t1; _ } { name = t2; _ } ->
+    List.sort
+      (fun Official_template.{ name = t1; _ } Official_template.{ name = t2; _ } ->
         if String.equal (String.prefix t1 3) "bs-" then
           if String.equal (String.prefix t2 3) "bs-" then
             String.compare t1 t2
@@ -14,12 +15,15 @@ let run () =
           1
         else
           String.compare t1 t2)
+      templates
   in
   Logs.app (fun m -> m "");
-  List.iter sorted_templates ~f:(fun { name; description } ->
+  List.iter
+    (fun Official_template.{ name; description } ->
       Logs.app (fun m -> m "  %a" Pp.pp_blue name);
       Logs.app (fun m -> m "    %s" description);
       Logs.app (fun m -> m ""))
+    sorted_templates
 
 (* Command line interface *)
 
@@ -45,7 +49,7 @@ let man =
 let info = Term.info "ls" ~doc ~sdocs ~exits ~envs ~man ~man_xrefs
 
 let term =
-  let open Common.Let_syntax in
+  let open Common.Syntax in
   let+ _term = Common.term in
   run () |> Common.handle_errors
 

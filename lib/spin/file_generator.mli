@@ -1,14 +1,14 @@
 val copy
-  :  context:(string, string) Spin_std.Hashtbl.t
+  :  context:(string, string) Hashtbl.t
   -> content:string
   -> string
-  -> (unit, Spin_error.t) Lwt_result.t
+  -> (unit, Spin_error.t) Result.t
 
 val generate
-  :  context:(string, string) Spin_std.Hashtbl.t
+  :  context:(string, string) Hashtbl.t
   -> content:string
   -> string
-  -> (unit, Spin_error.t) Lwt_result.t
+  -> (unit, Spin_error.t) Result.t
 
 val normalize_path : string -> string
 

@@ -135,6 +135,16 @@ If a value is present in the configuration file, it will not be prompted when ge
 
 See our [development board](https://github.com/tmattio/spin/projects/1) for a list of selected features and issues.
 
+Here are some of the improvements we'll be working on as well in for next releases:
+
+- [ ] Add cram tests to CI
+- [ ] Support Opam 2.0.X (add to CI)
+- [ ] Support windows
+- [ ] Support CLI options/args for configurations
+- [ ] Extract current templates in community templates, and drop support for Reason/Esy
+- [ ] Minimal `hello` template
+- [ ] Generators for `lib/bin/test` for all templates
+
 ## Contributing
 
 We'd love your help improving Spin!

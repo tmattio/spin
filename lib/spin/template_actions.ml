@@ -12,91 +12,83 @@ type t =
   ; actions : action list
   }
 
+let command_to_string = function
+  | { name; args = [] } ->
+    name
+  | { name; args } ->
+    Printf.sprintf "%s %s" name (String.concat " " args)
+
 let of_dec ~context (dec_actions : Dec_template.Actions.t) =
-  let open Lwt.Syntax in
-  let* message =
+  let message =
     match dec_actions.message with
     | Some message ->
-      let+ evaluated = Template_expr.eval message ~context in
+      let evaluated = Template_expr.eval message ~context in
       Some evaluated
     | None ->
-      Lwt.return None
+      None
   in
-  let+ actions =
-    Spin_lwt.fold_left dec_actions.actions ~f:(function
+  let actions =
+    List.map
+      (function
         | Dec_template.Actions.Run { name; args } ->
-          Run { name; args } |> Lwt.return
+          Run { name; args }
         | Dec_template.Actions.Refmt files ->
-          let+ files =
-            Spin_lwt.fold_left files ~f:(Template_expr.eval ~context)
-          in
+          let files = List.map (Template_expr.eval ~context) files in
           Refmt files)
+      dec_actions.actions
   in
   { message; actions }
 
 let action_run ~root_path cmd =
-  let open Lwt.Syntax in
-  let* () =
-    Logs_lwt.debug (fun m ->
-        m "Running %s %s" cmd.name (String.concat cmd.args ~sep:" "))
-  in
-  Spin_lwt.with_chdir ~dir:root_path (fun () ->
-      Spin_lwt.exec_with_logs cmd.name cmd.args)
-  |> Lwt_result.map_err (fun err -> Spin_error.failed_to_generate err)
+  Logs.debug (fun m -> m "Running %s" (command_to_string cmd));
+  Spawn.exec cmd.name cmd.args ~cwd:(Path root_path)
+  |> Result.map_error (fun err ->
+         Spin_error.failed_to_generate
+           (Printf.sprintf
+              "The command %s did not run successfully: %s"
+              (command_to_string cmd)
+              err))
 
 let action_refmt ~root_path globs =
-  let open Lwt_result.Syntax in
-  let files = Spin_sys.ls_dir root_path in
-  let+ _ =
-    Spin_lwt.result_fold_left files ~f:(fun input_path ->
-        let normalized_path =
-          input_path
-          |> Fpath.v
-          |> (fun p ->
-               Option.value_exn (Fpath.rem_prefix (Fpath.v root_path) p))
-          |> Fpath.to_string
-          |> String.substr_replace_all ~pattern:"\\" ~with_:"/"
-        in
-        if Glob.matches_globs normalized_path ~globs then
-          let* () =
-            Logs_lwt.debug (fun m -> m "Running refmt on %s" input_path)
-            |> Lwt_result.ok
-          in
-          let+ () = Refmt.convert ~project_root:root_path normalized_path in
-          Caml.Sys.remove input_path
-        else
-          Lwt.return_ok ())
-  in
-  ()
+  let open Result.Syntax in
+  let files = Sys.ls_dir root_path in
+  Result.List.iter
+    (fun input_path ->
+      let normalized_path =
+        input_path
+        |> Fpath.v
+        |> (fun p -> Option.get (Fpath.rem_prefix (Fpath.v root_path) p))
+        |> Fpath.to_string
+        |> Str.global_replace (Str.regexp "\\\\") "/"
+      in
+      if Glob.matches_globs normalized_path ~globs then
+        let () = Logs.debug (fun m -> m "Running refmt on %s" input_path) in
+        let+ () = Refmt.convert ~project_root:root_path normalized_path in
+        Sys.remove input_path
+      else
+        Ok ())
+    files
 
 let run ~path t =
-  let open Lwt_result.Syntax in
-  let* () =
-    match t.message with
-    | Some message ->
-      Logs_lwt.app (fun m -> m "%s" message) |> Lwt_result.ok
-    | None ->
-      Lwt_result.return ()
-  in
-  let* () =
-    List.fold_left t.actions ~init:(Lwt_result.return ()) ~f:(fun acc el ->
-        let* () = acc in
+  let open Result.Syntax in
+  Option.iter (fun msg -> Logs.app (fun m -> m "%s" msg)) t.message;
+  let+ () =
+    Result.List.fold_left
+      (fun _ el ->
         match el with
         | Run cmd ->
           action_run ~root_path:path cmd
         | Refmt globs ->
-          action_refmt ~root_path:path globs
-          |> Lwt_result.map_err (fun err -> Spin_error.failed_to_generate err))
+          action_refmt ~root_path:path globs)
+      ()
+      t.actions
   in
-  match t.message with
-  | Some _ ->
-    Logs_lwt.app (fun m -> m "%a" Pp.pp_bright_green "Done!\n") |> Lwt_result.ok
-  | None ->
-    Lwt_result.return ()
+  let _ = Format.asprintf "%a" Pp.pp_bright_green "Done!\n" in
+  ()
 
 let of_decs_with_condition ~context l =
-  Template_expr.lwt_filter_map
-    l
+  Template_expr.filter_map
     ~context
     ~condition:(fun el -> el.Dec_template.Actions.enabled_if)
-    ~f:(of_dec ~context)
+    (of_dec ~context)
+    l

@@ -1,13 +1,12 @@
 open Spin
 
 let run () =
-  let open Result.Let_syntax in
+  let open Result.Syntax in
   let* user_config = User_config.read () in
   let* new_config =
-    let result = User_config.prompt ?default:user_config () in
-    try Ok (Lwt_main.run result) with
-    | Caml.Sys.Break | Failure _ ->
-      Caml.exit 1
+    try Ok (User_config.prompt ?default:user_config ()) with
+    | Sys.Break | Failure _ ->
+      exit 1
     | e ->
       raise e
   in
@@ -43,7 +42,7 @@ let man =
 let info = Term.info "config" ~doc ~sdocs ~exits ~envs ~man ~man_xrefs
 
 let term =
-  let open Common.Let_syntax in
+  let open Common.Syntax in
   let+ _term = Common.term in
   run () |> Common.handle_errors
 

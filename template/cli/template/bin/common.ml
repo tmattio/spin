@@ -1,12 +1,12 @@
 open Cmdliner
 
-module Let_syntax = struct
+module Syntax = struct
   let ( let+ ) t f = Term.(const f $ t)
 
   let ( and+ ) a b = Term.(const (fun x y -> x, y) $ a $ b)
 end
 
-open Let_syntax
+open Syntax
 
 let envs =
   [ Term.env_info
