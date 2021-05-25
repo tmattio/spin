@@ -20,11 +20,7 @@ deps: ## Install development dependencies
 
 .PHONY: create_switch
 create_switch: ## Create an opam switch without any dependency
-	{%- if syntax == 'Reason' %}
-	opam switch create . 4.10.0 --no-install
-	{%- else %}
 	opam switch create . --no-install
-	{%- endif %}
 
 .PHONY: switch
 switch: ## Create an opam switch and install development dependencies
