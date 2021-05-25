@@ -16,15 +16,9 @@ let cache_dir_of_repo repo =
 
 let git_clone ~destination repo =
   let open Result.Syntax in
-  let* () =
-    Logs.app (fun m ->
-        m "📡  Downloading %a to %s" Pp.pp_blue repo destination)
-    |> Result.ok
-  in
-  let* () =
-    Logs.debug (fun m -> m "Cloning %S to %S" repo destination) |> Result.ok
-  in
-  let* () =
+  Logs.app (fun m -> m "📡  Downloading %a to %s" Pp.pp_blue repo destination);
+  Logs.debug (fun m -> m "Cloning %S to %S" repo destination);
+  let+ () =
     Spawn.exec "git" [ "clone"; repo; destination ]
     |> Result.map_error (fun err ->
            let msg =
@@ -32,30 +26,24 @@ let git_clone ~destination repo =
            in
            Spin_error.invalid_template repo ~msg)
   in
-  Logs.app (fun m -> m "%a" Pp.pp_bright_green "Done!\n") |> Result.ok
+  Logs.app (fun m -> m "%a" Pp.pp_bright_green "Done!\n")
 
 let donwload_git_repo repo =
   let open Result.Syntax in
   let* cache_dir = cache_dir_of_repo repo in
   let+ () =
-    if Sys.file_exists cache_dir && Sys.is_directory cache_dir then
-      let* () =
-        Logs.app (fun m ->
-            m "The repository %a has already been downloaded." Pp.pp_blue repo)
-        |> Result.ok
-      in
-      let* refetch =
+    if Sys.file_exists cache_dir && Sys.is_directory cache_dir then (
+      Logs.app (fun m ->
+          m "The repository %a has already been downloaded." Pp.pp_blue repo);
+      let refetch =
         Inquire.confirm "Do you want to download it again?" ~default:true
-        |> Result.ok
       in
       if refetch then (
-        let* () =
-          Logs.debug (fun m -> m "Removing %S" cache_dir) |> Result.ok
-        in
+        Logs.debug (fun m -> m "Removing %S" cache_dir);
         Sys.rm_p cache_dir;
         git_clone repo ~destination:cache_dir)
       else
-        Result.ok ()
+        Result.ok ())
     else (
       Sys.mkdir_p cache_dir;
       git_clone repo ~destination:cache_dir)

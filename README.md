@@ -1,7 +1,7 @@
 <p align="center">
     <img width="300" src="https://raw.githubusercontent.com/tmattio/spin/master/doc/logo.svg?sanitize=true" alt="Logo">
   	<br><br>
-    Reason and OCaml project generator.
+    OCaml project generator.
 </p>
 
 
@@ -33,7 +33,7 @@
 
 🚀 Quickly start new projects that are ready for the real world.
 
-❤️ Have a great developer experience when developing with Reason/OCaml.
+❤️ Have a great developer experience when developing with OCaml.
 
 🏄 Be as productive as Ruby-on-Rails or Elixir's Mix users.
 
@@ -84,13 +84,12 @@ The official Spin templates templates are the following:
 
 If you'd like to add an official template, don't hesitate to open a PR!
 
-### Other Reason/OCaml templates
+### Other OCaml templates
+
+You can find community Spin templates for various projects here: [https://github.com/ocaml-templates](https://github.com/ocaml-templates)
 
 Here are some non-official Spin templates that you can use:
 
-- [**spin-rescript**](https://github.com/tmattio/spin-rescript) - Spin template for ReScript applications
-- [**spin-jsoo-react**](https://github.com/tmattio/spin-jsoo-react) - Spin template for React applications with Js_of_ocaml
-- [**spin-incr-dom**](https://github.com/tmattio/spin-incr-dom) - Single page application with Js_of_ocaml using Incr_dom
 - [**spin-sihl**](https://github.com/oxidizing/spin-sihl) - Spin template for [Sihl](https://github.com/oxidizing/sihl) applications
 
 ### Other non-OCaml templates
@@ -153,7 +152,7 @@ Take a look at our [Contributing Guide](CONTRIBUTING.md) to get started.
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+Distributed under the ISC License. See [LICENSE](LICENSE) for more information.
 
 ## Acknowledgements
 

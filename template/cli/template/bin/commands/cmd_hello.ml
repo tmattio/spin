@@ -1,7 +1,5 @@
-open {{ project_snake | capitalize }}
-
 let run ~name =
-  let greeting = Utils.greet name in
+  let greeting = {{ project_snake | capitalize }}.greet name in
   Logs.app (fun m -> m "%s" greeting);
   Ok ()
 

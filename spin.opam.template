@@ -11,3 +11,6 @@ build: [
     "@doc" {with-doc}
   ]
 ]
+pin-depends: [
+  ["dream-server" "git+https://github.com/tmattio/dream-serve.git"]
+]

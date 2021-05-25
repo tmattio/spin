@@ -1,4 +1,0 @@
-(executable
- (name main)
- (libraries {{ project_snake }})
- (modules main))

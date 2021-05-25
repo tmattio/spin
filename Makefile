@@ -31,8 +31,8 @@ test: ## Run the unit tests
 	opam exec -- dune build --root . @test/runtest
 	opam exec -- dune build --root . @test_bin/runtest
 
-.PHONY: test-template
-test-template: ## Run the template integration tests
+.PHONY: test-templates
+test-templates: ## Run the template integration tests
 	opam exec -- dune build --root . @test_template/runtest -f -j 1
 
 .PHONY: clean

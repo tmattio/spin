@@ -1,7 +1,5 @@
 open Ppxlib
 
-module Builder = Ast_builder.Default
-
 let expand ~loc ~path:_ (num : int) =
   let (module Builder) = Ast_builder.make loc in
   [%expr [%e Builder.eint num] + 5]

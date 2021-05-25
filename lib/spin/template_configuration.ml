@@ -46,8 +46,8 @@ let prompt_config ?(use_defaults = false) ~context (config : Configuration.t) =
   | true, _, Some default ->
     Result.ok (Some default)
   | _, Some (Configuration.Input input_t), _ ->
-    let+ v = Inquire.input input_t.message ?default ~validate |> Result.ok in
-    Some v
+    let v = Inquire.input input_t.message ?default ~validate in
+    Ok (Some v)
   | _, Some (Configuration.Select select_t), _ ->
     let default_v =
       (* Find the index of the default value if provided. *)
@@ -55,16 +55,15 @@ let prompt_config ?(use_defaults = false) ~context (config : Configuration.t) =
         (fun default -> List.index (String.equal default) select_t.values)
         default
     in
-    let+ v =
+    let v =
       Inquire.select
         select_t.message
         ~options:select_t.values
         ?default:default_v
-      |> Result.ok
     in
-    Some v
+    Ok (Some v)
   | _, Some (Configuration.Confirm confirm_t), _ ->
-    let* default =
+    let+ default =
       match default with
       | None ->
         Result.ok None
@@ -77,7 +76,7 @@ let prompt_config ?(use_defaults = false) ~context (config : Configuration.t) =
         in
         Some result
     in
-    let+ v = Inquire.confirm confirm_t.message ?default |> Result.ok in
+    let v = Inquire.confirm confirm_t.message ?default in
     Some (Bool.to_string v)
   | _, None, _ ->
     Ok default

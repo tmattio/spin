@@ -60,9 +60,7 @@ let run_actions ~path actions =
   in
   ()
 
-let run_generator ?context:additionnal_context ~project:t generator
-    : (unit, Spin_error.t) result
-  =
+let run_generator ?context:additionnal_context ~project:t generator =
   let open Result.Syntax in
   let context = Hashtbl.of_list t.dec.configs in
   let () =

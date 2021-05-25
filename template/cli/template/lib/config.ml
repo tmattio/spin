@@ -1,6 +1,6 @@
 let home =
   let env_var = match Sys.os_type with "Unix" -> "HOME" | _ -> "APPDATA" in
-  Sys.getenv_opt env_var |> Option.to_result ~none:({{ project_snake | capitalize }}_error.missing_env env_var)
+  Sys.getenv_opt env_var |> Option.to_result ~none:(Error.missing_env env_var)
 
 let default_cache_dir =
   Result.map (fun home ->

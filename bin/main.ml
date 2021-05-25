@@ -7,7 +7,7 @@ let cmds = [ Cmd_config.cmd; Cmd_gen.cmd; Cmd_ls.cmd; Cmd_new.cmd ]
 let run () =
   let message =
     {|
-Generate Reason and OCaml projects.
+Generate OCaml projects.
 
 Usage:
   spin COMMAND
@@ -32,7 +32,7 @@ Use `spin COMMAND --help` for help on a single command.|}
 
 (* Command line interface *)
 
-let doc = "Generate Reason and OCaml projects"
+let doc = "Generate OCaml projects"
 
 let sdocs = Manpage.s_common_options
 
@@ -42,7 +42,7 @@ let envs = Common.envs
 
 let man =
   [ `S Manpage.s_description
-  ; `P "$(mname) helps to bootstrap Reason and OCaml projects."
+  ; `P "$(mname) helps to bootstrap OCaml projects."
   ; `P
       "It can generate new projects from local or remote templates, and \
        generate components in existing projects."
