@@ -20,9 +20,7 @@ type t =
   ; example_commands : example_command list
   ; source : source
   ; generators :
-      ( string
-      , unit -> (Template_generator.t, Spin_error.t) Lwt_result.t )
-      Hashtbl.t
+      (string, unit -> (Template_generator.t, Spin_error.t) Result.t) Hashtbl.t
   }
 
 val source_of_string : string -> source Option.t
@@ -34,12 +32,12 @@ val source_to_dec : source -> Dec_common.Source.t
 val read_source_spin_file
   :  ?download_git:bool
   -> source
-  -> (Dec_template.t, Spin_error.t) Lwt_result.t
+  -> (Dec_template.t, Spin_error.t) Result.t
 
 val read_source_template_files
   :  ?download_git:bool
   -> source
-  -> ((string, string) Hashtbl.t, Spin_error.t) Lwt_result.t
+  -> ((string, string) Hashtbl.t, Spin_error.t) Result.t
 
 val of_dec
   :  ?use_defaults:bool
@@ -51,7 +49,7 @@ val of_dec
   -> source:source
   -> context:(string, string) Hashtbl.t
   -> Dec_template.t
-  -> (t, Spin_error.t) Lwt_result.t
+  -> (t, Spin_error.t) Result.t
 
 val read
   :  ?use_defaults:bool
@@ -61,6 +59,6 @@ val read
   -> ?ignore_generators:bool
   -> ?context:(string, string) Hashtbl.t
   -> source
-  -> (t, Spin_error.t) Lwt_result.t
+  -> (t, Spin_error.t) Result.t
 
-val generate : path:string -> t -> (unit, Spin_error.t) Lwt_result.t
+val generate : path:string -> t -> (unit, Spin_error.t) Result.t

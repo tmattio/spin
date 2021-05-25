@@ -4,6 +4,6 @@
   Done!
   
   spin: [ERROR] The template generation failed:
-  The command false did not run successfully: 
+  The command false did not run successfully: exited with code 1
   [7]
 

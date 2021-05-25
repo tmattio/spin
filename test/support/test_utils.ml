@@ -17,5 +17,7 @@ let decoder a =
     eq
 
 let get_tempdir prefix =
-  Printf.sprintf "%s-%s" prefix (Unix.time () |> Float.to_int |> Int.to_string)
-  |> Caml.Filename.concat (Caml.Filename.get_temp_dir_name ())
+  let dirname =
+    Printf.sprintf "%s-%s" prefix (Unix.time () |> Float.to_int |> Int.to_string)
+  in
+  Spin_std.Sys.mk_temp_dir dirname

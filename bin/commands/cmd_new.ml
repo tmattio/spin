@@ -1,11 +1,11 @@
 open Spin
 
 let run ~ignore_config ~use_defaults ~template ~path =
-  let open Result.Let_syntax in
+  let open Result.Syntax in
   let path = Option.value path ~default:Filename.current_dir_name in
   let* () =
     try
-      match Caml.Sys.readdir path with
+      match Sys.readdir path with
       | [||] ->
         Ok ()
       | _ ->
@@ -13,7 +13,7 @@ let run ~ignore_config ~use_defaults ~template ~path =
           (Spin_error.failed_to_generate "The output directory is not empty.")
     with
     | Sys_error _ ->
-      Spin_unix.mkdir_p path;
+      Sys.mkdir_p path;
       Ok ()
   in
   let* context =
@@ -37,19 +37,15 @@ let run ~ignore_config ~use_defaults ~template ~path =
   in
   match Template.source_of_string template with
   | Some source ->
-    let result =
-      let open Lwt_result.Syntax in
-      let* template = Template.read ?context ~use_defaults source in
-      Template.generate ~path template
-    in
-    let+ _ =
-      try Lwt_main.run result with
-      | Caml.Sys.Break | Failure _ ->
-        Caml.exit 1
-      | e ->
-        raise e
-    in
-    ()
+    let open Result.Syntax in
+    (try
+       let* template = Template.read ?context ~use_defaults source in
+       Template.generate ~path template
+     with
+    | Sys.Break | Failure _ ->
+      exit 1
+    | e ->
+      raise e)
   | None ->
     Logs.err (fun m -> m "This template does not exist");
     Ok ()
@@ -79,7 +75,7 @@ let man =
 let info = Term.info "new" ~doc ~sdocs ~exits ~envs ~man ~man_xrefs
 
 let term =
-  let open Common.Let_syntax in
+  let open Common.Syntax in
   let+ _term = Common.term
   and+ ignore_config = Common.ignore_config_arg
   and+ use_defaults = Common.use_defaults_arg

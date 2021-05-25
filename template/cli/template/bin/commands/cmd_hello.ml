@@ -25,7 +25,7 @@ let man =
 let info = Term.info "hello" ~doc ~sdocs ~exits ~envs ~man
 
 let term =
-  let open Common.Let_syntax in
+  let open Common.Syntax in
   let+ _term = Common.term
   and+ name =
     let doc = "The name to greet." in

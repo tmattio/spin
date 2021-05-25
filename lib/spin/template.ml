@@ -22,42 +22,43 @@ type t =
   ; example_commands : example_command list
   ; source : source
   ; generators :
-      ( string
-      , unit -> (Template_generator.t, Spin_error.t) Lwt_result.t )
-      Hashtbl.t
+      (string, unit -> (Template_generator.t, Spin_error.t) Result.t) Hashtbl.t
   }
 
 let ignore_files files ~context ~(dec : Dec_template.t) =
-  let open Lwt_result.Syntax in
+  let open Result.Syntax in
   let+ ignores =
     Template_expr.filter_map
+      (fun x -> x)
       dec.ignore_file_rules
       ~context
       ~condition:(fun el -> el.Ignore_rule.enabled_if)
-      ~f:(fun x -> x)
   in
   let ignores =
-    List.map ignores ~f:(fun ignore -> ignore.files) |> List.concat
+    List.map (fun (ignore : Ignore_rule.t) -> ignore.files) ignores
+    |> List.concat
   in
   files
-  |> Hashtbl.to_alist
-  |> List.filter_map ~f:(fun (path, content) ->
+  |> Hashtbl.to_list
+  |> List.filter_map (fun (path, content) ->
          if
-           List.exists ignores ~f:(fun glob ->
+           List.exists
+             (fun glob ->
                let normalized_path =
-                 String.substr_replace_all path ~pattern:"\\" ~with_:"/"
+                 Str.global_replace (Str.regexp "\\\\") "/" path
                in
                Glob.matches_glob normalized_path ~glob)
+             ignores
          then
            None
          else
            Some (path, content))
-  |> Hashtbl.of_alist_exn (module String)
+  |> Hashtbl.of_list
 
 let populate_template_files files =
   files
-  |> Hashtbl.to_alist
-  |> List.filter_map ~f:(fun (path, content) ->
+  |> Hashtbl.to_list
+  |> List.filter_map (fun (path, content) ->
          let fpath = Fpath.v path in
          let root = Fpath.v "template" in
          match Fpath.rem_prefix root fpath with
@@ -66,12 +67,12 @@ let populate_template_files files =
            Some (path, content)
          | None ->
            None)
-  |> Hashtbl.of_alist_exn (module String)
+  |> Hashtbl.of_list
 
 let populate_generator_files files ~gen =
   files
-  |> Hashtbl.to_alist
-  |> List.filter_map ~f:(fun (path, content) ->
+  |> Hashtbl.to_list
+  |> List.filter_map (fun (path, content) ->
          let fpath = Fpath.v path in
          let root = Fpath.(v "generators" / gen) in
          match Fpath.rem_prefix root fpath with
@@ -80,14 +81,14 @@ let populate_generator_files files ~gen =
            Some (path, content)
          | None ->
            None)
-  |> Hashtbl.of_alist_exn (module String)
+  |> Hashtbl.of_list
 
 let populate_example_commands ~context (dec : Dec_template.t) =
   Template_expr.filter_map
+    (fun el -> { name = el.name; description = el.description })
     dec.example_commands
     ~context
     ~condition:(fun el -> el.Example_command.enabled_if)
-    ~f:(fun el -> { name = el.name; description = el.description })
 
 let source_of_dec = function
   | Dec_common.Source.Git s ->
@@ -114,11 +115,11 @@ let source_of_string s =
   | Some v ->
     Some (Official v)
   | None ->
-    (match Dec_common.Git_repo.decode (Sexp.Atom s) with
+    (match Dec_common.Git_repo.decode (Sexplib.Sexp.Atom s) with
     | Ok s ->
       Some (Git s)
     | Error _ ->
-      if Caml.Sys.is_directory s then
+      if Sys.is_directory s then
         Some (Local_dir s)
       else
         None)
@@ -133,24 +134,23 @@ let relativize_source ~root = function
         let froot = Fpath.v root in
         if Fpath.is_rel froot then
           let relativized = Fpath.relativize ~root:froot fpath in
-          Option.value_exn relativized |> Fpath.to_string
+          Option.get relativized |> Fpath.to_string
         else
-          let cwd = Caml.Sys.getcwd () in
+          let cwd = Sys.getcwd () in
           let rel_root =
-            Option.value_exn (Fpath.relativize ~root:(Fpath.v cwd) froot)
+            Option.get (Fpath.relativize ~root:(Fpath.v cwd) froot)
           in
-          Option.value_exn (Fpath.relativize ~root:rel_root fpath)
-          |> Fpath.to_string
+          Option.get (Fpath.relativize ~root:rel_root fpath) |> Fpath.to_string
       else
         path
     in
     Local_dir reparented
 
 let read_source_spin_file ?(download_git = false) source =
-  let open Lwt_result.Syntax in
+  let open Result.Syntax in
   match source with
   | Official (module T) ->
-    Official_template.read_spin_file (module T) |> Lwt.return
+    Official_template.read_spin_file (module T)
   | Local_dir dir ->
     Local_template.read_spin_file dir
   | Git repo ->
@@ -158,36 +158,31 @@ let read_source_spin_file ?(download_git = false) source =
       if download_git then
         Git_template.donwload_git_repo repo
       else
-        Git_template.cache_dir_of_repo repo |> Lwt.return
+        Git_template.cache_dir_of_repo repo
     in
     Local_template.read_spin_file template_dir
 
 let read_source_template_files ?(download_git = false) source =
-  let open Lwt_result.Syntax in
+  let open Result.Syntax in
   match source with
   | Official (module T) ->
-    Ok
-      (Official_template.files_with_content (module T)
-      |> Hashtbl.of_alist_exn (module String))
-    |> Lwt.return
+    Ok (Official_template.files_with_content (module T) |> Hashtbl.of_list)
   | Local_dir dir ->
-    let+ files = Local_template.files_with_content dir |> Lwt_result.ok in
-    Hashtbl.of_alist_exn (module String) files
+    let+ files = Local_template.files_with_content dir |> Result.ok in
+    Hashtbl.of_list files
   | Git repo ->
     let* template_dir =
       if download_git then
         Git_template.donwload_git_repo repo
       else
-        Git_template.cache_dir_of_repo repo |> Lwt.return
+        Git_template.cache_dir_of_repo repo
     in
-    let+ files =
-      Local_template.files_with_content template_dir |> Lwt_result.ok
-    in
-    Hashtbl.of_alist_exn (module String) files
+    let+ files = Local_template.files_with_content template_dir |> Result.ok in
+    Hashtbl.of_list files
 
 let rec of_dec
     ?(use_defaults = false)
-    ?(files = Hashtbl.create (module String))
+    ?(files = Hashtbl.create 256)
     ?(ignore_configs = false)
     ?(ignore_actions = false)
     ?(ignore_example_commands = false)
@@ -196,15 +191,14 @@ let rec of_dec
     ~context
     (dec : Dec_template.t)
   =
-  let open Lwt_result.Syntax in
+  let open Result.Syntax in
   let* base =
     match dec.base_template with
     | Some base ->
       let* source =
         source_of_dec base.source
-        |> Result.map_error ~f:(fun reason ->
+        |> Result.map_error (fun reason ->
                Spin_error.invalid_template ~msg:reason dec.name)
-        |> Lwt.return
       in
       read
         source
@@ -215,24 +209,24 @@ let rec of_dec
         ~ignore_example_commands:base.ignore_example_commands
         ~ignore_generators:base.ignore_generators
     | None ->
-      Lwt_result.return
+      Result.ok
         { name = ""
         ; description = ""
         ; raw_files = []
         ; parse_binaries = false
         ; context
-        ; files = Hashtbl.create (module String)
+        ; files = Hashtbl.create 256
         ; pre_gen_actions = []
         ; post_gen_actions = []
         ; example_commands = []
         ; source
           (* This is not the correct value, but we are not supposed to use this. *)
-        ; generators = Hashtbl.create (module String)
+        ; generators = Hashtbl.create 256
         }
   in
   let* () =
     if ignore_configs then
-      Lwt_result.return ()
+      Result.ok ()
     else
       Template_configuration.populate_context
         ~use_defaults
@@ -241,34 +235,33 @@ let rec of_dec
   in
   let* pre_gen_actions =
     if ignore_actions then
-      Lwt_result.return []
+      Result.ok []
     else
       Template_actions.of_decs_with_condition ~context dec.pre_gen_actions
   in
   let* post_gen_actions =
     if ignore_actions then
-      Lwt_result.return []
+      Result.ok []
     else
       Template_actions.of_decs_with_condition ~context dec.post_gen_actions
   in
   let* example_commands =
     if ignore_example_commands then
-      Lwt_result.return []
+      Result.ok []
     else
       populate_example_commands ~context dec
   in
-  let generators = Hashtbl.create (module String) in
+  let generators = Hashtbl.create 256 in
   let _ =
     if ignore_generators then
       ()
     else
-      List.iter dec.generators ~f:(fun g ->
+      List.iter
+        (fun (g : Generator.t) ->
           let files = populate_generator_files files ~gen:g.name in
-          let _ =
-            Hashtbl.add generators ~key:g.name ~data:(fun () ->
-                Template_generator.of_dec ~context ~files g)
-          in
-          ())
+          Hashtbl.add generators g.name (fun () ->
+              Template_generator.of_dec ~context ~files g))
+        dec.generators
   in
   let parse_binaries =
     match dec.parse_binaries with Some v -> v | None -> base.parse_binaries
@@ -281,11 +274,9 @@ let rec of_dec
       base.raw_files
   in
   let files = populate_template_files files in
-  Hashtbl.merge_into ~src:base.files ~dst:files ~f:(fun ~key:_ src -> function
-    | Some dst -> Set_to dst | None -> Set_to src);
+  Hashtbl.merge base.files ~into:files;
   let+ files = ignore_files files ~dec ~context in
-  Hashtbl.merge_into ~src:base.generators ~dst:generators ~f:(fun ~key:_ src ->
-    function Some dst -> Set_to dst | None -> Set_to src);
+  Hashtbl.merge base.generators ~into:generators;
   { name = dec.name
   ; description = dec.description
   ; parse_binaries
@@ -308,10 +299,8 @@ and read
     ?context
     source
   =
-  let open Lwt_result.Syntax in
-  let context =
-    Option.value context ~default:(Hashtbl.create (module String))
-  in
+  let open Result.Syntax in
+  let context = Option.value context ~default:(Hashtbl.create 256) in
   let* spin_file = read_source_spin_file source ~download_git:true in
   let* files = read_source_template_files source ~download_git:false in
   of_dec
@@ -325,31 +314,38 @@ and read
     ~source
     ~use_defaults
 
-let generate ~path:generation_root template =
-  let open Lwt_result.Syntax in
-  (* Run pre-gen commands *)
-  let* _ =
-    Spin_lwt.result_fold_left
-      template.pre_gen_actions
-      ~f:(Template_actions.run ~path:generation_root)
+let run_actions ~path actions =
+  let open Result.Syntax in
+  let+ _ =
+    Result.List.fold_left
+      (fun acc el ->
+        let+ action = Template_actions.run ~path el in
+        action :: acc)
+      []
+      actions
   in
+  ()
+
+let generate ~path:generation_root template =
+  let open Result.Syntax in
+  (* Run pre-gen commands *)
+  let* _ = run_actions ~path:generation_root template.pre_gen_actions in
   (* Generate files *)
   let* () =
-    Logs_lwt.app (fun m ->
+    Logs.app (fun m ->
         m
           "\n🏗️  Creating a new project from %a in %s"
           Pp.pp_blue
           template.name
           generation_root)
-    |> Lwt_result.ok
+    |> Result.ok
   in
   let normalized_raw_files =
-    template.raw_files |> List.map ~f:File_generator.normalize_path
+    template.raw_files |> List.map File_generator.normalize_path
   in
   let files_to_copy, files_to_generate =
     List.fold_left
-      (Hashtbl.to_alist template.files)
-      ~f:(fun (files_to_copy, files_to_generate) file ->
+      (fun (files_to_copy, files_to_generate) file ->
         let file_path, file_content = file in
         let normalized_file_path = File_generator.normalize_path file_path in
         let file = normalized_file_path, file_content in
@@ -369,68 +365,63 @@ let generate ~path:generation_root template =
           file :: files_to_copy, files_to_generate
         | _, _, _ ->
           files_to_copy, file :: files_to_generate)
-      ~init:([], [])
+      ([], [])
+      (Hashtbl.to_list template.files)
   in
+  Sys.mkdir_p generation_root;
   let* _ =
     files_to_copy
-    |> Spin_lwt.result_fold_left ~f:(fun (path, content) ->
+    |> Result.List.iter_left (fun (path, content) ->
            let path = Filename.concat generation_root path in
            File_generator.copy ~context:template.context ~content path)
   in
   let* _ =
     files_to_generate
-    |> Spin_lwt.result_fold_left ~f:(fun (path, content) ->
+    |> Result.List.iter_left (fun (path, content) ->
            let path = Filename.concat generation_root path in
            File_generator.generate ~context:template.context ~content path)
   in
   let* () =
-    Logs_lwt.app (fun m -> m "%a" Pp.pp_bright_green "Done!\n") |> Lwt_result.ok
+    Logs.app (fun m -> m "%a" Pp.pp_bright_green "Done!\n") |> Result.ok
   in
   (* Run post-gen commands *)
-  let* _ =
-    Spin_lwt.result_fold_left
-      template.post_gen_actions
-      ~f:(Template_actions.run ~path:generation_root)
-  in
+  let* _ = run_actions ~path:generation_root template.post_gen_actions in
   let () =
     let project_config =
       Dec_project.
         { source =
             source_to_dec
               (relativize_source ~root:generation_root template.source)
-        ; configs = Hashtbl.to_alist template.context
+        ; configs = Hashtbl.to_list template.context
         }
     in
     Encoder.encode_file
+      (Filename.concat generation_root ".spin")
       project_config
-      ~path:(Filename.concat generation_root ".spin")
-      ~f:Dec_project.encode
+      Dec_project.encode
   in
   let* () =
-    Logs_lwt.app (fun m ->
+    Logs.app (fun m ->
         m "🎉  Success! Your project is ready at %s" generation_root)
-    |> Lwt_result.ok
+    |> Result.ok
   in
   (* Print example commands *)
-  let open Lwt.Syntax in
-  let* () =
+  let () =
     match template.example_commands with
     | [] ->
-      Lwt.return ()
-    | _ ->
-      Logs_lwt.app (fun m ->
+      ()
+    | l ->
+      Logs.app (fun m ->
           m
             "\n\
              Here are some example commands that you can run inside this \
-             directory:")
+             directory:");
+      List.iter
+        (fun (el : example_command) ->
+          Logs.app (fun m -> m "");
+          Logs.app (fun m -> m "  %a" Pp.pp_blue el.name);
+          Logs.app (fun m -> m "    %s" el.description))
+        l
   in
-  let* _ =
-    Spin_lwt.fold_left
-      template.example_commands
-      ~f:(fun (el : example_command) ->
-        let* () = Logs_lwt.app (fun m -> m "") in
-        let* () = Logs_lwt.app (fun m -> m "  %a" Pp.pp_blue el.name) in
-        Logs_lwt.app (fun m -> m "    %s" el.description))
-  in
-  let* () = Logs_lwt.app (fun m -> m "\nHappy hacking!") in
-  Lwt_result.return ()
+  Logs.app (fun m -> m "\nHappy hacking!");
+  Result.ok ()

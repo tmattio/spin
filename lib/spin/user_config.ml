@@ -14,68 +14,64 @@ let of_dec (dec : Dec_user_config.t) =
 
 let path_of_opt value =
   value
-  |> Option.map ~f:Result.return
+  |> Option.map Result.ok
   |> Option.value
        ~default:
          (Config.spin_config_dir
-         |> Result.map ~f:(fun p -> Filename.concat p "default"))
+         |> Result.map (fun p -> Filename.concat p "default"))
 
 let read ?path () =
   let decode_if_exists path =
-    if Caml.Sys.file_exists path then
-      Decoder.decode_sexps_file path ~f:Dec_user_config.decode
-      |> Result.map ~f:of_dec
-      |> Result.map ~f:Option.return
-      |> Result.map_error ~f:(Spin_error.of_decoder_error ~file:path)
+    if Sys.file_exists path then
+      Decoder.decode_sexps_file path Dec_user_config.decode
+      |> Result.map of_dec
+      |> Result.map Option.some
+      |> Result.map_error (Spin_error.of_decoder_error ~file:path)
     else
       Ok None
   in
-  path_of_opt path |> Result.bind ~f:decode_if_exists
+  Result.bind (path_of_opt path) decode_if_exists
 
-let save ?path t =
-  let open Result.Let_syntax in
+let save ?path (t : t) =
+  let open Result.Syntax in
   let+ path = path_of_opt path in
-  let () = Spin_unix.mkdir_p (Filename.dirname path) in
+  let () = Sys.mkdir_p (Filename.dirname path) in
   Encoder.encode_file
-    { username = t.username
-    ; email = t.email
-    ; github_username = t.github_username
-    ; create_switch = t.create_switch
-    }
-    ~path
-    ~f:Dec_user_config.encode
+    path
+    Dec_user_config.
+      { username = t.username
+      ; email = t.email
+      ; github_username = t.github_username
+      ; create_switch = t.create_switch
+      }
+    Dec_user_config.encode
 
 let validate_strip s =
-  match String.strip s with
-  | "" ->
-    Lwt.return (Error "Enter a value.")
-  | s ->
-    Lwt.return (Ok s)
+  match String.trim s with "" -> Error "Enter a value." | s -> Ok s
 
 let prompt ?default:d () =
-  let open Lwt.Syntax in
-  let* username =
+  let username =
     Inquire.input
       "Your name"
-      ?default:(Option.bind d ~f:(fun d -> d.username))
+      ?default:(Option.bind d (fun d -> d.username))
       ~validate:validate_strip
   in
-  let* email =
+  let email =
     Inquire.input
       "Your email"
-      ?default:(Option.bind d ~f:(fun d -> d.email))
+      ?default:(Option.bind d (fun d -> d.email))
       ~validate:validate_strip
   in
-  let* github_username =
+  let github_username =
     Inquire.input
       "Your Github username"
-      ?default:(Option.bind d ~f:(fun d -> d.github_username))
+      ?default:(Option.bind d (fun d -> d.github_username))
       ~validate:validate_strip
   in
-  let+ create_switch =
+  let create_switch =
     Inquire.confirm
       "Create switches when generating projects"
-      ?default:(Option.bind d ~f:(fun d -> d.create_switch))
+      ?default:(Option.bind d (fun d -> d.create_switch))
   in
   { username = Some username
   ; email = Some email
@@ -84,11 +80,10 @@ let prompt ?default:d () =
   }
 
 let to_context t =
-  let context = Hashtbl.create (module String) in
-  Option.iter t.username ~f:(fun v ->
-      Hashtbl.add context ~key:"username" ~data:v |> ignore);
-  Option.iter t.email ~f:(fun v ->
-      Hashtbl.add context ~key:"email" ~data:v |> ignore);
-  Option.iter t.github_username ~f:(fun v ->
-      Hashtbl.add context ~key:"github_username" ~data:v |> ignore);
+  let context = Hashtbl.create 256 in
+  Option.iter (fun v -> Hashtbl.add context "username" v |> ignore) t.username;
+  Option.iter (fun v -> Hashtbl.add context "email" v |> ignore) t.email;
+  Option.iter
+    (fun v -> Hashtbl.add context "github_username" v |> ignore)
+    t.github_username;
   context

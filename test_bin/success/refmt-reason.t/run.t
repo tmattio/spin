@@ -11,4 +11,4 @@
   file.ml
 
   $ cat _generated/file.ml
-  let () = print_endline "Hello World"
+  let () = print_endline (("Hello World")[@reason.raw_literal "Hello World"])

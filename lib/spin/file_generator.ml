@@ -271,7 +271,7 @@ let filters =
   ]
 
 let jg_models_of_context context =
-  Hashtbl.to_alist context |> List.map ~f:(fun (k, v) -> k, Jg_types.Tstr v)
+  Hashtbl.to_list context |> List.map (fun (k, v) -> k, Jg_types.Tstr v)
 
 let generate_string ~context s =
   Jg_template.from_string
@@ -279,44 +279,40 @@ let generate_string ~context s =
     ~models:(jg_models_of_context context)
     ~env:{ Jg_types.std_env with filters = Jg_types.std_env.filters @ filters }
 
-let normalize_path path =
-  String.substr_replace_all path ~pattern:"\\" ~with_:"/"
+let normalize_path path = Str.global_replace (Str.regexp "\\\\") "/" path
 
 let is_binary_file path =
-  List.mem binary_extensions (Fpath.v path |> Fpath.get_ext) ~equal:String.equal
+  let ext = Fpath.v path |> Fpath.get_ext in
+  List.find_opt (String.equal ext) binary_extensions |> Option.is_some
 
 let copy ~context ~content path =
-  let open Lwt_result.Syntax in
+  let open Result.Syntax in
   (* Need to normalize the file separation because "\\" will escape the
      expressions to evaluate in the template engine *)
   let normalized_path = normalize_path path in
-  let* normalized_path =
-    (try Ok (generate_string normalized_path ~context) with
+  let+ normalized_path =
+    try Ok (generate_string normalized_path ~context) with
     | _ ->
       Error
         (Spin_error.failed_to_generate
            (Printf.sprintf
               "Error while running the template engine on the path of %S"
-              path)))
-    |> Lwt.return
+              path))
   in
-  let* () = Logs_lwt.debug (fun m -> m "Generating %s" path) |> Lwt_result.ok in
-  Filename.dirname normalized_path |> Spin_unix.mkdir_p;
-  Lwt_io.with_file
-    normalized_path
-    (fun oc -> Lwt_io.write oc content |> Lwt_result.ok)
-    ~mode:Lwt_io.Output
+  let dirname = Filename.dirname normalized_path in
+  Sys.mkdir_p dirname;
+  Logs.debug (fun m -> m "Generating %s" normalized_path);
+  Sys.write_file normalized_path content
 
 let generate ~context ~content path =
-  let open Lwt_result.Syntax in
+  let open Result.Syntax in
   let* content =
-    (try Ok (generate_string content ~context) with
+    try Ok (generate_string content ~context) with
     | _ ->
       Error
         (Spin_error.failed_to_generate
            (Printf.sprintf
               "Error while running the template engine on content of %S."
-              path)))
-    |> Lwt.return
+              path))
   in
   copy ~context ~content path

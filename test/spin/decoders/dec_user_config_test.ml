@@ -12,7 +12,7 @@ let test_encode_config () =
       }
   in
   let f = Dec_user_config.encode in
-  let encoded = Encoder.encode_sexps_string t ~f in
+  let encoded = Encoder.encode_sexps_string t f in
   let expected =
     "(username Bill)\n\n\
      (email bill@email.com)\n\n\

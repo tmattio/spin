@@ -6,11 +6,11 @@ type t =
   }
 
 let decode =
-  let open Decoder.Let_syntax in
-  let+ username = Decoder.field_opt "username" ~f:Decoder.string
-  and+ email = Decoder.field_opt "email" ~f:Decoder.string
-  and+ github_username = Decoder.field_opt "github_username" ~f:Decoder.string
-  and+ create_switch = Decoder.field_opt "create_switch" ~f:Decoder.bool in
+  let open Decoder.Syntax in
+  let+ username = Decoder.field_opt "username" Decoder.string
+  and+ email = Decoder.field_opt "email" Decoder.string
+  and+ github_username = Decoder.field_opt "github_username" Decoder.string
+  and+ create_switch = Decoder.field_opt "create_switch" Decoder.bool in
   { username; email; github_username; create_switch }
 
 let encode t =

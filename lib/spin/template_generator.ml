@@ -11,42 +11,34 @@ type t =
   }
 
 let populate_files ~context ~files (dec : Generator.t) =
-  let open Lwt_result.Syntax in
-  let generator_files = Hashtbl.create (module String) in
-  let+ _ =
-    Spin_lwt.result_fold_left dec.files ~f:(fun dec_file ->
-        match Hashtbl.find files dec_file.Generator.source with
+  let open Result.Syntax in
+  let (generator_files : (string, string) Hashtbl.t) = Hashtbl.create 256 in
+  let+ (_ : unit) =
+    Result.List.fold_left
+      (fun _ dec_file ->
+        match Hashtbl.find_opt files dec_file.Generator.source with
         | None ->
-          Lwt.return
-            (Error
-               (Spin_error.generator_error
-                  dec.name
-                  ~msg:"The generator file does not exist"))
+          Error
+            (Spin_error.generator_error
+               dec.name
+               ~msg:"The generator file does not exist")
         | Some content ->
-          let+ destination =
-            Template_expr.eval dec_file.destination ~context |> Lwt_result.ok
-          in
-          Lwt.catch
-            (fun () ->
-              let _ =
-                Hashtbl.add generator_files ~key:destination ~data:content
-              in
-              Lwt.return (Ok ()))
-            (function
-              | Template_expr.Invalid_expr reason ->
-                Error (Spin_error.generator_error dec.name ~msg:reason)
-                |> Lwt.return
-              | _ ->
-                Error
-                  (Spin_error.generator_error
-                     dec.name
-                     ~msg:"Failed to evaluate an expression for unknown reason")
-                |> Lwt.return))
+          let destination = Template_expr.eval dec_file.destination ~context in
+          (try Ok (Hashtbl.add generator_files destination content) with
+          | Template_expr.Invalid_expr reason ->
+            Error (Spin_error.generator_error dec.name ~msg:reason)
+          | _ ->
+            Error
+              (Spin_error.generator_error
+                 dec.name
+                 ~msg:"Failed to evaluate an expression for unknown reason")))
+      ()
+      dec.files
   in
   generator_files
 
 let of_dec ?(use_defaults = false) ~context ~files (dec : Generator.t) =
-  let open Lwt_result.Syntax in
+  let open Result.Syntax in
   let context = Hashtbl.copy context in
   let* () =
     Template_configuration.populate_context
@@ -64,11 +56,11 @@ let of_dec ?(use_defaults = false) ~context ~files (dec : Generator.t) =
     match dec.message with
     | Some message ->
       let+ result =
-        Template_expr.to_result ~context ~f:Template_expr.eval message
+        Template_expr.to_result ~context Template_expr.eval message
       in
       Some result
     | None ->
-      Lwt_result.return None
+      Result.ok None
   in
   let+ files = populate_files ~context ~files dec in
   { name = dec.name
