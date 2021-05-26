@@ -13,4 +13,4 @@ cd "$TEMP_DIR"
 
 asciinema rec -c "$DIR/demo-emulate.sh" 
 
-# cat /var/folders/1k/w8wtfpk909s_mvn_72q6d2p40000gn/T/tmpl3vpup57-ascii.cast | svg-term --out "doc/demo.svg" --window --no-cursor
+# cat /var/folders/1k/w8wtfpk909s_mvn_72q6d2p40000gn/T/tmpl3vpup57-ascii.cast | svg-term --out "doc/demo.svg" --window --no-cursor --width 80 --height 24
