@@ -1,0 +1,5 @@
+(tests
+ (names {{ project_snake }}_test)
+ (libraries alcotest {{ project_snake }})
+ (preprocess
+  (pps {{ project_slug }})))
