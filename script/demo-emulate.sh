@@ -19,5 +19,5 @@ clear
 
 export SPIN_CREATE_SWITCH=false
 
-type 'spin new cli my-cli --default'
-printf 'My CLI\nThibaut Mattio\n' | spin new cli my-cli --default
+type 'spin new cli my-cli'
+SPIN_PROJECT_NAME=Demo spin new cli my-cli --default
