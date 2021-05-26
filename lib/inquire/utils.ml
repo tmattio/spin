@@ -49,7 +49,7 @@ let print_err ?(style = Style.default) err =
   in
   flush stderr
 
-let with_cbreak ?(when_ = Unix.TCSAFLUSH) fd f =
+let with_cbreak ?(when_ = Unix.TCSANOW) fd f =
   if Unix.isatty fd then (
     let term_init = Unix.tcgetattr fd in
     Unix.tcsetattr
@@ -75,7 +75,7 @@ let with_cbreak ?(when_ = Unix.TCSAFLUSH) fd f =
   else
     f ()
 
-let with_raw ?(hide_cursor = false) ?(when_ = Unix.TCSAFLUSH) fd f =
+let with_raw ?(hide_cursor = false) ?(when_ = Unix.TCSANOW) fd f =
   if Unix.isatty fd then (
     if hide_cursor then (
       Ansi.hide_cursor ();
