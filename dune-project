@@ -34,8 +34,6 @@
   (crunch :build)
   (sexplib
    (>= v0.13))
-  (inquire
-   (>= 0.3.0))
   (spawn
    (>= v0.13))
   fmt
