@@ -25,7 +25,7 @@ opam install {{ project_slug }}
 ### Using a script
 
 ```bash
-curl -fsSL https://github.com/{{ github_username }}/{{ project_slug }}/raw/master/script/install.sh | bash
+curl -fsSL https://github.com/{{ github_username }}/{{ project_slug }}/raw/main/script/install.sh | bash
 ```
 
 ## Usage

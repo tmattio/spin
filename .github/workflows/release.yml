@@ -56,13 +56,13 @@ jobs:
 
       - name: Upload _release
         if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@main
         with:
           name: _release
           path: _release
 
       - name: Upload artifacts for ${{ matrix.os }}
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@main
         with:
           name: ${{ matrix.os }}
           path: _build/default/bin/main.exe
@@ -80,19 +80,19 @@ jobs:
           node-version: 12.x
 
       - name: Download _release
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@main
         with:
           name: _release
           path: _release
 
       - name: Download linux artifacts
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@main
         with:
           name: ubuntu-latest
           path: _release/platform-linux-x64
 
       - name: Download macOS artifacts
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@main
         with:
           name: macos-latest
           path: _release/platform-darwin-x64

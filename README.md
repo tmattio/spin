@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="300" src="https://raw.githubusercontent.com/tmattio/spin/master/doc/logo.svg?sanitize=true" alt="Logo">
+    <img width="300" src="https://raw.githubusercontent.com/tmattio/spin/main/doc/logo.svg?sanitize=true" alt="Logo">
   	<br><br>
     OCaml project generator.
 </p>
@@ -26,7 +26,7 @@
 </p>
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/tmattio/spin/master/doc/demo.svg?sanitize=true" alt="Demo">
+  <img src="https://raw.githubusercontent.com/tmattio/spin/main/doc/demo.svg?sanitize=true" alt="Demo">
 </div>
 
 ## Features
@@ -56,7 +56,7 @@ opam install spin
 ### Using a script
 
 ```bash
-curl -fsSL https://github.com/tmattio/spin/raw/master/script/install.sh | bash
+curl -fsSL https://github.com/tmattio/spin/raw/main/script/install.sh | bash
 ```
 
 ## Templates
@@ -100,7 +100,7 @@ Although the focus of Spin is to offer a great project generator for the OCaml e
 
 ## Usage
 
-For a detailed documentation of Spin's CLI, run `spin --help`, or refer to the [CLI documentation](https://github.com/tmattio/spin/tree/master/doc/cli.md).
+For a detailed documentation of Spin's CLI, run `spin --help`, or refer to the [CLI documentation](https://github.com/tmattio/spin/tree/main/doc/cli.md).
 
 ### `spin new TEMPLATE [PATH] [--default] [--ignore-config]`
 
