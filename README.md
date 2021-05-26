@@ -116,14 +116,6 @@ When `--ignore-config` is passed, the configuration file will be ignored and the
 
 List the official Spin templates.
 
-### `spin gen`
-
-List the generators available for the current project.
-
-### `spin gen GENERATOR`
-
-Generate a new component in the current project.
-
 ### `spin config`
 
 Prompt the user for values that can be saved in the configuration file.

@@ -21,8 +21,6 @@ type t =
   ; post_gen_actions : Template_actions.t list
   ; example_commands : example_command list
   ; source : source
-  ; generators :
-      (string, unit -> (Template_generator.t, Spin_error.t) Result.t) Hashtbl.t
   }
 
 let ignore_files files ~context ~(dec : Dec_template.t) =
@@ -61,20 +59,6 @@ let populate_template_files files =
   |> List.filter_map (fun (path, content) ->
          let fpath = Fpath.v path in
          let root = Fpath.v "template" in
-         match Fpath.rem_prefix root fpath with
-         | Some fpath ->
-           let path = Fpath.to_string fpath in
-           Some (path, content)
-         | None ->
-           None)
-  |> Hashtbl.of_list
-
-let populate_generator_files files ~gen =
-  files
-  |> Hashtbl.to_list
-  |> List.filter_map (fun (path, content) ->
-         let fpath = Fpath.v path in
-         let root = Fpath.(v "generators" / gen) in
          match Fpath.rem_prefix root fpath with
          | Some fpath ->
            let path = Fpath.to_string fpath in
@@ -164,7 +148,6 @@ let rec of_dec
     ?(ignore_configs = false)
     ?(ignore_actions = false)
     ?(ignore_example_commands = false)
-    ?(ignore_generators = false)
     ~source
     ~context
     (dec : Dec_template.t)
@@ -185,7 +168,6 @@ let rec of_dec
         ~ignore_configs:base.ignore_configs
         ~ignore_actions:base.ignore_actions
         ~ignore_example_commands:base.ignore_example_commands
-        ~ignore_generators:base.ignore_generators
     | None ->
       Result.ok
         { name = ""
@@ -198,8 +180,6 @@ let rec of_dec
         ; post_gen_actions = []
         ; example_commands = []
         ; source
-          (* This is not the correct value, but we are not supposed to use this. *)
-        ; generators = Hashtbl.create 256
         }
   in
   let* () =
@@ -229,18 +209,6 @@ let rec of_dec
     else
       populate_example_commands ~context dec
   in
-  let generators = Hashtbl.create 256 in
-  let _ =
-    if ignore_generators then
-      ()
-    else
-      List.iter
-        (fun (g : Generator.t) ->
-          let files = populate_generator_files files ~gen:g.name in
-          Hashtbl.add generators g.name (fun () ->
-              Template_generator.of_dec ~context ~files g))
-        dec.generators
-  in
   let parse_binaries =
     match dec.parse_binaries with Some v -> v | None -> base.parse_binaries
   in
@@ -255,8 +223,6 @@ let rec of_dec
   let merged_files = Hashtbl.copy base.files in
   Hashtbl.merge files ~into:merged_files;
   let+ merged_files = ignore_files merged_files ~dec ~context in
-  let merged_generators = Hashtbl.copy base.generators in
-  Hashtbl.merge generators ~into:merged_generators;
   { name = dec.name
   ; description = dec.description
   ; parse_binaries
@@ -267,7 +233,6 @@ let rec of_dec
   ; post_gen_actions = base.post_gen_actions @ post_gen_actions
   ; example_commands = base.example_commands @ example_commands
   ; source
-  ; generators = merged_generators
   }
 
 and read
@@ -275,7 +240,6 @@ and read
     ?(ignore_configs = false)
     ?(ignore_actions = false)
     ?(ignore_example_commands = false)
-    ?(ignore_generators = false)
     ?context
     source
   =
@@ -288,7 +252,6 @@ and read
     ~ignore_configs
     ~ignore_actions
     ~ignore_example_commands
-    ~ignore_generators
     ~files
     ~context
     ~source

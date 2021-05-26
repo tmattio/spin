@@ -20,14 +20,12 @@ module Base_template = struct
     | Configs
     | Actions
     | Example_commands
-    | Generators
 
   type t =
     { source : Source.t
     ; ignore_configs : bool
     ; ignore_actions : bool
     ; ignore_example_commands : bool
-    ; ignore_generators : bool
     }
 
   let decode_overwrite sexp =
@@ -38,8 +36,6 @@ module Base_template = struct
       Ok Actions
     | Sexplib.Sexp.Atom "example_commands" ->
       Ok Example_commands
-    | Sexplib.Sexp.Atom "generators" ->
-      Ok Generators
     | Sexplib.Sexp.Atom _ ->
       decoder_error ~msg:Errors.invalid_overwite sexp
     | Sexplib.Sexp.List _ ->
@@ -59,15 +55,7 @@ module Base_template = struct
     let ignore_example_commands =
       List.exists (function Example_commands -> true | _ -> false) overwrites
     in
-    let ignore_generators =
-      List.exists (function Generators -> true | _ -> false) overwrites
-    in
-    { source
-    ; ignore_configs
-    ; ignore_actions
-    ; ignore_example_commands
-    ; ignore_generators
-    }
+    { source; ignore_configs; ignore_actions; ignore_example_commands }
 end
 
 module Parse_binaries = struct
@@ -455,57 +443,6 @@ module Example_commands = struct
       commands
 end
 
-module Generator = struct
-  type file =
-    { source : string
-    ; destination : Expr.t
-    }
-
-  type t =
-    { name : string
-    ; description : string
-    ; configurations : Configuration.t list
-    ; pre_gen_actions : Actions.t list
-    ; post_gen_actions : Actions.t list
-    ; files : file list
-    ; message : Expr.t option
-    }
-
-  let decode_file = function
-    | Sexplib.Sexp.List [ Sexplib.Sexp.Atom source; destination ] ->
-      let open Result.Syntax in
-      let+ destination = Expr.decode destination in
-      { source; destination }
-    | sexp ->
-      decoder_error
-        ~msg:"Expected an s-expression with the form (<file> <expression>)"
-        sexp
-
-  let decode_files =
-    Decoder.one_of
-      [ "n files", Decoder.list decode_file
-      ; "one file", Decoder.map (fun x -> [ x ]) decode_file
-      ]
-
-  let decode =
-    let open Decoder.Syntax in
-    let+ name = Decoder.field "name" Template_name.decode
-    and+ description = Decoder.field "description" Description.decode
-    and+ configurations = Decoder.fields "config" Configuration.decode
-    and+ pre_gen_actions = Decoder.fields "pre_gen" Actions.decode
-    and+ post_gen_actions = Decoder.fields "post_gen" Actions.decode
-    and+ files = Decoder.field_opt "files" decode_files
-    and+ message = Decoder.field_opt "message" Expr.decode in
-    { name
-    ; description
-    ; configurations
-    ; pre_gen_actions
-    ; post_gen_actions
-    ; files = Option.value files ~default:[]
-    ; message
-    }
-end
-
 type t =
   { name : string
   ; description : string
@@ -517,7 +454,6 @@ type t =
   ; post_gen_actions : Actions.t list
   ; ignore_file_rules : Ignore_rule.t list
   ; example_commands : Example_command.t list
-  ; generators : Generator.t list
   }
 
 let decode =
@@ -535,7 +471,7 @@ let decode =
     Decoder.fields "example_commands" Example_commands.decode
   and+ example_command_list =
     Decoder.fields "example_command" Example_command.decode
-  and+ generators = Decoder.fields "generator" Generator.decode in
+  in
   let example_commands =
     example_command_list @ List.concat example_commands_list
   in
@@ -549,5 +485,4 @@ let decode =
   ; post_gen_actions
   ; ignore_file_rules
   ; example_commands
-  ; generators
   }

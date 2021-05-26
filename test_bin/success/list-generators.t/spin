@@ -1,8 +1,0 @@
-(name test)
-(description "Test template")
-
-(config test (default ""))
-
-(generator
-  (name cmd)
-  (description "Generate a subcommand for the CLI."))

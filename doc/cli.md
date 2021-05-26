@@ -58,52 +58,6 @@ prompted for configuration that have been saved.
 
     Run as if spin was started in `PATH` instead of the current directory.
 
-## `gen`
-
-```
-spin gen [OPTION]... [GENERATOR]
-```
-
-### Description
-
-`gen` generates new files in the current project if a generator is
-provided, or list the available generators for the current project if
-not.
-
-`gen` assumes it is run in a project generated with `new`, it will
-read the source template of the project from the file `.spin` located
-at the root of the project. If the source is not a local directory and
-cannot be found in the cache, it will be downloaded before the
-generator is run.
-
-If the provided generator exists in the source template, the user will
-be prompted for the configurations of the generator and the generator
-will be run at the root of the project.
-
-### Arguments
-
-- `GENERATOR`
-
-    The generator to use. If absent, list the available generators for
-    the current project.
-
-### Options
-
-- `-C PATH`
-
-    Run as if spin was started in PATH instead of the current
-    directory.
-
-- `-d, --default`
-
-    Use default values without prompting when the configuration has a
-    default value.
-
-- `--ignore-config`
-
-    Prompt for values regardless of whether they are in the user's
-    configuration file.
-
 ## `ls`
 
 ```

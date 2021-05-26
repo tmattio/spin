@@ -81,7 +81,9 @@ let prompt ?default:d () =
 
 let to_context t =
   let context = Hashtbl.create 256 in
-  Option.iter (fun v -> Hashtbl.add context "author_name" v |> ignore) t.author_name;
+  Option.iter
+    (fun v -> Hashtbl.add context "author_name" v |> ignore)
+    t.author_name;
   Option.iter (fun v -> Hashtbl.add context "email" v |> ignore) t.email;
   Option.iter
     (fun v -> Hashtbl.add context "github_username" v |> ignore)

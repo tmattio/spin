@@ -2,7 +2,7 @@ open Cmdliner
 
 let () = Printexc.record_backtrace true
 
-let cmds = [ Cmd_config.cmd; Cmd_gen.cmd; Cmd_ls.cmd; Cmd_new.cmd ]
+let cmds = [ Cmd_config.cmd; Cmd_ls.cmd; Cmd_new.cmd ]
 
 let run () =
   let message =
