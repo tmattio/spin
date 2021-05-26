@@ -29,3 +29,5 @@ let spin_config_dir =
   Sys.getenv_opt "SPIN_CONFIG_DIR"
   |> Option.map Result.ok
   |> Option.value ~default:default_config_dir
+
+let verbose () = match Logs.level () with Some Logs.Debug -> true | _ -> false

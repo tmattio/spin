@@ -30,7 +30,6 @@
   (js_of_ocaml-ppx :with-test)
   (ppxlib :with-test)
   (ctypes :with-test)
-  (dream-serve :with-test)
   (odoc :with-doc)
   (crunch :build)
   (sexplib

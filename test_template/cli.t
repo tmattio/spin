@@ -9,17 +9,8 @@
   Done!
   
   🎁  Installing packages globally. This might take a couple minutes.
-  opam install -y dune-release ocamlformat utop ocaml-lsp-server
-  [NOTE] Package ocaml-lsp-server is already installed (current version is 1.6.1).
-  [NOTE] Package utop is already installed (current version is 2.7.0).
-  [NOTE] Package ocamlformat is already installed (current version is 0.16.0).
-  [NOTE] Package dune-release is already installed (current version is 1.4.0).
-  opam install --deps-only --with-test --with-doc -y .
-  [WARNING] Failed checks on demo package definition from source at file:///Users/tmattio/Workspace/private/spin/_build/.sandbox/a1c18dc90ede28fef0e0d3fb53e4ec4d/default/test_template/_generated:
-    warning 35: Missing field 'homepage'
-    warning 36: Missing field 'bug-reports'
-  Nothing to do.
-  opam exec -- dune build --root .
+  Done!
+  
   🎉  Success! Your project is ready at _generated
   
   Here are some example commands that you can run inside this directory:

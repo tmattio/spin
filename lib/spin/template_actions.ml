@@ -83,8 +83,9 @@ let run ~path t =
       ()
       t.actions
   in
-  let _ = Format.asprintf "%a" Pp.pp_bright_green "Done!\n" in
-  ()
+  Option.iter
+    (fun _msg -> Logs.app (fun m -> m "%a" Pp.pp_bright_green "Done!\n"))
+    t.message
 
 let of_decs_with_condition ~context l =
   Template_expr.filter_map

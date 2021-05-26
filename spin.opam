@@ -16,7 +16,6 @@ depends: [
   "js_of_ocaml-ppx" {with-test}
   "ppxlib" {with-test}
   "ctypes" {with-test}
-  "dream-serve" {with-test}
   "odoc" {with-doc}
   "crunch" {build}
   "sexplib" {>= "v0.13"}
@@ -41,7 +40,4 @@ build: [
     "@install"
     "@doc" {with-doc}
   ]
-]
-pin-depends: [
-  ["dream-server" "git+https://github.com/tmattio/dream-serve.git"]
 ]
