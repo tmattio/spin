@@ -55,4 +55,4 @@ jobs:
 
       - name: Run the unit tests
         run: make test-templates
-        timeout-minutes: 1
+        timeout-minutes: 10
