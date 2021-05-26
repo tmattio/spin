@@ -4,13 +4,14 @@
 
 - Added a `parse_binaries` stanza that can be `true` to force Spin to parse binary files
 - Added a `raw_files` stanza that takes a list of file or glob expressions to instruct Spin to copy files instead of parsing them
-- A lock file is now generated for Opam projects
-- Added `ocaml-lsp-server` in `esy.json` files
 - Added a new `c-bindings` template for C bindings using `ctypes`
 - Added a new `js` template for javascript applications with `js_of_ocaml`
 
 ## Changed
 
+- Removed the `gen` subcommand. The generators will come back with a much better workflow
+- Dropped support for Esy and Reason. The templates are now using the recommended OCaml setup only. The previous templates are hosted at https://github.com/ocaml-templates/
+- Changed the templates to use the `ISC` license
 - Increase version of `ocamlformat` to `0.18.0` in templates
 - Do not install merlin when installing dev dependencies in templates
 - Drop support for BuckleScript in PPX
@@ -19,7 +20,7 @@
 - Remove python dependency to serve documentation in Makefile
 - Inline release script in Makefile
 - Remove global `-open StdLabels` in templates
-- The `spa` template has been removed from the official templates and now lives at https://github.com/tmattio/spin-incr-dom
+- The `spa` template has been removed from the official templates and now lives at https://github.com/ocaml-templates/spin-incr-dom
 - Spin does not parse binary files by default anymore, they are simply copied to the destination folder
 - Use `test` stanza for unit tests now that Alcotest prints colors by default
 - Remove unused flags defined in the root's `dune` file
@@ -122,7 +123,7 @@ Since the beginning of the project, a lot of learnings have been made and this n
 
 ## Added
 
-- Support user configuration file that stores general configuration such as the user's name, Github username, etc.
+- Support user configuration file that stores general configuration such as the user's name, Github author_name, etc.
 - Provide a `config` subcommand that can be used to change the user configuration.
 - The generators can now print a message when the generation succeeds with the `message` stanza.
 

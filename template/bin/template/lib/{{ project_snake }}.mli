@@ -1,5 +1,4 @@
-(** The Utils module define helper functions commonly used throughout the
-    project. *)
+(** {{ project_description }} *)
 
 val greet : string -> string
 (** Returns a greeting message.

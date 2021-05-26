@@ -1,0 +1,20 @@
+(library
+ (name ansi)
+ (public_name spin.ansi)
+ (modules ansi ansi_common)
+ (foreign_stubs
+  (language c)
+  (names ansi_stubs))
+ (synopsis "Basic control of ANSI compliant terminals and the windows shell")
+ (libraries unix bytes))
+
+(rule
+ (targets ansi.ml ansi_stubs.c)
+ (deps
+  ansi_unix.ml
+  ansi_win.ml
+  ansi_unix_stubs.c
+  ansi_win_stubs.c
+  choose_implementation.ml)
+ (action
+  (run %{ocaml} choose_implementation.ml)))

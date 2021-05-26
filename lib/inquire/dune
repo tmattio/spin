@@ -1,0 +1,7 @@
+(library
+ (name inquire)
+ (public_name spin.inquire)
+ (synopsis "Prompt users on the terminal")
+ (libraries unix spin.ansi))
+
+(include_subdirs unqualified)

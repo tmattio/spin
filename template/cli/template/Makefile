@@ -10,12 +10,6 @@ all:
 .PHONY: deps
 deps: ## Install development dependencies
 	opam install -y dune-release ocamlformat utop ocaml-lsp-server
-	{%- if test_framework == 'Rely' %}
-	opam pin add -y pastel https://github.com/facebookexperimental/reason-native.git
-	opam pin add -y cli https://github.com/facebookexperimental/reason-native.git
-	opam pin add -y file-context-printer https://github.com/facebookexperimental/reason-native.git
-	opam pin add -y rely https://github.com/facebookexperimental/reason-native.git
-	{%- endif %}
 	opam install --deps-only --with-test --with-doc -y .
 
 .PHONY: create_switch

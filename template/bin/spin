@@ -24,29 +24,14 @@
     ("The last character of the description cannot be a \".\" to comply with Opam"
       (neq . (last_char :project_description)))))
 
-(config username
+(config author_name
   (input (prompt "Name of the author")))
-
-(config github_username
-  (input (prompt "Github username"))
-  (default :username))
-
-(config syntax
-  (select
-    (prompt "Which syntax do you use?")
-    (values OCaml Reason)))
-
-(config package_manager
-  (select
-    (prompt "Which package manager do you use?")
-    (values Opam Esy))
-  (default (if (eq :syntax Reason) Esy Opam)))
 
 (config test_framework
   (select
     (prompt "Which test framework do you prefer?")
-    (values Alcotest Rely None))
-  (default (if (eq :syntax Reason) Rely Alcotest)))
+    (values Alcotest None))
+  (default Alcotest))
 
 (config ci_cd
   (select
@@ -55,28 +40,12 @@
   (default Github))
 
 (ignore 
-  (files .ocamlformat)
-  (enabled_if (neq :syntax OCaml)))
-
-(ignore 
-  (files test/)
+  (files test/*)
   (enabled_if (eq :test_framework None)))
-
-(ignore 
-  (files test/support/test_framework.* *.opam.template)
-  (enabled_if (neq :test_framework Rely)))
 
 (ignore
   (files github/*)
   (enabled_if (neq :ci_cd Github)))
-
-(ignore
-  (files esy.json)
-  (enabled_if (neq :package_manager Esy)))
-
-(ignore
-  (files Makefile)
-  (enabled_if (neq :package_manager Opam)))
 
 ; We need to do this because Dune won't copy .github during build
 (post_gen
@@ -86,41 +55,21 @@
 
 (post_gen
   (actions
-    (run esy install)
-    (run esy dune build))
-  (message "🎁  Installing packages. This might take a couple minutes.")
-  (enabled_if (eq :package_manager Esy)))
-
-(post_gen
-  (actions
     (run make create_switch)
     (run make deps)
     (run make build))
   (message "🎁  Installing packages in a switch. This might take a couple minutes.")
-  (enabled_if (and (eq :package_manager Opam) (eq :create_switch true))))
+  (enabled_if (eq :create_switch true)))
 
 (post_gen
   (actions
     (run make deps)
     (run make build))
   (message "🎁  Installing packages globally. This might take a couple minutes.")
-  (enabled_if (and (eq :package_manager Opam) (eq :create_switch false))))
-
-(post_gen
-  (actions
-    (refmt bin/*.ml bin/*.mli lib/*.ml lib/*.mli test/*.ml test/*.mli test/*/*.ml test/*/*.mli))
-  (enabled_if (eq :syntax Reason)))
-
-(example_commands
-  (commands 
-    ("esy install" "Download and lock the dependencies.")
-    ("esy build" "Build the dependencies and the project.")
-    ("esy test" "Starts the test runner."))
-  (enabled_if (eq :package_manager Esy)))
+  (enabled_if (eq :create_switch false)))
 
 (example_commands
   (commands
     ("make deps" "Download runtime and development dependencies.")
     ("make build" "Build the dependencies and the project.")
-    ("make test" "Starts the test runner."))
-  (enabled_if (eq :package_manager Opam)))
+    ("make test" "Starts the test runner.")))

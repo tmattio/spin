@@ -19,8 +19,6 @@ type t =
   ; post_gen_actions : Template_actions.t list
   ; example_commands : example_command list
   ; source : source
-  ; generators :
-      (string, unit -> (Template_generator.t, Spin_error.t) Result.t) Hashtbl.t
   }
 
 val source_of_string : string -> source Option.t
@@ -45,7 +43,6 @@ val of_dec
   -> ?ignore_configs:bool
   -> ?ignore_actions:bool
   -> ?ignore_example_commands:bool
-  -> ?ignore_generators:bool
   -> source:source
   -> context:(string, string) Hashtbl.t
   -> Dec_template.t
@@ -56,7 +53,6 @@ val read
   -> ?ignore_configs:bool
   -> ?ignore_actions:bool
   -> ?ignore_example_commands:bool
-  -> ?ignore_generators:bool
   -> ?context:(string, string) Hashtbl.t
   -> source
   -> (t, Spin_error.t) Result.t

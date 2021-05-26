@@ -21,8 +21,6 @@ type t =
   ; post_gen_actions : Template_actions.t list
   ; example_commands : example_command list
   ; source : source
-  ; generators :
-      (string, unit -> (Template_generator.t, Spin_error.t) Result.t) Hashtbl.t
   }
 
 let ignore_files files ~context ~(dec : Dec_template.t) =
@@ -61,20 +59,6 @@ let populate_template_files files =
   |> List.filter_map (fun (path, content) ->
          let fpath = Fpath.v path in
          let root = Fpath.v "template" in
-         match Fpath.rem_prefix root fpath with
-         | Some fpath ->
-           let path = Fpath.to_string fpath in
-           Some (path, content)
-         | None ->
-           None)
-  |> Hashtbl.of_list
-
-let populate_generator_files files ~gen =
-  files
-  |> Hashtbl.to_list
-  |> List.filter_map (fun (path, content) ->
-         let fpath = Fpath.v path in
-         let root = Fpath.(v "generators" / gen) in
          match Fpath.rem_prefix root fpath with
          | Some fpath ->
            let path = Fpath.to_string fpath in
@@ -124,28 +108,6 @@ let source_of_string s =
       else
         None)
 
-let relativize_source ~root = function
-  | (Git _ | Official _) as source ->
-    source
-  | Local_dir path ->
-    let fpath = Fpath.v path in
-    let reparented =
-      if Fpath.is_rel fpath then
-        let froot = Fpath.v root in
-        if Fpath.is_rel froot then
-          let relativized = Fpath.relativize ~root:froot fpath in
-          Option.get relativized |> Fpath.to_string
-        else
-          let cwd = Sys.getcwd () in
-          let rel_root =
-            Option.get (Fpath.relativize ~root:(Fpath.v cwd) froot)
-          in
-          Option.get (Fpath.relativize ~root:rel_root fpath) |> Fpath.to_string
-      else
-        path
-    in
-    Local_dir reparented
-
 let read_source_spin_file ?(download_git = false) source =
   let open Result.Syntax in
   match source with
@@ -168,16 +130,16 @@ let read_source_template_files ?(download_git = false) source =
   | Official (module T) ->
     Ok (Official_template.files_with_content (module T) |> Hashtbl.of_list)
   | Local_dir dir ->
-    let+ files = Local_template.files_with_content dir |> Result.ok in
-    Hashtbl.of_list files
+    let files = Local_template.files_with_content dir in
+    Ok (Hashtbl.of_list files)
   | Git repo ->
-    let* template_dir =
+    let+ template_dir =
       if download_git then
         Git_template.donwload_git_repo repo
       else
         Git_template.cache_dir_of_repo repo
     in
-    let+ files = Local_template.files_with_content template_dir |> Result.ok in
+    let files = Local_template.files_with_content template_dir in
     Hashtbl.of_list files
 
 let rec of_dec
@@ -186,7 +148,6 @@ let rec of_dec
     ?(ignore_configs = false)
     ?(ignore_actions = false)
     ?(ignore_example_commands = false)
-    ?(ignore_generators = false)
     ~source
     ~context
     (dec : Dec_template.t)
@@ -207,7 +168,6 @@ let rec of_dec
         ~ignore_configs:base.ignore_configs
         ~ignore_actions:base.ignore_actions
         ~ignore_example_commands:base.ignore_example_commands
-        ~ignore_generators:base.ignore_generators
     | None ->
       Result.ok
         { name = ""
@@ -220,8 +180,6 @@ let rec of_dec
         ; post_gen_actions = []
         ; example_commands = []
         ; source
-          (* This is not the correct value, but we are not supposed to use this. *)
-        ; generators = Hashtbl.create 256
         }
   in
   let* () =
@@ -251,18 +209,6 @@ let rec of_dec
     else
       populate_example_commands ~context dec
   in
-  let generators = Hashtbl.create 256 in
-  let _ =
-    if ignore_generators then
-      ()
-    else
-      List.iter
-        (fun (g : Generator.t) ->
-          let files = populate_generator_files files ~gen:g.name in
-          Hashtbl.add generators g.name (fun () ->
-              Template_generator.of_dec ~context ~files g))
-        dec.generators
-  in
   let parse_binaries =
     match dec.parse_binaries with Some v -> v | None -> base.parse_binaries
   in
@@ -274,20 +220,19 @@ let rec of_dec
       base.raw_files
   in
   let files = populate_template_files files in
-  Hashtbl.merge base.files ~into:files;
-  let+ files = ignore_files files ~dec ~context in
-  Hashtbl.merge base.generators ~into:generators;
+  let merged_files = Hashtbl.copy base.files in
+  Hashtbl.merge files ~into:merged_files;
+  let+ merged_files = ignore_files merged_files ~dec ~context in
   { name = dec.name
   ; description = dec.description
   ; parse_binaries
   ; raw_files
   ; context
-  ; files
+  ; files = merged_files
   ; pre_gen_actions = base.pre_gen_actions @ pre_gen_actions
   ; post_gen_actions = base.post_gen_actions @ post_gen_actions
   ; example_commands = base.example_commands @ example_commands
   ; source
-  ; generators
   }
 
 and read
@@ -295,7 +240,6 @@ and read
     ?(ignore_configs = false)
     ?(ignore_actions = false)
     ?(ignore_example_commands = false)
-    ?(ignore_generators = false)
     ?context
     source
   =
@@ -308,7 +252,6 @@ and read
     ~ignore_configs
     ~ignore_actions
     ~ignore_example_commands
-    ~ignore_generators
     ~files
     ~context
     ~source
@@ -331,15 +274,12 @@ let generate ~path:generation_root template =
   (* Run pre-gen commands *)
   let* _ = run_actions ~path:generation_root template.pre_gen_actions in
   (* Generate files *)
-  let* () =
-    Logs.app (fun m ->
-        m
-          "\n🏗️  Creating a new project from %a in %s"
-          Pp.pp_blue
-          template.name
-          generation_root)
-    |> Result.ok
-  in
+  Logs.app (fun m ->
+      m
+        "\n🏗️  Creating a new project from %a in %s"
+        Pp.pp_blue
+        template.name
+        generation_root);
   let normalized_raw_files =
     template.raw_files |> List.map File_generator.normalize_path
   in
@@ -381,30 +321,11 @@ let generate ~path:generation_root template =
            let path = Filename.concat generation_root path in
            File_generator.generate ~context:template.context ~content path)
   in
-  let* () =
-    Logs.app (fun m -> m "%a" Pp.pp_bright_green "Done!\n") |> Result.ok
-  in
+  Logs.app (fun m -> m "%a" Pp.pp_bright_green "Done!\n");
   (* Run post-gen commands *)
   let* _ = run_actions ~path:generation_root template.post_gen_actions in
-  let () =
-    let project_config =
-      Dec_project.
-        { source =
-            source_to_dec
-              (relativize_source ~root:generation_root template.source)
-        ; configs = Hashtbl.to_list template.context
-        }
-    in
-    Encoder.encode_file
-      (Filename.concat generation_root ".spin")
-      project_config
-      Dec_project.encode
-  in
-  let* () =
-    Logs.app (fun m ->
-        m "🎉  Success! Your project is ready at %s" generation_root)
-    |> Result.ok
-  in
+  Logs.app (fun m ->
+      m "🎉  Success! Your project is ready at %s" generation_root);
   (* Print example commands *)
   let () =
     match template.example_commands with

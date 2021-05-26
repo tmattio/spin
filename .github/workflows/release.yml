@@ -29,7 +29,6 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
           dune-cache: ${{ matrix.os != 'macos-latest' }}
-          opam-depext-flags: --with-test
 
       - name: Use Node.js 12.x
         if: ${{ matrix.os == 'ubuntu-latest' }}

@@ -1,14 +1,3 @@
-(library
- (name {{ project_snake }}_test)
- (libraries {% if test_framework == 'Rely' %}rely.lib{% else %}alcotest{% endif %} {{ project_slug }})
- (modules
-  (:standard \ test_runner))
- (flags (:standard -linkall -g{% if test_framework == 'Rely' %} -w -40{% endif %})))
-
-(test
- (name test_runner)
- (libraries {% if test_framework == 'Rely' %}rely.lib{% else %}alcotest{% endif %} {{ project_snake }}_test)
- (modules test_runner){% if test_framework == 'Rely' %}
- (flags (:standard -w -40)){% endif %})
-
-(include_subdirs unqualified)
+(tests
+ (names {{ project_snake }}_test)
+ (libraries alcotest {{ project_snake }}))

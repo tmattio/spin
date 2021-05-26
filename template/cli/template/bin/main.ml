@@ -23,7 +23,9 @@ let man =
   ; `S Manpage.s_bugs
   ; `P "File bug reports at $(i,%%{% raw %}PKG_ISSUE{% endraw %}S%%)"
   ; `S Manpage.s_authors
-  ; `P "{{ username }}, $(i,https://github.com/{{ github_username }})"
+  {%- if github_username %}
+  ; `P "{{ author_name }}, $(i,https://github.com/{{ github_username }})"
+  {%- endif %}
   ]
 
 let default_cmd =

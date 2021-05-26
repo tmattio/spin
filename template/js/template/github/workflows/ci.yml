@@ -2,55 +2,6 @@ name: CI
 
 on: [push, pull_request]
 
-{% if package_manager == 'Esy' -%}
-{% raw -%}
-jobs:
-  build:
-    name: Build and test
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    steps:
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-
-      - uses: actions/checkout@v2
-      - name: Cache esy dependencies
-        uses: actions/cache@v1
-        id: cache
-        with:
-          path: _export
-          key: ${{ runner.OS }}-build-${{ hashFiles('esy.lock/index.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
-
-      - name: Install esy
-        run: npm install -g esy@latest
-
-      - name: Import dependencies
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: esy import-build _export/*
-
-      - name: Install dependencies
-        run: esy install
-
-      - name: Build
-        run: esy build --release
-
-      - name: Check formatting
-        run: esy format
-
-      - name: Run tests
-        run: esy test
-        
-      - name: Export dependencies
-        run: esy export-dependencies
-{%- endraw %}
-{% else -%}
 {% raw -%}
 jobs:
   build-and-test:
@@ -78,7 +29,6 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
           dune-cache: ${{ matrix.os != 'macos-latest' }}
-          opam-depext-flags: --with-test
 
       - name: Install ocamlformat
         run: opam install ocamlformat.0.18.0
@@ -97,5 +47,4 @@ jobs:
       - name: Run the unit tests
         run: make test
         timeout-minutes: 1
-{%- endraw %}
-{% endif %}
+{% endraw -%}

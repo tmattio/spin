@@ -7,7 +7,7 @@
 
 (documentation "https://tmattio.github.io/spin/")
 
-(license MIT)
+(license ISC)
 
 (authors "Thibaut Mattio")
 
@@ -19,20 +19,21 @@
 
 (package
  (name spin)
- (synopsis "A project generator for Reason and OCaml")
- (description "A project generator for Reason and OCaml\n")
+ (synopsis "OCaml project generator")
+ (description "OCaml project generator")
  (depends
   (ocaml
    (>= 4.08.0))
   dune
   (alcotest :with-test)
-  (reason :with-test)
+  (js_of_ocaml :with-test)
+  (js_of_ocaml-ppx :with-test)
+  (ppxlib :with-test)
+  (ctypes :with-test)
   (odoc :with-doc)
   (crunch :build)
-  (sexplib0
+  (sexplib
    (>= v0.13))
-  (inquire
-   (>= 0.3.0))
   (spawn
    (>= v0.13))
   fmt

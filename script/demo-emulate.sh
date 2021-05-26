@@ -12,10 +12,12 @@ function type() {
 type 'spin ls'
 spin ls
 
-sleep 2
+sleep 1.5
 echo ""
 
 clear
 
-type 'spin new cli my-cli --default'
-printf 'My CLI\n' | spin new cli my-cli --default
+export SPIN_CREATE_SWITCH=false
+
+type 'spin new cli my-cli'
+SPIN_PROJECT_NAME=Demo spin new cli my-cli --default

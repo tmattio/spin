@@ -5,5 +5,3 @@
  (kind ppx_rewriter)
  (preprocess
   (pps ppxlib.metaquot ppxlib.runner)))
-
-(include_subdirs unqualified)

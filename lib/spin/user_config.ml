@@ -1,12 +1,12 @@
 type t =
-  { username : string option
+  { author_name : string option
   ; email : string option
   ; github_username : string option
   ; create_switch : bool option
   }
 
 let of_dec (dec : Dec_user_config.t) =
-  { username = dec.username
+  { author_name = dec.author_name
   ; email = dec.email
   ; github_username = dec.github_username
   ; create_switch = dec.create_switch
@@ -39,7 +39,7 @@ let save ?path (t : t) =
   Encoder.encode_file
     path
     Dec_user_config.
-      { username = t.username
+      { author_name = t.author_name
       ; email = t.email
       ; github_username = t.github_username
       ; create_switch = t.create_switch
@@ -50,10 +50,10 @@ let validate_strip s =
   match String.trim s with "" -> Error "Enter a value." | s -> Ok s
 
 let prompt ?default:d () =
-  let username =
+  let author_name =
     Inquire.input
       "Your name"
-      ?default:(Option.bind d (fun d -> d.username))
+      ?default:(Option.bind d (fun d -> d.author_name))
       ~validate:validate_strip
   in
   let email =
@@ -64,7 +64,7 @@ let prompt ?default:d () =
   in
   let github_username =
     Inquire.input
-      "Your Github username"
+      "Your Github author_name"
       ?default:(Option.bind d (fun d -> d.github_username))
       ~validate:validate_strip
   in
@@ -73,7 +73,7 @@ let prompt ?default:d () =
       "Create switches when generating projects"
       ?default:(Option.bind d (fun d -> d.create_switch))
   in
-  { username = Some username
+  { author_name = Some author_name
   ; email = Some email
   ; github_username = Some github_username
   ; create_switch = Some create_switch
@@ -81,7 +81,9 @@ let prompt ?default:d () =
 
 let to_context t =
   let context = Hashtbl.create 256 in
-  Option.iter (fun v -> Hashtbl.add context "username" v |> ignore) t.username;
+  Option.iter
+    (fun v -> Hashtbl.add context "author_name" v |> ignore)
+    t.author_name;
   Option.iter (fun v -> Hashtbl.add context "email" v |> ignore) t.email;
   Option.iter
     (fun v -> Hashtbl.add context "github_username" v |> ignore)

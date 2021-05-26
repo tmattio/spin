@@ -17,7 +17,6 @@ jobs:
         os:
           - macos-latest
           - ubuntu-latest
-          - windows-latest
 
         ocaml-compiler:
           - 4.12.x
@@ -34,7 +33,6 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
           dune-cache: ${{ matrix.os != 'macos-latest' }}
-          opam-depext-flags: --with-test
 
       - name: Install ocamlformat
         run: opam install ocamlformat.0.18.0

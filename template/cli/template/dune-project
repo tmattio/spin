@@ -2,38 +2,32 @@
 
 (name {{ project_slug }})
 
-(source
- (github {{ github_username }}/{{ project_slug }}))
+{% if github_username %}(documentation "https://{{ github_username }}.github.io/{{ project_slug }}/"){% endif %}
 
-(license MIT)
+{% if github_username %}(source
+ (github {{ github_username }}/{{ project_slug }})){% endif %}
+
+(license ISC)
 
 (authors
-  "{{ username }}{% if author_email %} <{{ author_email }}>{% endif %}")
+  "{{ author_name }}{% if author_email %} <{{ author_email }}>{% endif %}")
 
 (maintainers
-  "{{ username }}{% if author_email %} <{{ author_email }}>{% endif %}")
+  "{{ author_name }}{% if author_email %} <{{ author_email }}>{% endif %}")
 
 (generate_opam_files true)
 
 (package
  (name {{ project_slug }})
  (synopsis "{{ project_description }}")
- (description "\
-{{ project_description }}
-")
+ (description "{{ project_description }}")
  (depends
   (ocaml (>= 4.08.0))
   dune
-  {%- if test_framework == 'Rely' %}
-  ; Add Rely when released on Opam
-  ; (rely :with-test)
-  {%- else %}
+  {%- if test_framework == 'Alcotest' %}
   (alcotest :with-test)
   {%- endif %}
   (odoc :with-doc)
-  {%- if syntax == 'Reason' %}
-  (reason :build)
-  {%- endif %}
   cmdliner
   logs
   fmt))

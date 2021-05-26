@@ -1,6 +1,6 @@
 # {{ project_name }}
 
-{%- if ci_cd == 'Github' %}
+{%- if ci_cd == 'Github' and github_username %}
 
 [![Actions Status](https://github.com/{{ github_username }}/{{ project_slug }}/workflows/CI/badge.svg)](https://github.com/{{ github_username }}/{{ project_slug }}/actions)
 {%- endif %}
@@ -29,13 +29,7 @@ esy add @opam/inquire
 ### In OCaml
 
 ```ocaml
-let () = {{ project_snake | capitalize }}.Utils.greet "World"
-```
-
-### In Reason
-
-```ocaml
-{{ project_snake | capitalize }}.Utils.greet("World");
+let () = {{ project_snake | capitalize }}.greet "World"
 ```
 
 ## Contributing

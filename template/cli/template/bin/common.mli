@@ -1,6 +1,6 @@
 val term : int Cmdliner.Term.t
 
-val handle_errors : (unit, {{ project_snake | capitalize }}.{{ project_snake | capitalize }}_error.t) Result.t -> int
+val handle_errors : (unit, {{ project_snake | capitalize }}.Error.t) Result.t -> int
 
 val envs : Cmdliner.Term.env_info list
 

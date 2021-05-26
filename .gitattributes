@@ -2,9 +2,6 @@
 *.ml linguist-language=OCaml
 *.mli linguist-language=OCaml
 
-# Disable syntax detection for .spin
-.spin linguist-language=Text
-
 # Disable syntax detection for cram tests
 *.t linguist-language=Text
 
