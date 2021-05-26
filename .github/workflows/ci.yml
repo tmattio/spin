@@ -17,7 +17,6 @@ jobs:
         os:
           - macos-latest
           - ubuntu-latest
-          - windows-latest
 
         ocaml-compiler:
           - 4.12.x
@@ -52,7 +51,3 @@ jobs:
       - name: Run the unit tests
         run: make test
         timeout-minutes: 1
-
-      - name: Run the unit tests
-        run: make test-templates
-        timeout-minutes: 10
