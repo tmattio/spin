@@ -6,3 +6,8 @@
   (:standard -open Spin_std)))
 
 (include_subdirs unqualified)
+
+(install
+ (section bin)
+ (files
+  (main.exe as opam-spin)))
