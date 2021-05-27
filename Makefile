@@ -9,7 +9,7 @@ all:
 
 .PHONY: dev
 dev: ## Install development dependencies
-	opam switch create . --no-install
+	opam switch create . --no-install -y
 	opam install -y dune-release ocamlformat utop ocaml-lsp-server
 	opam install --deps-only --with-test --with-doc -y .
 
