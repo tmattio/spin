@@ -21,3 +21,8 @@ export SPIN_CREATE_SWITCH=false
 
 type 'spin new cli my-cli'
 SPIN_PROJECT_NAME=Demo spin new cli my-cli --default
+
+sleep 1.5
+echo ""
+
+clear
