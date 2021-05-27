@@ -14,7 +14,6 @@ Usage:
 
 Available Commands:
   config      Update the current user's configuration
-  gen         Generate a new component in the current project
   ls          List the official templates
   new         Generate a new project from a template
 
@@ -59,11 +58,10 @@ let man =
       "The following commands will create a new command line interface and \
        generate a subcommand $(b,my-cmd) in it."
   ; `Noblank
-  ; `Pre
-      {|
+  ; `Pre {|
     \$ spin new cli my-cli
     \$ cd my-cli
-    \$ spin gen cmd my-cmd|}
+    \$ make build|}
   ; `S Manpage.s_common_options
   ; `S Manpage.s_exit_status
   ; `S Manpage.s_environment

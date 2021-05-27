@@ -49,8 +49,8 @@ that will be saved in `$SPIN_CONFIG_DIR/config`
 
 Unless `--ignore-config` is used, the configuration values stored in
 `$SPIN_CONFIG_DIR/config` will be used when creating new projects (with
-`new`) or components (with `gen`) and the user will not be
-prompted for configuration that have been saved.
+`new`) and the user will not be prompted for configuration that have 
+been saved.
 
 ### Options
 

@@ -24,7 +24,7 @@ let exits = Common.exits
 
 let envs = Common.envs
 
-let man_xrefs = [ `Main; `Cmd "new"; `Cmd "gen" ]
+let man_xrefs = [ `Main; `Cmd "new" ]
 
 let man =
   [ `S Manpage.s_description
@@ -35,8 +35,8 @@ let man =
   ; `P
       "Unless `--ignore-config` is used, the configuration values stored in \
        `\\$SPIN_CONFIG_DIR/config` will be used when creating new projects \
-       (with spin-new(1)) or components (with spin-gen(2)) and the user will \
-       not be prompted for configuration that have been saved."
+       (with spin-new(1)) and the user will not be prompted for configuration \
+       that have been saved."
   ]
 
 let info = Term.info "config" ~doc ~sdocs ~exits ~envs ~man ~man_xrefs
