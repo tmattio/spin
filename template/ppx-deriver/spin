@@ -1,0 +1,5 @@
+(inherit (official lib))
+
+(name ppx-deriver)
+
+(description "PPX deriver")

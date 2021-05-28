@@ -17,8 +17,6 @@
 
 (generate_opam_files true)
 
-(allow_approximate_merlin)
-
 (package
  (name {{ project_slug }})
  (synopsis "{{ project_description }}")
@@ -31,4 +29,4 @@
   (alcotest :with-test)
   {%- endif %}
   (odoc :with-doc)
-  (ppxlib :build)))
+  ppxlib))

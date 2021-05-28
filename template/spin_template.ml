@@ -24,10 +24,16 @@ module Bin : Template = struct
   let name = "bin"
 end
 
-module Ppx : Template = struct
-  include Ppx
+module Ppx_deriver : Template = struct
+  include Ppx_deriver
 
-  let name = "ppx"
+  let name = "ppx-deriver"
+end
+
+module Ppx_rewriter : Template = struct
+  include Ppx_rewriter
+
+  let name = "ppx-rewriter"
 end
 
 module C_bindings : Template = struct
@@ -46,7 +52,8 @@ let all : (module Template) list =
   [ (module Cli)
   ; (module Lib)
   ; (module Bin)
-  ; (module Ppx)
+  ; (module Ppx_deriver)
+  ; (module Ppx_rewriter)
   ; (module C_bindings)
   ; (module Js)
   ]

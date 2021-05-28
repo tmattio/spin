@@ -29,12 +29,20 @@
   (run %{bin:ocaml-crunch} -m plain bin -o %{targets})))
 
 (rule
- (targets ppx.ml)
+ (targets ppx_deriver.ml)
  (deps
   (:data
-   (source_tree ppx)))
+   (source_tree ppx-deriver)))
  (action
-  (run %{bin:ocaml-crunch} -m plain ppx -o %{targets})))
+  (run %{bin:ocaml-crunch} -m plain ppx-deriver -o %{targets})))
+
+(rule
+ (targets ppx_rewriter.ml)
+ (deps
+  (:data
+   (source_tree ppx-rewriter)))
+ (action
+  (run %{bin:ocaml-crunch} -m plain ppx-rewriter -o %{targets})))
 
 (rule
  (targets c_bindings.ml)
