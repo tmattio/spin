@@ -23,7 +23,7 @@
  (description "OCaml project generator")
  (depends
   (ocaml
-   (>= 4.08.0))
+   (>= 4.10.0))
   dune
   (alcotest :with-test)
   (js_of_ocaml :with-test)
@@ -36,8 +36,10 @@
    (>= v0.13))
   (spawn
    (>= v0.13))
-  fmt
+  (jingoo
+   (>= 1.4.0))
+  (fmt
+   (>= 0.8.9))
   fpath
   cmdliner
-  logs
-  jingoo))
+  logs))
