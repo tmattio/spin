@@ -22,7 +22,7 @@ depends: [
   "js_of_ocaml-ppx"
 ]
 build: [
-  ["dune" "subst"] {pinned}
+  ["dune" "subst"] {dev}
   [
     "dune"
     "build"
