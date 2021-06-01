@@ -16,7 +16,7 @@
 - Do not install merlin when installing dev dependencies in templates
 - Drop support for BuckleScript in PPX
 - Drop support for publishing on NPM for CLI and PPX templates
-- Update CI scripts to `avsm/setup-ocaml@v2`
+- Update CI scripts to `ocaml/setup-ocaml@v2`
 - Remove python dependency to serve documentation in Makefile
 - Inline release script in Makefile
 - Remove global `-open StdLabels` in templates
