@@ -2,6 +2,7 @@
 
 ## Added
 
+- Added an `hello` command to generate a tutorial project
 - Added a `parse_binaries` stanza that can be `true` to force Spin to parse binary files
 - Added a `raw_files` stanza that takes a list of file or glob expressions to instruct Spin to copy files instead of parsing them
 - Added a new `c-bindings` template for C bindings using `ctypes`

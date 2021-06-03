@@ -42,6 +42,14 @@ module Js : Template = struct
   let name = "js"
 end
 
+module Hello : Template = struct
+  include Hello
+
+  let name = "hello"
+end
+
+let hello : (module Template) = (module Hello)
+
 let all : (module Template) list =
   [ (module Cli)
   ; (module Lib)

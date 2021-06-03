@@ -2,7 +2,7 @@ open Cmdliner
 
 let () = Printexc.record_backtrace true
 
-let cmds = [ Cmd_config.cmd; Cmd_ls.cmd; Cmd_new.cmd ]
+let cmds = [ Cmd_config.cmd; Cmd_ls.cmd; Cmd_new.cmd; Cmd_hello.cmd ]
 
 let run () =
   let message =
@@ -16,6 +16,7 @@ Available Commands:
   config      Update the current user's configuration
   ls          List the official templates
   new         Generate a new project from a template
+  hello       Generate the tutorial project
 
 Useful options:
        --help      Show manual page

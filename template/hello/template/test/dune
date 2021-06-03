@@ -1,0 +1,3 @@
+(tests
+ (names hello_test)
+ (libraries alcotest hello))
