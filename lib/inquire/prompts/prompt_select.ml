@@ -18,9 +18,6 @@ let print_prompt ?style message =
   flush stdout
 
 let prompt ?default ?style ~options message =
-  print_prompt ?style message;
-  Ansi.save_cursor ();
-  print_string "\n";
   let selected =
     match default with
     | Some v when v < List.length options ->
@@ -28,25 +25,38 @@ let prompt ?default ?style ~options message =
     | _ ->
       ref 0
   in
-  print_options ~selected:!selected options;
+  let print_options () = print_options ~selected:!selected options in
   let reset () =
-    Ansi.restore_cursor ();
-    Ansi.erase Ansi.Below;
-    print_string "\n";
-    print_options ~selected:!selected options
+    let erase_n_lines = function
+      | 0 ->
+        ()
+      | n ->
+        Ansi.move_bol ();
+        Ansi.move_cursor 0 (-1 * (n - 1));
+        Ansi.erase Ansi.Below;
+        flush stdout
+    in
+    erase_n_lines (List.length options)
   in
   let up () =
     selected := max 0 (!selected - 1);
-    reset ()
+    reset ();
+    print_options ()
   in
   let down () =
     selected := min (List.length options - 1) (!selected + 1);
-    reset ()
+    reset ();
+    print_options ()
   in
   let select i =
     selected := i;
-    reset ()
+    reset ();
+    print_options ()
   in
+  print_prompt ?style message;
+  print_string "\n";
+  print_options ();
+  flush stdout;
   let rec aux () =
     let buf = Bytes.create 3 in
     let size = input stdin buf 0 3 in
@@ -58,8 +68,10 @@ let prompt ?default ?style ~options message =
     with
     | 1, 10, _, _ ->
       (* Enter *)
-      Ansi.restore_cursor ();
-      Ansi.erase Ansi.Below;
+      reset ();
+      Ansi.move_cursor 0 (-1);
+      Ansi.erase Ansi.Eol;
+      print_prompt ?style message;
       let input = List.nth options !selected in
       print_string input;
       print_string "\n";
@@ -70,9 +82,8 @@ let prompt ?default ?style ~options message =
       Ansi.erase Ansi.Screen;
       Ansi.set_cursor 1 1;
       print_prompt ?style message;
-      Ansi.save_cursor ();
       print_string "\n";
-      print_options ~selected:!selected options;
+      print_options ();
       aux ()
     | 1, (3 | 4), _, _ ->
       (* Handle ^C and ^D *)

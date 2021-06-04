@@ -23,18 +23,23 @@ end
 
 let prompt ?validate ?default ?style message =
   Utils.print_prompt ?default ?style message;
-  Ansi.save_cursor ();
   let buf = Input_buffer.create () in
-  let print_input () =
-    Ansi.restore_cursor ();
-    Ansi.erase Ansi.Eol;
-    Input_buffer.print buf
-  in
   let validate = match validate with None -> fun x -> Ok x | Some fn -> fn in
   let reset () =
-    Ansi.restore_cursor ();
+    let len = String.length @@ Input_buffer.get buf in
+    Ansi.move_cursor (-1 * len) 0;
     Ansi.erase Ansi.Eol;
     Input_buffer.reset buf
+  in
+  let print_input () = Input_buffer.print buf in
+  let remove_last_char () =
+    match Input_buffer.get buf with
+    | "" ->
+      ()
+    | _ ->
+      Input_buffer.rm_last_char buf;
+      Ansi.move_cursor (-1) 0;
+      Ansi.erase Ansi.Eol
   in
   let rec aux () =
     let ch = Char.code (input_char stdin) in
@@ -82,7 +87,6 @@ let prompt ?validate ?default ?style message =
       Ansi.erase Ansi.Screen;
       Ansi.set_cursor 1 1;
       Utils.print_prompt ?default ?style message;
-      Ansi.save_cursor ();
       print_input ();
       aux ()
     | 3, _ | 4, _ ->
@@ -94,12 +98,12 @@ let prompt ?validate ?default ?style message =
       Utils.user_interrupt ()
     | 127, _ ->
       (* DEL *)
-      Input_buffer.rm_last_char buf;
-      print_input ();
+      remove_last_char ();
       aux ()
     | code, _ ->
       Input_buffer.add_char buf (Char.chr code);
-      print_input ();
+      print_char (Char.chr code);
+      flush stdout;
       aux ()
   in
   Utils.with_raw Unix.stdin aux

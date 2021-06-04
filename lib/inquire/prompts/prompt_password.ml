@@ -20,14 +20,9 @@ let prompt ?validate ?default ?style message =
   let default_str = "******" in
   let default_str_opt = Option.map (fun _ -> default_str) default in
   Utils.print_prompt ?default:default_str_opt ?style message;
-  Ansi.save_cursor ();
   let buf = Input_buffer.create () in
   let validate = match validate with None -> fun x -> Ok x | Some fn -> fn in
-  let reset () =
-    Ansi.restore_cursor ();
-    Ansi.erase Ansi.Eol;
-    Input_buffer.reset buf
-  in
+  let reset () = Input_buffer.reset buf in
   let rec aux () =
     let ch = Char.code (input_char stdin) in
     match ch, default with
@@ -74,7 +69,6 @@ let prompt ?validate ?default ?style message =
       Ansi.erase Ansi.Screen;
       Ansi.set_cursor 1 1;
       Utils.print_prompt ?default:default_str_opt ?style message;
-      Ansi.save_cursor ();
       aux ()
     | 3, _ | 4, _ ->
       (* Handle ^C and ^D *)

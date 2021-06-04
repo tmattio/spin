@@ -19,10 +19,6 @@ let print_prompt ?style message =
   flush stdout
 
 let prompt ?default ?style ~options message =
-  print_prompt ?style message;
-  Ansi.save_cursor ();
-  print_string "\n";
-  Ansi.save_cursor ();
   let input =
     match default with
     | Some v when v < List.length options ->
@@ -30,7 +26,7 @@ let prompt ?default ?style ~options message =
     | _ ->
       ref None
   in
-  print_options ~selected:!input options;
+  let print_options () = print_options ~selected:!input options in
   let print_input () =
     match !input with
     | None ->
@@ -39,24 +35,34 @@ let prompt ?default ?style ~options message =
       print_int (i + 1);
       flush stdout
   in
-  print_input ();
   let reset () =
-    Ansi.restore_cursor ();
-    print_string "\n";
-    print_options ~selected:!input options;
-    print_input ()
+    let erase_n_lines = function
+      | 0 ->
+        ()
+      | n ->
+        Ansi.move_bol ();
+        Ansi.move_cursor 0 (-1 * (n - 1));
+        Ansi.erase Ansi.Below;
+        flush stdout
+    in
+    erase_n_lines (List.length options)
   in
   let select i =
     input := Some i;
-    reset ()
+    reset ();
+    print_input ();
+    print_options ()
   in
+  print_prompt ?style message;
+  print_string "\n";
+  print_options ();
+  print_input ();
   let rec aux () =
     let ch = Char.code (input_char stdin) in
     match ch, !input with
     | 10, Some input ->
       (* Enter *)
-      Ansi.restore_cursor ();
-      Ansi.erase Ansi.Below;
+      reset ();
       let input = List.nth options input in
       print_string input;
       print_string "\n";
@@ -67,9 +73,8 @@ let prompt ?default ?style ~options message =
       Ansi.erase Ansi.Screen;
       Ansi.set_cursor 1 1;
       print_prompt ?style message;
-      Ansi.save_cursor ();
       print_string "\n";
-      print_options ~selected:!input options;
+      print_options ();
       print_input ();
       aux ()
     | 3, _ | 4, _ ->
