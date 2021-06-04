@@ -41,7 +41,7 @@ let prompt ?default ?style ~options message =
         ()
       | n ->
         Ansi.move_bol ();
-        Ansi.move_cursor 0 (-1 * (n - 1));
+        Ansi.move_cursor 0 (-1 * n);
         Ansi.erase Ansi.Below;
         flush stdout
     in
@@ -50,8 +50,8 @@ let prompt ?default ?style ~options message =
   let select i =
     input := Some i;
     reset ();
-    print_input ();
-    print_options ()
+    print_options ();
+    print_input ()
   in
   print_prompt ?style message;
   print_string "\n";
@@ -63,6 +63,9 @@ let prompt ?default ?style ~options message =
     | 10, Some input ->
       (* Enter *)
       reset ();
+      Ansi.move_cursor 0 (-1);
+      Ansi.erase Ansi.Eol;
+      print_prompt ?style message;
       let input = List.nth options input in
       print_string input;
       print_string "\n";
