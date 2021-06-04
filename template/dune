@@ -51,3 +51,11 @@
    (source_tree js)))
  (action
   (run %{bin:ocaml-crunch} -m plain js -o %{targets})))
+
+(rule
+ (targets hello.ml)
+ (deps
+  (:data
+   (source_tree hello)))
+ (action
+  (run %{bin:ocaml-crunch} -m plain hello -o %{targets})))

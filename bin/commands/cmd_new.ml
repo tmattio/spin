@@ -37,7 +37,6 @@ let run ~ignore_config ~use_defaults ~template ~path =
   in
   match Template.source_of_string template with
   | Some source ->
-    let open Result.Syntax in
     (try
        let* template = Template.read ?context ~use_defaults source in
        Template.generate ~path template

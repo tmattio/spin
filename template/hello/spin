@@ -1,0 +1,15 @@
+(name hello)
+
+(description "Tutorial template without any configuration")
+
+(post_gen
+  (actions
+    (run make deps)
+    (run make build))
+  (message "🎁  Installing packages globally. This might take a couple minutes."))
+
+(example_commands
+  (commands
+    ("make deps" "Download runtime and development dependencies.")
+    ("make build" "Build the dependencies and the project.")
+    ("make test" "Starts the test runner.")))
