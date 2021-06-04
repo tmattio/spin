@@ -6,6 +6,7 @@
   (:standard \ test_runner)))
 
 (test
+ (package spin)
  (name test_runner)
  (libraries spin_test)
  (modules test_runner))

@@ -10,7 +10,7 @@ doc: "https://tmattio.github.io/spin/"
 bug-reports: "https://github.com/tmattio/spin/issues"
 depends: [
   "ocaml" {>= "4.10.0"}
-  "dune" {>= "2.7"}
+  "dune" {>= "2.8"}
   "alcotest" {with-test}
   "js_of_ocaml" {with-test}
   "js_of_ocaml-ppx" {with-test}
