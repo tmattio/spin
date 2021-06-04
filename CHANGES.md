@@ -1,3 +1,9 @@
+# 0.8.1
+
+## Changed
+
+- Split the opam plugin in an `opam-spin` package.
+
 # 0.8.0
 
 ## Added

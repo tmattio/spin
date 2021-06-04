@@ -1,6 +1,7 @@
 (executable
  (name main)
  (public_name spin)
+ (package spin)
  (libraries spin spin_std cmdliner fmt fmt.tty logs.fmt logs.cli)
  (flags
   (:standard -open Spin_std)))
@@ -9,5 +10,6 @@
 
 (install
  (section bin)
+ (package opam-spin)
  (files
   (main.exe as opam-spin)))

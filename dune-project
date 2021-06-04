@@ -43,3 +43,14 @@
   fpath
   cmdliner
   logs))
+
+(package
+ (name opam-spin)
+ (synopsis "Opam plugin for Spin, the OCaml project generator")
+ (description "Opam plugin for Spin, the OCaml project generator")
+ (depends
+  (ocaml
+   (>= 4.10.0))
+  dune
+  (spin
+   (= :version))))
