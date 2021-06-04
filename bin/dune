@@ -10,6 +10,6 @@
 
 (install
  (section bin)
- (package opam-spin)
+ (package spin)
  (files
   (main.exe as opam-spin)))
