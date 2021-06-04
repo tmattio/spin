@@ -1,3 +1,3 @@
-(** Main entry point for our application. *)
-
-let () = print_endline @@ Hello.greet "World"
+let () =
+  let greeting = Hello.greet "world" in
+  print_endline greeting
