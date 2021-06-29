@@ -20,7 +20,6 @@ make build
 
 After building the project, you can run the main binary that is produced.
 
-
 ```bash
 make start
 ```
@@ -29,7 +28,6 @@ make start
 
 You can run the test compiled executable:
 
-
 ```bash
 make test
 ```
@@ -37,7 +35,6 @@ make test
 ### Building documentation
 
 Documentation for the libraries in the project can be generated with:
-
 
 ```bash
 make doc
@@ -50,30 +47,18 @@ This assumes you have a command like [open-cli](https://github.com/sindresorhus/
 
 ### Releasing
 
-To release prebuilt binaries to all platforms, we use Github Actions to build each binary individually.
+To release prebuilt binaries to all platforms, we use GitHub Actions to build each binary individually.
 
-The binaries are then uploaded to a Github Release and NPM automatically.
+The binaries are then uploaded to a GitHub Release.
 
 To trigger the Release workflow, you need to push a git tag to the repository.
-We provide a script that will bump the version of the project, tag the commit and push it to Github:
+We provide a script that will bump the version of the project, tag the commit and push it to GitHub:
 
 ```bash
-./script/release.sh
+make release
 ```
 
-The script will release the current project version on Opam, update the documentation and push a new tag on Github.
-
-### Releasing
-
-To create a release and publish it on Opam, first update the `CHANGES.md` file with the last changes and the version that you want to release.
-The, you can run the script `script/release.sh`. The script will perform the following actions:
-
-- Create a tag with the version found in `spin.opam`, and push it to your repository.
-- Create the distribution archive.
-- Publish the distribution archive to a Github Release.
-- Submit a PR on Opam's repository.
-
-When the release is published on Github, the CI/CD will trigger the `Release` workflow which will compile binaries for all supported platforms and add them to the Github Release as assets.
+The script will release the current project version on Opam, update the documentation and push a new tag on GitHub.
 
 ### Repository Structure
 
@@ -82,7 +67,7 @@ The following snippet describes Spin's repository structure.
 ```text
 .
 ├── .github/
-|   Contains Github specific files such as actions definitions and issue templates.
+|   Contains GitHub specific files such as actions definitions and issue templates.
 │
 ├── bin/
 |   Source for Spin's binary. This links to the library defined in `lib/`.
