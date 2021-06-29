@@ -1,3 +1,11 @@
+# Unreleased
+
+## Fixed
+
+- Added punctuation to prompts to improve the experience with monochrome terminals
+- Renamed Github to GitHub in prompts and documentation
+- Fixed extra leading spaces before the template name
+
 # 0.8.1
 
 ## Changed
