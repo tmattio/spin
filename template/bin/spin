@@ -2,10 +2,10 @@
 (description "Native project containing a binary")
 
 (config project_name
-  (input (prompt "Project name")))
+  (input (prompt "Project name:")))
 
 (config project_slug
-  (input (prompt "Project slug"))
+  (input (prompt "Project slug:"))
   (default (slugify :project_name))
   (rules
     ("The project slug must be lowercase and contain ASCII characters and '-' only."
@@ -18,14 +18,14 @@
   (default true))
 
 (config project_description
-  (input (prompt "Description"))
+  (input (prompt "Description:"))
   (default "A short, but powerful statement about your project")
   (rules
     ("The last character of the description cannot be a \".\" to comply with Opam"
       (neq . (last_char :project_description)))))
 
 (config author_name
-  (input (prompt "Name of the author")))
+  (input (prompt "Name of the author:")))
 
 (config test_framework
   (select
@@ -36,8 +36,8 @@
 (config ci_cd
   (select
     (prompt "Which CI/CD do you use?")
-    (values Github None))
-  (default Github))
+    (values GitHub None))
+  (default GitHub))
 
 (ignore 
   (files test/*)
@@ -45,13 +45,13 @@
 
 (ignore
   (files github/*)
-  (enabled_if (neq :ci_cd Github)))
+  (enabled_if (neq :ci_cd GitHub)))
 
 ; We need to do this because Dune won't copy .github during build
 (post_gen
   (actions
     (run mv github .github))
-  (enabled_if (eq :ci_cd Github)))
+  (enabled_if (eq :ci_cd GitHub)))
 
 (post_gen
   (actions

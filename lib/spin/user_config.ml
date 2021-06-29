@@ -64,7 +64,7 @@ let prompt ?default:d () =
   in
   let github_username =
     Inquire.input
-      "Your Github author_name"
+      "Your GitHub username"
       ?default:(Option.bind d (fun d -> d.github_username))
       ~validate:validate_strip
   in

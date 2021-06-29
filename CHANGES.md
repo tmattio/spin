@@ -130,7 +130,7 @@ Since the beginning of the project, a lot of learnings have been made and this n
 
 ## Added
 
-- Support user configuration file that stores general configuration such as the user's name, Github author_name, etc.
+- Support user configuration file that stores general configuration such as the user's name, GitHub author_name, etc.
 - Provide a `config` subcommand that can be used to change the user configuration.
 - The generators can now print a message when the generation succeeds with the `message` stanza.
 

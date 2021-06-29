@@ -97,7 +97,7 @@ jobs:
           name: macos-latest
           path: _release/platform-darwin-x64
 
-      - name: Create archives for Github release
+      - name: Create archives for GitHub release
         run: |
           cd _release/platform-darwin-x64
           zip -r ../../spin-darwin-x64.zip .
@@ -107,7 +107,7 @@ jobs:
           zip -r ../../spin-linux-x64.zip .
           cd ../..
 
-      - name: Upload spin-darwin-x64.zip to Github release 
+      - name: Upload spin-darwin-x64.zip to GitHub release 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -117,7 +117,7 @@ jobs:
           asset_name: spin-darwin-x64.zip
           asset_content_type: application/gzip
 
-      - name: Upload spin-linux-x64.zip to Github release 
+      - name: Upload spin-linux-x64.zip to GitHub release 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -127,7 +127,7 @@ jobs:
           asset_name: spin-linux-x64.zip
           asset_content_type: application/gzip
 
-      - name: Upload spin-windows-x64.zip to Github release 
+      - name: Upload spin-windows-x64.zip to GitHub release 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

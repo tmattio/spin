@@ -278,7 +278,7 @@ let generate ~path:generation_root template =
       m
         "\n🏗️  Creating a new project from %a in %s"
         Pp.pp_blue
-        template.name
+        (String.trim template.name)
         generation_root);
   let normalized_raw_files =
     template.raw_files |> List.map File_generator.normalize_path

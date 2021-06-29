@@ -56,10 +56,10 @@ The, you can run the script `script/release.sh`. The script will perform the fol
 
 - Create a tag with the version found in `{{ project_slug }}.opam`, and push it to your repository.
 - Create the distribution archive.
-- Publish the distribution archive to a Github Release.
+- Publish the distribution archive to a GitHub Release.
 - Submit a PR on Opam's repository.
 
-When the release is published on Github, the CI/CD will trigger the `Release` workflow which will compile binaries for all supported platforms and add them to the Github Release as assets.
+When the release is published on GitHub, the CI/CD will trigger the `Release` workflow which will compile binaries for all supported platforms and add them to the GitHub Release as assets.
 
 ### Repository Structure
 
@@ -68,7 +68,7 @@ The following snippet describes {{ project_name }}'s repository structure.
 ```text
 .
 ├── .github/
-|   Contains Github specific files such as actions definitions and issue templates.
+|   Contains GitHub specific files such as actions definitions and issue templates.
 │
 ├── bin/
 |   Source for {{ project_name }}'s binary. This links to the library defined in `lib/`.
