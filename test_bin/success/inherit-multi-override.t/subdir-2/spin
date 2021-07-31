@@ -1,0 +1,13 @@
+(inherit
+  (local subdir-1)
+  (overwrites (example_commands)))
+
+(name test)
+(description "Test template")
+
+(ignore (files new_file_to_ignore))
+
+(example_commands
+  (commands
+    ("make build" "Build the dependencies and the project.")
+    ("make test" "Starts the test runner.")))

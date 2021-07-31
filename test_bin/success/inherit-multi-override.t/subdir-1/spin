@@ -1,0 +1,6 @@
+(inherit (local base))
+
+(name test)
+(description "Test template")
+
+(ignore (files ignored_base_file))

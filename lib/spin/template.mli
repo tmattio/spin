@@ -37,22 +37,8 @@ val read_source_template_files
   -> source
   -> ((string, string) Hashtbl.t, Spin_error.t) Result.t
 
-val of_dec
-  :  ?use_defaults:bool
-  -> ?files:(string, string) Hashtbl.t
-  -> ?ignore_configs:bool
-  -> ?ignore_actions:bool
-  -> ?ignore_example_commands:bool
-  -> source:source
-  -> context:(string, string) Hashtbl.t
-  -> Dec_template.t
-  -> (t, Spin_error.t) Result.t
-
 val read
   :  ?use_defaults:bool
-  -> ?ignore_configs:bool
-  -> ?ignore_actions:bool
-  -> ?ignore_example_commands:bool
   -> ?context:(string, string) Hashtbl.t
   -> source
   -> (t, Spin_error.t) Result.t

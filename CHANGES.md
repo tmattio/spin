@@ -1,3 +1,9 @@
+# 0.8.3
+
+## Fixed
+
+- Fixed the inheritance overwrites for multi-level inheritance
+
 # 0.8.2
 
 ## Fixed

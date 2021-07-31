@@ -145,11 +145,12 @@ let read_source_template_files ?(download_git = false) source =
 let rec of_dec
     ?(use_defaults = false)
     ?(files = Hashtbl.create 256)
-    ?(ignore_configs = false)
-    ?(ignore_actions = false)
-    ?(ignore_example_commands = false)
+    ?ignore_configs
+    ?ignore_actions
+    ?ignore_example_commands
     ~source
     ~context
+    ~depth
     (dec : Dec_template.t)
   =
   let open Result.Syntax in
@@ -161,13 +162,25 @@ let rec of_dec
         |> Result.map_error (fun reason ->
                Spin_error.invalid_template ~msg:reason dec.name)
       in
-      read
+      let ignore_configs =
+        Option.value ignore_configs ~default:base.ignore_configs
+      in
+      let ignore_actions =
+        Option.value ignore_actions ~default:base.ignore_actions
+      in
+      let ignore_example_commands =
+        Option.value
+          ignore_example_commands
+          ~default:base.ignore_example_commands
+      in
+      read_template
         source
         ~use_defaults
         ~context
-        ~ignore_configs:base.ignore_configs
-        ~ignore_actions:base.ignore_actions
-        ~ignore_example_commands:base.ignore_example_commands
+        ~ignore_configs
+        ~ignore_actions
+        ~ignore_example_commands
+        ~depth:(depth + 1)
     | None ->
       Result.ok
         { name = ""
@@ -181,6 +194,29 @@ let rec of_dec
         ; example_commands = []
         ; source
         }
+  in
+  let compute_ignore v f =
+    match depth, v, dec.base_template with
+    | 0, _, _ ->
+      false
+    | _, Some x, _ ->
+      x
+    | _, None, Some base_template ->
+      f base_template
+    | _, None, None ->
+      false
+  in
+  let ignore_configs =
+    compute_ignore ignore_configs (fun x ->
+        x.Dec_template.Base_template.ignore_configs)
+  in
+  let ignore_actions =
+    compute_ignore ignore_actions (fun x ->
+        x.Dec_template.Base_template.ignore_actions)
+  in
+  let ignore_example_commands =
+    compute_ignore ignore_example_commands (fun x ->
+        x.Dec_template.Base_template.ignore_example_commands)
   in
   let* () =
     if ignore_configs then
@@ -235,27 +271,34 @@ let rec of_dec
   ; source
   }
 
-and read
+and read_template
     ?(use_defaults = false)
-    ?(ignore_configs = false)
-    ?(ignore_actions = false)
-    ?(ignore_example_commands = false)
+    ?ignore_configs
+    ?ignore_actions
+    ?ignore_example_commands
     ?context
+    ~depth
     source
   =
   let open Result.Syntax in
   let context = Option.value context ~default:(Hashtbl.create 256) in
-  let* spin_file = read_source_spin_file source ~download_git:true in
+  let* (spin_file : Dec_template.t) =
+    read_source_spin_file source ~download_git:true
+  in
   let* files = read_source_template_files source ~download_git:false in
   of_dec
     spin_file
-    ~ignore_configs
-    ~ignore_actions
-    ~ignore_example_commands
+    ?ignore_configs
+    ?ignore_actions
+    ?ignore_example_commands
     ~files
     ~context
     ~source
     ~use_defaults
+    ~depth
+
+let read ?(use_defaults = false) ?context source =
+  read_template ~use_defaults ?context ~depth:0 source
 
 let run_actions ~path actions =
   let open Result.Syntax in

@@ -1,0 +1,8 @@
+(name base)
+(description "Test template")
+
+(example_commands
+  (commands
+    ("make deps" "Download runtime and development dependencies.")
+    ("make build" "Build the dependencies and the project.")
+    ("make test" "Starts the test runner.")))
