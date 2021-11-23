@@ -1,7 +1,7 @@
 type source =
   | Git of string
   | Local_dir of string
-  | Official of (module Spin_template.Template)
+  | Official of (module Template_intf.S)
 
 type example_command =
   { name : string
@@ -21,9 +21,15 @@ type t =
   ; source : source
   }
 
-val source_of_string : string -> source Option.t
+val source_of_string
+  :  templates:(module Template_intf.S) list
+  -> string
+  -> source Option.t
 
-val source_of_dec : Dec_common.Source.t -> (source, string) Result.t
+val source_of_dec
+  :  templates:(module Template_intf.S) list
+  -> Dec_common.Source.t
+  -> (source, string) Result.t
 
 val source_to_dec : source -> Dec_common.Source.t
 
@@ -40,6 +46,7 @@ val read_source_template_files
 val read
   :  ?use_defaults:bool
   -> ?context:(string, string) Hashtbl.t
+  -> templates:(module Template_intf.S) list
   -> source
   -> (t, Spin_error.t) Result.t
 

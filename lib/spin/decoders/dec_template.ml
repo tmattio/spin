@@ -326,6 +326,8 @@ module Actions = struct
 
   type action =
     | Run of command
+    | Install
+    | Build
     | Refmt of Expr.t list
 
   type t =
@@ -358,9 +360,15 @@ module Actions = struct
     in
     Refmt files
 
+  let decode_install_action _sexp = Ok Install
+
+  let decode_build_action _sexp = Ok Build
+
   let decode_action =
     Decoder.one_of
       [ "run", Decoder.field "run" decode_run_action
+      ; "install", Decoder.field "install" decode_install_action
+      ; "build", Decoder.field "build" decode_build_action
       ; "refmt", Decoder.field "refmt" decode_refmt_action
       ]
 

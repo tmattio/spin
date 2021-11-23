@@ -34,8 +34,6 @@
   (crunch :build)
   (sexplib
    (>= v0.13))
-  (spawn
-   (>= v0.13))
   (jingoo
    (>= 1.4.0))
   (fmt

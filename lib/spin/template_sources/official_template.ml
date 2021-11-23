@@ -1,11 +1,9 @@
-let all = Spin_template.all
-
 type doc =
   { name : string
   ; description : string
   }
 
-let read_spin_file (module T : Spin_template.Template) =
+let read_spin_file (module T : Template_intf.S) =
   match T.read "spin" with
   | Some content ->
     (match Decoder.decode_sexps_string content Dec_template.decode with
@@ -17,27 +15,27 @@ let read_spin_file (module T : Spin_template.Template) =
   | None ->
     Error (Spin_error.invalid_template T.name ~msg:"Missing \"spin\" file.")
 
-let all_doc () =
+let all_doc templates =
   let rec aux acc = function
     | [] ->
       Ok acc
-    | (module T : Spin_template.Template) :: rest ->
+    | (module T : Template_intf.S) :: rest ->
       (match read_spin_file (module T) with
       | Ok spin_file ->
         aux ({ name = T.name; description = spin_file.description } :: acc) rest
       | Error error ->
         Error error)
   in
-  aux [] all
+  aux [] templates
 
-let files_with_content (module T : Spin_template.Template) =
+let files_with_content (module T : Template_intf.S) =
   List.map
     (fun path ->
       let content = Option.get (T.read path) in
       path, content)
     T.file_list
 
-let of_name s =
+let of_name ~templates s =
   List.find_opt
-    (fun (module T : Spin_template.Template) -> String.equal s T.name)
-    all
+    (fun (module T : Template_intf.S) -> String.equal s T.name)
+    templates

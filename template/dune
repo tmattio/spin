@@ -1,6 +1,7 @@
 (library
  (name spin_template)
- (public_name spin.template))
+ (public_name spin.template)
+ (libraries spin))
 
 (data_only_dirs *)
 

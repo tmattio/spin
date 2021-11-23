@@ -1,7 +1,7 @@
 (library
  (name spin)
  (public_name spin)
- (libraries spin_std spin_template inquire sexplib str fmt logs jingoo fpath)
+ (libraries spin_std inquire sexplib str fmt logs jingoo fpath)
  (flags
   (:standard -open Spin_std)))
 

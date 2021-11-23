@@ -1,13 +1,5 @@
-module type Template = sig
-  val name : string
-
-  val file_list : string list
-
-  val read : string -> string option
-end
-
-val hello : (module Template)
+val hello : (module Spin.Template_intf.S)
 (** The hello tutorial template *)
 
-val all : (module Template) list
+val all : (module Spin.Template_intf.S) list
 (** List of all of the official spin templates *)

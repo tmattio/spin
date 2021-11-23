@@ -1,56 +1,48 @@
-module type Template = sig
-  val name : string
-
-  val file_list : string list
-
-  val read : string -> string option
-end
-
-module Cli : Template = struct
+module Cli : Spin.Template_intf.S = struct
   include Cli
 
   let name = "cli"
 end
 
-module Lib : Template = struct
+module Lib : Spin.Template_intf.S = struct
   include Lib
 
   let name = "lib"
 end
 
-module Bin : Template = struct
+module Bin : Spin.Template_intf.S = struct
   include Bin
 
   let name = "bin"
 end
 
-module Ppx : Template = struct
+module Ppx : Spin.Template_intf.S = struct
   include Ppx
 
   let name = "ppx"
 end
 
-module C_bindings : Template = struct
+module C_bindings : Spin.Template_intf.S = struct
   include C_bindings
 
   let name = "c-bindings"
 end
 
-module Js : Template = struct
+module Js : Spin.Template_intf.S = struct
   include Js
 
   let name = "js"
 end
 
-module Hello : Template = struct
+module Hello : Spin.Template_intf.S = struct
   include Hello
 
   let name = "hello"
 end
 
-let hello : (module Template) = (module Hello)
+let hello : (module Spin.Template_intf.S) = (module Hello)
 
-let all : (module Template) list =
+let all : (module Spin.Template_intf.S) list =
   [ (module Cli)
   ; (module Lib)
   ; (module Bin)

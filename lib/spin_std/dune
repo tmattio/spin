@@ -1,4 +1,4 @@
 (library
  (name spin_std)
  (public_name spin.std)
- (libraries unix spawn))
+ (libraries unix dune-private-libs.spawn))

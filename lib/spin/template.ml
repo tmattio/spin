@@ -3,7 +3,7 @@ open Dec_template
 type source =
   | Git of string
   | Local_dir of string
-  | Official of (module Spin_template.Template)
+  | Official of (module Template_intf.S)
 
 type example_command =
   { name : string
@@ -74,13 +74,13 @@ let populate_example_commands ~context (dec : Dec_template.t) =
     ~context
     ~condition:(fun el -> el.Example_command.enabled_if)
 
-let source_of_dec = function
+let source_of_dec ~templates = function
   | Dec_common.Source.Git s ->
     Ok (Git s)
   | Dec_common.Source.Local_dir s ->
     Ok (Local_dir s)
   | Dec_common.Source.Official s ->
-    (match Official_template.of_name s with
+    (match Official_template.of_name s ~templates with
     | Some (module T) ->
       Ok (Official (module T))
     | None ->
@@ -94,8 +94,8 @@ let source_to_dec = function
   | Official (module T) ->
     Dec_common.Source.Official T.name
 
-let source_of_string s =
-  match Official_template.of_name s with
+let source_of_string ~templates s =
+  match Official_template.of_name ~templates s with
   | Some v ->
     Some (Official v)
   | None ->
@@ -151,6 +151,7 @@ let rec of_dec
     ~source
     ~context
     ~depth
+    ~templates
     (dec : Dec_template.t)
   =
   let open Result.Syntax in
@@ -158,7 +159,7 @@ let rec of_dec
     match dec.base_template with
     | Some base ->
       let* source =
-        source_of_dec base.source
+        source_of_dec base.source ~templates
         |> Result.map_error (fun reason ->
                Spin_error.invalid_template ~msg:reason dec.name)
       in
@@ -181,6 +182,7 @@ let rec of_dec
         ~ignore_actions
         ~ignore_example_commands
         ~depth:(depth + 1)
+        ~templates
     | None ->
       Result.ok
         { name = ""
@@ -278,6 +280,7 @@ and read_template
     ?ignore_example_commands
     ?context
     ~depth
+    ~templates
     source
   =
   let open Result.Syntax in
@@ -296,9 +299,10 @@ and read_template
     ~source
     ~use_defaults
     ~depth
+    ~templates
 
-let read ?(use_defaults = false) ?context source =
-  read_template ~use_defaults ?context ~depth:0 source
+let read ?(use_defaults = false) ?context ~templates source =
+  read_template ~use_defaults ?context ~depth:0 ~templates source
 
 let run_actions ~path actions =
   let open Result.Syntax in

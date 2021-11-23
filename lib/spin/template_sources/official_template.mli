@@ -4,15 +4,14 @@ type doc =
   }
 
 val read_spin_file
-  :  (module Spin_template.Template)
+  :  (module Template_intf.S)
   -> (Dec_template.t, Spin_error.t) Result.t
 
-val all : (module Spin_template.Template) list
+val all_doc : (module Template_intf.S) list -> (doc list, Spin_error.t) Result.t
 
-val all_doc : unit -> (doc list, Spin_error.t) Result.t
+val files_with_content : (module Template_intf.S) -> (string * string) list
 
-val files_with_content
-  :  (module Spin_template.Template)
-  -> (string * string) list
-
-val of_name : string -> (module Spin_template.Template) option
+val of_name
+  :  templates:(module Template_intf.S) list
+  -> string
+  -> (module Template_intf.S) option
