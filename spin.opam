@@ -20,6 +20,7 @@ depends: [
   "crunch" {build}
   "sexplib" {>= "v0.13"}
   "spawn" {>= "v0.13"}
+  "stdio" {>= "v0.13"}
   "jingoo" {>= "1.4.0"}
   "fmt" {>= "0.8.9"}
   "fpath"
