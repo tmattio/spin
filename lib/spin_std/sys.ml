@@ -86,22 +86,6 @@ let with_chdir dir f =
   Unix.chdir old_cwd;
   result
 
-let write_file file content =
-  let oc = open_out file in
-  Printf.fprintf oc "%s" content;
-  close_out oc
+let write_file file content = Stdio.Out_channel.write_all file ~data:content
 
-let read_lines file : string list =
-  let ic = open_in file in
-  let try_read () = try Some (input_line ic) with End_of_file -> None in
-  let rec loop acc =
-    match try_read () with
-    | Some s ->
-      loop (s :: acc)
-    | None ->
-      close_in ic;
-      List.rev acc
-  in
-  loop []
-
-let read_file file = String.concat "\n" (read_lines file)
+let read_file = Stdio.In_channel.read_all
