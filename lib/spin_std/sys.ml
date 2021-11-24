@@ -93,11 +93,9 @@ let write_file file content =
     ~finally:(fun () -> close_out oc)
 
 let read_file file =
-  let ic = open_in file in
+  let ic = open_in_bin file in
   Fun.protect
     (fun () ->
       let length = in_channel_length ic in
-      let buffer = Bytes.create length in
-      really_input ic buffer 0 length;
-      Bytes.to_string buffer)
+      really_input_string ic length)
     ~finally:(fun () -> close_in ic)
