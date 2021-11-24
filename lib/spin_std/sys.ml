@@ -88,20 +88,14 @@ let with_chdir dir f =
 
 let write_file file content =
   let oc = open_out file in
-  Printf.fprintf oc "%s" content;
-  close_out oc
+  Fun.protect
+    (fun () -> output_string oc content)
+    ~finally:(fun () -> close_out oc)
 
-let read_lines file : string list =
-  let ic = open_in file in
-  let try_read () = try Some (input_line ic) with End_of_file -> None in
-  let rec loop acc =
-    match try_read () with
-    | Some s ->
-      loop (s :: acc)
-    | None ->
-      close_in ic;
-      List.rev acc
-  in
-  loop []
-
-let read_file file = String.concat "\n" (read_lines file)
+let read_file file =
+  let ic = open_in_bin file in
+  Fun.protect
+    (fun () ->
+      let length = in_channel_length ic in
+      really_input_string ic length)
+    ~finally:(fun () -> close_in ic)

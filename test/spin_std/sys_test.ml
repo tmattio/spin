@@ -9,4 +9,17 @@ let test_ls_dir () =
   let f_list = Spin_std.Sys.ls_dir (Filename.dirname temp_file) in
   check (list string) "equals" f_list [ temp_file ]
 
-let suite = [ "ls_dir returns the files in the directory", `Quick, test_ls_dir ]
+let test_read_write_file () =
+  let temp_dir = Spin_std.Sys.mk_temp_dir "spin-test" in
+  let temp_file = Filename.concat temp_dir "file" in
+  let contents = "Hello world!\n" in
+  Spin_std.Sys.write_file temp_file contents;
+  let read_contents = Spin_std.Sys.read_file temp_file in
+  check string "equals" contents read_contents
+
+let suite =
+  [ "ls_dir returns the files in the directory", `Quick, test_ls_dir
+  ; ( "write_file/read_file preserves newlines at end of file"
+    , `Quick
+    , test_read_write_file )
+  ]

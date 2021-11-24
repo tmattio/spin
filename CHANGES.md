@@ -1,3 +1,10 @@
+# Unreleased
+
+## Fixed
+
+- Preserve trailing newline characters at the end of template files
+  when present
+
 # 0.8.3
 
 ## Fixed
