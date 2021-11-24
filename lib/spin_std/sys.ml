@@ -86,6 +86,18 @@ let with_chdir dir f =
   Unix.chdir old_cwd;
   result
 
-let write_file file content = Stdio.Out_channel.write_all file ~data:content
+let write_file file content =
+  let oc = open_out file in
+  Fun.protect
+    (fun () -> output_string oc content)
+    ~finally:(fun () -> close_out oc)
 
-let read_file = Stdio.In_channel.read_all
+let read_file file =
+  let ic = open_in file in
+  Fun.protect
+    (fun () ->
+      let length = in_channel_length ic in
+      let buffer = Bytes.create length in
+      really_input ic buffer 0 length;
+      Bytes.to_string buffer)
+    ~finally:(fun () -> close_in ic)
