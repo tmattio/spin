@@ -1,4 +1,3 @@
 (executable
  (name main)
- (public_name {{ project_slug }})
  (libraries {{ project_snake }}))
