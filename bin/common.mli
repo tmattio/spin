@@ -6,9 +6,9 @@ val ignore_config_arg : bool Cmdliner.Term.t
 
 val use_defaults_arg : bool Cmdliner.Term.t
 
-val envs : Cmdliner.Term.env_info list
+val envs : Cmdliner.Cmd.Env.info list
 
-val exits : Cmdliner.Term.exit_info list
+val exits : Cmdliner.Cmd.Exit.info list
 
 module Syntax : sig
   val ( let+ ) : 'a Cmdliner.Term.t -> ('a -> 'b) -> 'b Cmdliner.Term.t

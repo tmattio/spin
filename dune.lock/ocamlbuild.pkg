@@ -1,0 +1,25 @@
+(version 0.15.0+dune)
+
+(build
+ (progn
+  (run
+   %{make}
+   -f
+   configure.make
+   all
+   OCAMLBUILD_PREFIX=%{prefix}
+   OCAMLBUILD_BINDIR=%{bin}
+   OCAMLBUILD_LIBDIR=%{lib}
+   OCAMLBUILD_MANDIR=%{man}
+   OCAML_NATIVE=%{pkg:ocaml:native}
+   OCAML_NATIVE_TOOLS=%{pkg:ocaml:native})
+  (run %{make} check-if-preinstalled all opam-install)))
+
+(depends ocaml)
+
+(source
+ (fetch
+  (url
+   https://github.com/Leonidas-from-XIV/ocamlbuild/archive/refs/tags/0.15.0+dune.tar.gz)
+  (checksum
+   sha512=95f67e239798ecdd60685ae8f947c74f989d620cd4b214448c9c0813c90d6489c52662798384fbd9120cc974eef985de6af1169725e2d917eef0eafb127d81a4)))

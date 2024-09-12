@@ -2,7 +2,7 @@
  (name main)
  (public_name spin)
  (package spin)
- (libraries spin spin_std cmdliner fmt fmt.tty logs.fmt logs.cli)
+ (libraries spin spin_std cmdliner fmt fmt.tty logs logs.fmt logs.cli)
  (flags
   (:standard -open Spin_std)))
 

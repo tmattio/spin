@@ -1,0 +1,16 @@
+(version 3.2)
+
+(build
+ (progn
+  (when
+   %{pkg-self:dev}
+   (run dune subst))
+  (run dune build -p %{pkg-self:name} -j %{jobs} @install)))
+
+(depends ocaml dune ppxlib gen)
+
+(source
+ (fetch
+  (url
+   https://github.com/ocaml-community/sedlex/archive/refs/tags/v3.2.tar.gz)
+  (checksum md5=b67eec3a80a7fed8e6c91e47260b0843)))

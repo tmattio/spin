@@ -73,17 +73,19 @@ let man =
   ; `P "Thibaut Mattio, $(i,https://github.com/tmattio)"
   ]
 
-let default_cmd =
+let default_cmd, default_info =
   let term =
     let open Common.Syntax in
     let+ _term = Common.term in
     run ()
   in
-  let info = Term.info "spin" ~version:"%%VERSION%%" in
+  let info = Cmd.info "spin" ~version:"%%VERSION%%" ~doc
+  ~sdocs
+  ~exits
+  ~envs
+  ~man in
   term, info
 
-let main =
-  ( fst default_cmd
-  , Term.info "spin" ~version:"%%VERSION%%" ~doc ~sdocs ~exits ~man ~envs )
+let group = Cmd.group ~default:default_cmd default_info cmds
 
-let () = Term.(exit_status @@ eval_choice main cmds)
+let () = Stdlib.exit @@ Cmd.eval' group

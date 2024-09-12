@@ -39,11 +39,11 @@ let man =
        that have been saved."
   ]
 
-let info = Term.info "config" ~doc ~sdocs ~exits ~envs ~man ~man_xrefs
+let info = Cmd.info "config" ~doc ~sdocs ~exits ~envs ~man ~man_xrefs
 
 let term =
   let open Common.Syntax in
   let+ _term = Common.term in
   run () |> Common.handle_errors
 
-let cmd = term, info
+let cmd = Cmd.v info term

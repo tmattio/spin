@@ -1,0 +1,17 @@
+(version 3.3.1)
+
+(build
+ (progn
+  (when
+   %{pkg-self:dev}
+   (run dune subst))
+  (run dune build -p %{pkg-self:name} -j %{jobs} @install)))
+
+(depends ocaml cmdliner ptime dune)
+
+(source
+ (fetch
+  (url
+   https://github.com/mirage/ocaml-crunch/releases/download/v3.3.1/crunch-3.3.1.tbz)
+  (checksum
+   sha256=2c5ba0d4110bcbb7731cba4eafb6c44a7487c3f88c1ad47401271b69ffa8ed6a)))

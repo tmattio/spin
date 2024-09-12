@@ -1,0 +1,27 @@
+(version 5.8.2)
+
+(build
+ (progn
+  (when
+   %{pkg-self:dev}
+   (run dune subst))
+  (run dune build -p %{pkg-self:name} -j %{jobs} @install)))
+
+(depends
+ dune
+ ocaml
+ ppxlib
+ cmdliner
+ sedlex
+ menhir
+ menhirLib
+ menhirSdk
+ yojson
+ ocamlfind)
+
+(source
+ (fetch
+  (url
+   https://github.com/ocsigen/js_of_ocaml/releases/download/5.8.2/js_of_ocaml-5.8.2.tbz)
+  (checksum
+   sha256=7220194bd2f9b14d958153a5a206750359d7b49de12fe88d7450d385cecbf04a)))

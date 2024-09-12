@@ -1,0 +1,16 @@
+(version v0.15.1)
+
+(build
+ (progn
+  (when
+   %{pkg-self:dev}
+   (run dune subst))
+  (run dune build -p %{pkg-self:name} -j %{jobs} @install)))
+
+(depends dune ocaml)
+
+(source
+ (fetch
+  (url https://github.com/janestreet/spawn/archive/v0.15.1.tar.gz)
+  (checksum
+   sha256=9afdee314fab6c3fcd689ab6eb5608d6b78078e6dede3953a47debde06c19d50)))

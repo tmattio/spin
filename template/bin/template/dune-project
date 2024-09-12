@@ -1,4 +1,4 @@
-(lang dune 2.0)
+(lang dune 3.0)
 
 (name {{ project_slug }})
 
@@ -14,8 +14,6 @@
 
 (maintainers
   "{{ author_name }}{% if author_email %} <{{ author_email }}>{% endif %}")
-
-(generate_opam_files true)
 
 (package
  (name {{ project_slug }})

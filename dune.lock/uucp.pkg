@@ -1,0 +1,21 @@
+(version 15.1.0)
+
+(build
+ (run
+  ocaml
+  pkg/pkg.ml
+  build
+  --dev-pkg
+  %{pkg-self:dev}
+  --with-uunf
+  %{pkg:uunf:installed}
+  --with-cmdliner
+  %{pkg:cmdliner:installed}))
+
+(depends ocaml ocamlfind ocamlbuild topkg cmdliner)
+
+(source
+ (fetch
+  (url https://erratique.ch/software/uucp/releases/uucp-15.1.0.tbz)
+  (checksum
+   sha512=998f94fadb72357b15a3042a3d11c31b3e16f281822673f2defdd515cd1394d55de1817628be8bd5c030175f9e62c53630d4139a1c0253800f9fb898b0f11364)))

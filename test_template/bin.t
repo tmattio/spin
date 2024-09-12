@@ -1,5 +1,3 @@
-  $ export OPAMSKIPUPDATE=true
-  $ export SPIN_CREATE_SWITCH=false
   $ export SPIN_PROJECT_NAME=demo
   $ export SPIN_AUTHOR_NAME=user
   $ export SPIN_TEST_FRAMEWORK=Alcotest

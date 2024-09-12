@@ -38,11 +38,11 @@ CAMLexport value Ansi_term_size(value vfd) {
 #endif
 
 #ifdef TIOCGSIZE
-  if (ioctl(fd, TIOCGSIZE, &win)) failwith("Ansi.size");
+  if (ioctl(fd, TIOCGSIZE, &win)) caml_failwith("Ansi.size");
   x = win.ts_cols;
   y = win.ts_lines;
 #elif defined TIOCGWINSZ
-  if (ioctl(fd, TIOCGWINSZ, &win)) failwith("Ansi.size");
+  if (ioctl(fd, TIOCGWINSZ, &win)) caml_failwith("Ansi.size");
   x = win.ws_col;
   y = win.ws_row;
 #else

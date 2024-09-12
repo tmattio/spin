@@ -71,7 +71,7 @@ let man =
   ; `P "You can use spin-ls(1) to list the official templates."
   ]
 
-let info = Term.info "new" ~doc ~sdocs ~exits ~envs ~man ~man_xrefs
+let info = Cmd.info "new" ~doc ~sdocs ~exits ~envs ~man ~man_xrefs
 
 let term =
   let open Common.Syntax in
@@ -95,4 +95,4 @@ let term =
   in
   run ~ignore_config ~use_defaults ~template ~path |> Common.handle_errors
 
-let cmd = term, info
+let cmd = Cmd.v info term

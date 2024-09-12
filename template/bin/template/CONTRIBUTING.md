@@ -71,9 +71,5 @@ The following snippet describes {{ project_name }}'s repository structure.
 ├── Makefile
 |   Make file containing common development command.
 │
-├── README.md
-│
-└── {{ project_slug }}.opam
-    Opam package definition.
-    To know more about creating and publishing opam packages, see https://opam.ocaml.org/doc/Packaging.html.
+└── README.md
 ```
