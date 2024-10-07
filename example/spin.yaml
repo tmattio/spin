@@ -36,18 +36,18 @@ file_templates:
     when: "{{ ci_cd == 'GitHub' }}"
 
 post_generation:
-  - message: "🎁  Building project. This might take a couple minutes."
+  - message: "🎁 Building project. This might take a couple minutes."
   - run: 
       - "dune pkg lock"
       - "dune build"
   - message: |
-      Project generated successfully! Here are some example commands to get you started:
+      🚀 Project generated successfully! Here are some example commands to get you started:
       
-      - Build the dependencies and the project:
+      📦 Build the dependencies and the project:
         dune build
       
-      - Start the test runner:
+      🧪 Start the test runner:
         dune test
       
-      - Run the executable:
+      ⚡ Run the executable:
         dune exec bin/main.exe

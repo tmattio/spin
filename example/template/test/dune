@@ -1,2 +1,2 @@
 (test
- (name test_{{ project_name }}))
+ (name test))
