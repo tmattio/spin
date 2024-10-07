@@ -1,2 +1,0 @@
-  $ spin --version
-  %%VERSION%%

@@ -1,8 +1,0 @@
-(library
- (name spin)
- (public_name spin)
- (libraries spin_std spin_template inquire sexplib str fmt logs jingoo fpath)
- (flags
-  (:standard -open Spin_std)))
-
-(include_subdirs unqualified)

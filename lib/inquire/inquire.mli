@@ -109,18 +109,18 @@ module Style : sig
   val default : t
   (** The default style used by Inquire prompts if none is provided. *)
 
-  val make
-    :  ?qmark_icon:string
-    -> ?qmark_format:Ansi.style list
-    -> ?message_format:Ansi.style list
-    -> ?error_icon:string
-    -> ?error_format:Ansi.style list
-    -> ?default_format:Ansi.style list
-    -> ?option_icon_marked:string
-    -> ?option_icon_unmarked:string
-    -> ?pointer_icon:string
-    -> unit
-    -> t
+  val make :
+    ?qmark_icon:string ->
+    ?qmark_format:Ansi.style list ->
+    ?message_format:Ansi.style list ->
+    ?error_icon:string ->
+    ?error_format:Ansi.style list ->
+    ?default_format:Ansi.style list ->
+    ?option_icon_marked:string ->
+    ?option_icon_unmarked:string ->
+    ?pointer_icon:string ->
+    unit ->
+    t
   (** Create a custom style.
 
       - [qmark_icon] is the icon used for the question mark that prefixes the
@@ -139,12 +139,8 @@ module Style : sig
         single-selection prompts. *)
 end
 
-val confirm
-  :  ?default:bool
-  -> ?auto_enter:bool
-  -> ?style:Style.t
-  -> string
-  -> bool
+val confirm :
+  ?default:bool -> ?auto_enter:bool -> ?style:Style.t -> string -> bool
 (** Prompt the user to answer the given message with "y" or "n".
 
     {4 Examples}
@@ -154,12 +150,12 @@ val confirm
       if choice then print_endline "Yes!" else print_endline "No!"
     ]} *)
 
-val password
-  :  ?validate:(string -> (string, string) result)
-  -> ?default:string
-  -> ?style:Style.t
-  -> string
-  -> string
+val password :
+  ?validate:(string -> (string, string) result) ->
+  ?default:string ->
+  ?style:Style.t ->
+  string ->
+  string
 (** Prompt the user to enter a password that will be hidden.
 
     The password can take any value, except the empty string.
@@ -174,12 +170,12 @@ val password
     {[ Inquire.password "Enter your password:" |> fun password -> print_endline
     "Your new password is: %S" password ]} *)
 
-val input
-  :  ?validate:(string -> (string, string) result)
-  -> ?default:string
-  -> ?style:Style.t
-  -> string
-  -> string
+val input :
+  ?validate:(string -> (string, string) result) ->
+  ?default:string ->
+  ?style:Style.t ->
+  string ->
+  string
 (** Prompt the user to input a string.
 
     The string can take any value, except the empty string.
@@ -191,12 +187,8 @@ val input
       print_endline "You entered: %S" value
     ]} *)
 
-val raw_select
-  :  ?default:int
-  -> ?style:Style.t
-  -> options:string list
-  -> string
-  -> string
+val raw_select :
+  ?default:int -> ?style:Style.t -> options:string list -> string -> string
 (** Prompt the user to chose a value from the given options. The options will be
     listed with an index prefixed and the users will have to enter the index of
     their choice.
@@ -208,23 +200,20 @@ val raw_select
 
     {[
       let movies =
-        [ "Star Wars: The Rise of Skywalker"
-        ; "Solo: A Star Wars Story"
-        ; "Star Wars: The Last Jedi"
-        ; "Rogue One: A Star Wars Story"
-        ; "Star Wars: The Force Awakens"
+        [
+          "Star Wars: The Rise of Skywalker";
+          "Solo: A Star Wars Story";
+          "Star Wars: The Last Jedi";
+          "Rogue One: A Star Wars Story";
+          "Star Wars: The Force Awakens";
         ]
       in
       Inquire.raw_select "What's your favorite movie?" ~options:movies
       |> fun movie -> print_endline "Indeed, %S is a great movie!" movie
     ]} *)
 
-val select
-  :  ?default:int
-  -> ?style:Style.t
-  -> options:string list
-  -> string
-  -> string
+val select :
+  ?default:int -> ?style:Style.t -> options:string list -> string -> string
 (** Prompt the user to chose a value from the given options. The prompt is
     interactive and users can select their choice with directional keys.
 
@@ -232,11 +221,12 @@ val select
 
     {[
       let movies =
-        [ "Star Wars: The Rise of Skywalker"
-        ; "Solo: A Star Wars Story"
-        ; "Star Wars: The Last Jedi"
-        ; "Rogue One: A Star Wars Story"
-        ; "Star Wars: The Force Awakens"
+        [
+          "Star Wars: The Rise of Skywalker";
+          "Solo: A Star Wars Story";
+          "Star Wars: The Last Jedi";
+          "Rogue One: A Star Wars Story";
+          "Star Wars: The Force Awakens";
         ]
       in
       Inquire.select "What's your favorite movie?" ~options:movies

@@ -1,0 +1,14 @@
+(lang dune 3.17)
+
+(name template)
+
+(pin
+ (package
+  (name spin))
+ (url "git+https://github.com/tmattio/spin.git#dune-create"))
+
+(package
+ (name template)
+ (synopsis "A short synopsis")
+ (description "A longer description")
+ (depends spin))

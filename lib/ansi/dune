@@ -1,0 +1,8 @@
+(library
+ (name ansi)
+ (public_name spin.ansi)
+ (foreign_stubs
+  (language c)
+  (names ansi_stubs))
+ (synopsis "Basic control of ANSI compliant terminals and the windows shell")
+ (libraries unix))

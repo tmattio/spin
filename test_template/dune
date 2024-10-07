@@ -1,5 +1,0 @@
-(cram
- (package spin)
- (applies_to :whole_subtree)
- (deps %{bin:spin})
- (enabled_if false))

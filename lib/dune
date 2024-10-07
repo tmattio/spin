@@ -1,0 +1,4 @@
+(library
+ (name spin)
+ (public_name spin)
+ (libraries yaml inquire jingoo))

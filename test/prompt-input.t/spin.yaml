@@ -1,0 +1,10 @@
+name: test
+description: "Test template"
+
+config:
+  project_name:
+    prompt: "Project name:"
+    type: input
+
+post_generation:
+  - message: "Project name: {{ project_name }}."

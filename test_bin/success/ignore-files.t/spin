@@ -1,5 +1,0 @@
-(name test)
-(description "Test template")
-
-(ignore
- (files f2 dir/f3 dir2/* */f5))

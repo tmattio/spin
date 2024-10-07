@@ -1,15 +1,5 @@
 (executable
- (name main)
  (public_name spin)
- (package spin)
- (libraries spin spin_std cmdliner fmt fmt.tty logs logs.fmt logs.cli)
- (flags
-  (:standard -open Spin_std)))
-
-(include_subdirs unqualified)
-
-(install
- (section bin)
- (package spin)
- (files
-  (main.exe as opam-spin)))
+ (package spin-cli)
+ (name main)
+ (libraries spin cmdliner fmt fmt.tty logs logs.fmt logs.cli))

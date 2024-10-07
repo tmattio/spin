@@ -1,5 +1,0 @@
-(rule
- (target main.js)
- (deps ../bin/main.bc.js)
- (action
-  (copy %{deps} %{target})))

@@ -2,13 +2,10 @@ let print_options ?(style = Style.default) ~selected options =
   List.iteri
     (fun i opt ->
       if Some i = selected then
-        Printf.printf
-          " %s %i) %s"
+        Printf.printf " %s %i) %s"
           (Ansi.sprintf style.Style.qmark_format "%s" style.Style.pointer_icon)
-          (i + 1)
-          opt
-      else
-        Printf.printf "   %i) %s" (i + 1) opt;
+          (i + 1) opt
+      else Printf.printf "   %i) %s" (i + 1) opt;
       if not (i + 1 = List.length options) then print_string "\n")
     options;
   print_string "\n Answer: ";
@@ -21,24 +18,20 @@ let print_prompt ?style message =
 let prompt ?default ?style ~options message =
   let input =
     match default with
-    | Some v when v < List.length options ->
-      ref (Some v)
-    | _ ->
-      ref None
+    | Some v when v < List.length options -> ref (Some v)
+    | _ -> ref None
   in
   let print_options () = print_options ~selected:!input options in
   let print_input () =
     match !input with
-    | None ->
-      ()
+    | None -> ()
     | Some i ->
       print_int (i + 1);
       flush stdout
   in
   let reset () =
     let erase_n_lines = function
-      | 0 ->
-        ()
+      | 0 -> ()
       | n ->
         Ansi.move_bol ();
         Ansi.move_cursor 0 (-1 * n);
@@ -59,7 +52,7 @@ let prompt ?default ?style ~options message =
   print_input ();
   let rec aux () =
     let ch = Char.code (input_char stdin) in
-    match ch, !input with
+    match (ch, !input) with
     | 10, Some input ->
       (* Enter *)
       reset ();
@@ -89,26 +82,16 @@ let prompt ?default ?style ~options message =
       Utils.user_interrupt ()
     | code, _ ->
       (match Char.chr code with
-      | '1' when List.length options >= 1 ->
-        select 0
-      | '2' when List.length options >= 2 ->
-        select 1
-      | '3' when List.length options >= 3 ->
-        select 2
-      | '4' when List.length options >= 4 ->
-        select 3
-      | '5' when List.length options >= 5 ->
-        select 4
-      | '6' when List.length options >= 6 ->
-        select 5
-      | '7' when List.length options >= 7 ->
-        select 6
-      | '8' when List.length options >= 8 ->
-        select 7
-      | '9' when List.length options >= 9 ->
-        select 8
-      | _ ->
-        ());
+      | '1' when List.length options >= 1 -> select 0
+      | '2' when List.length options >= 2 -> select 1
+      | '3' when List.length options >= 3 -> select 2
+      | '4' when List.length options >= 4 -> select 3
+      | '5' when List.length options >= 5 -> select 4
+      | '6' when List.length options >= 6 -> select 5
+      | '7' when List.length options >= 7 -> select 6
+      | '8' when List.length options >= 8 -> select 7
+      | '9' when List.length options >= 9 -> select 8
+      | _ -> ());
       aux ()
   in
   Utils.with_raw Unix.stdin aux

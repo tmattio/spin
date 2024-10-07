@@ -1,8 +1,0 @@
-(inherit (official bin))
-
-(name js)
-
-(description "Javascript application with Js_of_ocaml")
-
-(ignore
-  (files test/*))

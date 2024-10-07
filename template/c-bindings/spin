@@ -1,4 +1,0 @@
-(inherit (official lib))
-
-(name c-bindings)
-(description "Bindings to a C library")

@@ -2,7 +2,7 @@ let prompt_auto_enter ?default print_prompt =
   print_prompt ();
   let rec aux () =
     let ch = Char.code (input_char stdin) in
-    match ch, default with
+    match (ch, default) with
     | 89, _ | 121, _ ->
       (* 'Y' | 'y' *)
       Utils.erase_n_chars 6;
@@ -18,10 +18,7 @@ let prompt_auto_enter ?default print_prompt =
     | 10, Some default ->
       (* Enter *)
       Utils.erase_n_chars 6;
-      if default then
-        print_endline "Yes"
-      else
-        print_endline "No";
+      if default then print_endline "Yes" else print_endline "No";
       flush stdout;
       default
     | 10, None ->
@@ -40,8 +37,7 @@ let prompt_auto_enter ?default print_prompt =
       (* Exit with an exception so we can catch it and revert the changes on
          stdin. *)
       Utils.user_interrupt ()
-    | _ ->
-      aux ()
+    | _ -> aux ()
   in
   Utils.with_raw Unix.stdin aux
 
@@ -56,13 +52,9 @@ let prompt_no_auto_enter ?default print_prompt =
       | Some false ->
         (* Erase "No" *)
         Utils.erase_n_chars 2
-      | None ->
-        ()
+      | None -> ()
     in
-    if selection then
-      print_string "Yes"
-    else
-      print_string "No";
+    if selection then print_string "Yes" else print_string "No";
     flush stdout
   in
   let rec aux selection =
@@ -76,8 +68,8 @@ let prompt_no_auto_enter ?default print_prompt =
       (* 'N' | 'n' *)
       print_selection ~current:selection false;
       aux (Some false)
-    | 10 ->
-      (match selection, default with
+    | 10 -> (
+      match (selection, default) with
       | Some true, _ ->
         (* Erase current selection with default tooltip *)
         Utils.erase_n_chars 9;
@@ -102,8 +94,7 @@ let prompt_no_auto_enter ?default print_prompt =
         print_string "No\n";
         flush stdout;
         false
-      | None, None ->
-        aux None)
+      | None, None -> aux None)
     | 12 ->
       (* Handle ^L *)
       Ansi.erase Ansi.Screen;
@@ -119,25 +110,19 @@ let prompt_no_auto_enter ?default print_prompt =
       (* Exit with an exception so we can catch it and revert the changes on
          stdin. *)
       Utils.exit 130
-    | _ ->
-      aux selection
+    | _ -> aux selection
   in
   Utils.with_raw Unix.stdin (fun () -> aux None)
 
 let prompt ?default ?(auto_enter = true) ?style message =
   let default_str =
     match default with
-    | Some true ->
-      "Y/n"
-    | Some false ->
-      "y/N"
-    | None ->
-      "y/n"
+    | Some true -> "Y/n"
+    | Some false -> "y/N"
+    | None -> "y/n"
   in
   let print_prompt () =
     Utils.print_prompt ~default:default_str ?style message
   in
-  if auto_enter then
-    prompt_auto_enter ?default print_prompt
-  else
-    prompt_no_auto_enter ?default print_prompt
+  if auto_enter then prompt_auto_enter ?default print_prompt
+  else prompt_no_auto_enter ?default print_prompt

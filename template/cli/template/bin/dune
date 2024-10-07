@@ -1,6 +1,0 @@
-(executable
- (name main)
- (public_name {{ project_slug }})
- (libraries {{ project_snake }} cmdliner fmt fmt.tty logs.fmt logs.cli))
-
-(include_subdirs unqualified)

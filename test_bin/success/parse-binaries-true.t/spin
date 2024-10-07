@@ -1,7 +1,0 @@
-(name test)
-(description "Test template")
-
-(parse_binaries true)
-
-(config value
-  (default test))

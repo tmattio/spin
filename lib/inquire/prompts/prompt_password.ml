@@ -1,18 +1,12 @@
 module Input_buffer = struct
   let create () = ref ""
-
   let is_empty t = !t = ""
-
   let add_char t chr = t := !t ^ Char.escaped chr
 
   let rm_last_char t =
-    if is_empty t then
-      ()
-    else
-      t := String.sub !t 0 (String.length !t - 1)
+    if is_empty t then () else t := String.sub !t 0 (String.length !t - 1)
 
   let get t = !t
-
   let reset t = t := ""
 end
 
@@ -25,17 +19,17 @@ let prompt ?validate ?default ?style message =
   let reset () = Input_buffer.reset buf in
   let rec aux () =
     let ch = Char.code (input_char stdin) in
-    match ch, default with
-    | 10, Some default ->
-      (* Enter *)
-      if Input_buffer.is_empty buf then (
+    match (ch, default) with
+    | 10, Some default -> (
+      if (* Enter *)
+         Input_buffer.is_empty buf then (
         Utils.erase_n_chars (3 + String.length default_str);
         print_endline default_str;
         flush stdout;
         default)
       else
         let input = Input_buffer.get buf in
-        (match validate input with
+        match validate input with
         | Ok output ->
           Utils.erase_n_chars (3 + String.length default_str);
           print_endline default_str;
@@ -50,10 +44,10 @@ let prompt ?validate ?default ?style message =
     | 10, None when Input_buffer.is_empty buf ->
       (* Enter, no input *)
       aux ()
-    | 10, None ->
+    | 10, None -> (
       (* Enter, with input *)
       let input = Input_buffer.get buf in
-      (match validate input with
+      match validate input with
       | Ok output ->
         print_string "\n";
         flush stdout;

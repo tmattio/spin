@@ -1,0 +1,53 @@
+name: demo
+description: "Native project containing a binary"
+
+config:
+  project_name:
+    prompt: "Project name:"
+    type: input
+
+  project_slug:
+    prompt: "Project slug:"
+    type: input
+    default: "{{ project_name | slugify }}"
+    validate:
+      - description: "The project slug must be lowercase and contain ASCII characters and '-' only."
+        check: "{{ project_slug == project_slug | slugify }}"
+
+  project_description:
+    prompt: "Description:"
+    type: input
+    default: "A short, but powerful statement about your project"
+    validate:
+      - description: "The last character of the description cannot be a \".\" to comply with Opam"
+        check: "{{ project_description | last_char != '.' }}"
+
+  ci_cd:
+    prompt: "Which CI/CD do you use?"
+    type: select
+    options:
+      - GitHub
+      - None
+    default: GitHub
+
+file_templates:
+  - source: ".github/"
+    destination: ".github/"
+    when: "{{ ci_cd == 'GitHub' }}"
+
+post_generation:
+  - message: "🎁  Building project. This might take a couple minutes."
+  - run: 
+      - "dune pkg lock"
+      - "dune build"
+  - message: |
+      Project generated successfully! Here are some example commands to get you started:
+      
+      - Build the dependencies and the project:
+        dune build
+      
+      - Start the test runner:
+        dune test
+      
+      - Run the executable:
+        dune exec bin/main.exe

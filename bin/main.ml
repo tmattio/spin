@@ -1,16 +1,16 @@
 open Cmdliner
 
-let () = Printexc.record_backtrace true
+(* List of available commands *)
+let cmds = [ Cmd_new.cmd ]
 
-let cmds = [ Cmd_config.cmd; Cmd_ls.cmd; Cmd_new.cmd; Cmd_hello.cmd ]
-
+(* Main run function for default command *)
 let run () =
   let message =
     {|
-Generate OCaml projects.
+Spin: Generate and manage OCaml projects with ease.
 
 Usage:
-  spin COMMAND
+  spin COMMAND [OPTIONS]
 
 Available Commands:
   config      Update the current user's configuration
@@ -20,11 +20,15 @@ Available Commands:
 
 Useful options:
        --help      Show manual page
-  --v, --verbose   Increase verbosity
+  -v, --verbose    Increase verbosity
        --version   Show spin version
 
-For a complete documentation, refer to the manual with `spin --help`.
+Examples:
+  spin new cli my-cli            Create a new CLI project named 'my-cli'
+  spin ls                        List available official templates
+  spin config set author "John Doe"  Set the author name in the configuration
 
+For complete documentation, run `spin --help`.
 Use `spin COMMAND --help` for help on a single command.|}
   in
   print_endline message;
@@ -32,7 +36,7 @@ Use `spin COMMAND --help` for help on a single command.|}
 
 (* Command line interface *)
 
-let doc = "Generate OCaml projects"
+let doc = "Generate and manage OCaml projects"
 
 let sdocs = Manpage.s_common_options
 
@@ -42,27 +46,45 @@ let envs = Common.envs
 
 let man =
   [ `S Manpage.s_description
-  ; `P "$(mname) helps to bootstrap OCaml projects."
+  ; `P "$(mname) is a powerful tool for generating and managing OCaml projects."
   ; `P
       "It can generate new projects from local or remote templates, and \
-       generate components in existing projects."
+       generate components in existing projects. Spin streamlines the setup \
+       process and encourages best practices in OCaml development."
   ; `P
       "$(mname) comes with a set of official templates that have been crafted \
        with developer experience in mind. They all include a CI/CD pipeline \
        and projects that are deployable (e.g. libraries, web servers) also \
        come with automated release scripts."
   ; `P "You can list the official templates with `$(mname) ls`"
-  ; `P "Use `$(mname) $(i,COMMAND) --help' for help on a single command."
   ; `S Manpage.s_commands
+  ; `P "Here's a brief overview of the available commands:"
+  ; `I ("config", "Update the current user's configuration")
+  ; `I ("ls", "List the official templates")
+  ; `I ("new", "Generate a new project from a template")
+  ; `I ("hello", "Generate the tutorial project")
+  ; `P "Use `$(mname) $(i,COMMAND) --help' for help on a single command."
   ; `S Manpage.s_examples
-  ; `P
-      "The following commands will create a new command line interface and \
-       generate a subcommand $(b,my-cmd) in it."
-  ; `Noblank
+  ; `P "Here are some common usage scenarios:"
   ; `Pre {|
-    \$ spin new cli my-cli
-    \$ cd my-cli
-    \$ make build|}
+    # Create a new CLI project
+    $ spin new cli my-cli
+    $ cd my-cli
+    $ make build
+
+    # List available templates
+    $ spin ls
+
+    # Set up user configuration
+    $ spin config set author "John Doe"
+    $ spin config set email "john.doe@example.com"
+
+    # Generate a tutorial project
+    $ spin hello my-tutorial|}
+  ; `S "CONFIGURATION"
+  ; `P
+      "$(mname) uses a configuration file to store user preferences. You can \
+       view and modify this configuration using the `config` command."
   ; `S Manpage.s_common_options
   ; `S Manpage.s_exit_status
   ; `S Manpage.s_environment
@@ -73,19 +95,25 @@ let man =
   ; `P "Thibaut Mattio, $(i,https://github.com/tmattio)"
   ]
 
+(* Default command setup *)
 let default_cmd, default_info =
   let term =
     let open Common.Syntax in
     let+ _term = Common.term in
     run ()
   in
-  let info = Cmd.info "spin" ~version:"%%VERSION%%" ~doc
-  ~sdocs
-  ~exits
-  ~envs
-  ~man in
+  let info = Cmd.info "spin" ~version:"%%VERSION%%" ~doc ~sdocs ~exits ~envs ~man in
   term, info
 
+(* Group all commands *)
 let group = Cmd.group ~default:default_cmd default_info cmds
 
-let () = Stdlib.exit @@ Cmd.eval' group
+(* Main entry point *)
+let () = 
+  try
+    exit @@ Cmd.eval' group
+  with
+  | exn ->
+      prerr_endline ("Error: " ^ Printexc.to_string exn);
+      exit 1
+  

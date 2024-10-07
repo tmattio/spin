@@ -1,14 +1,4 @@
-(library
- (name spin_test)
- (flags -linkall -g -w +42)
- (libraries spin spin_std alcotest)
- (modules
-  (:standard \ test_runner)))
-
-(test
- (package spin)
- (name test_runner)
- (libraries spin_test)
- (modules test_runner))
-
-(include_subdirs unqualified)
+(cram
+ (package spin-cli)
+ (applies_to :whole_subtree)
+ (deps %{bin:spin}))

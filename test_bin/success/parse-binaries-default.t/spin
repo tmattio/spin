@@ -1,5 +1,0 @@
-(name test)
-(description "Test template")
-
-(config value
-  (default test))

@@ -1,0 +1,5 @@
+(data_only_dirs template)
+
+(executable
+ (name generate_template)
+ (libraries spin))

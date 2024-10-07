@@ -1,7 +1,0 @@
-(name test)
-(description "Test template")
-
-(raw_files file.ml)
-
-(config value
-  (default test))
