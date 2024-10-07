@@ -1,0 +1,11 @@
+(version dev)
+
+(dune)
+
+(depends ocaml dune yaml jingoo)
+
+(source
+ (fetch
+  (url git+https://github.com/tmattio/spin.git#dune-create)))
+
+(dev)

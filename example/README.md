@@ -1,0 +1,1 @@
+# Example Spin template for Dune create

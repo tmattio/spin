@@ -1,0 +1,19 @@
+(version 3.16.0)
+
+(build
+ (progn
+  (when
+   %{pkg-self:dev}
+   (run dune subst))
+  (run rm -rf vendor/csexp)
+  (run rm -rf vendor/pp)
+  (run dune build -p %{pkg-self:name} -j %{jobs} @install)))
+
+(depends dune ocaml base-unix csexp)
+
+(source
+ (fetch
+  (url
+   https://github.com/ocaml/dune/releases/download/3.16.0/dune-3.16.0.tbz)
+  (checksum
+   sha256=5481dde7918ca3121e02c34d74339f734b32d5883efb8c1b8056471e74f9bda6)))

@@ -1,0 +1,32 @@
+(version 5.2.0)
+
+(install
+ (run %{make} install))
+
+(build
+ (progn
+  (run
+   ./configure
+   --prefix=%{prefix}
+   --docdir=%{doc}/ocaml
+   -C
+   CC=cc
+   "ASPP=cc -c")
+  (run %{make} -j%{jobs})))
+
+(source
+ (fetch
+  (url https://github.com/ocaml/ocaml/archive/5.2.0.tar.gz)
+  (checksum
+   sha256=48554abfd530fcdaa08f23f801b699e4f74c320ddf7d0bd56b0e8c24e55fc911)))
+
+(exported_env
+ (= CAML_LD_LIBRARY_PATH "\%{lib}%/stublibs"))
+
+(extra_sources
+ (ocaml-base-compiler.install
+  (fetch
+   (url
+    https://raw.githubusercontent.com/ocaml/opam-source-archives/main/patches/ocaml-base-compiler/ocaml-base-compiler.install)
+   (checksum
+    sha256=79f2a1a5044a91350a0eb6ce12e261a72a2855c094c425cddf3860e58c486678))))

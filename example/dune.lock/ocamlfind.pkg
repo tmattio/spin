@@ -1,0 +1,43 @@
+(version 1.9.6+dune)
+
+(install
+ (progn
+  (run %{make} install)
+  (when
+   %{pkg:ocaml:preinstalled}
+   (run install -m 0755 ocaml-stub %{bin}/ocaml))))
+
+(build
+ (progn
+  (patch 0001-Harden-test-for-OCaml-5.patch)
+  (run
+   ./configure
+   -bindir
+   %{bin}
+   -sitelib
+   %{lib}
+   -mandir
+   %{man}
+   -config
+   %{lib}/findlib.conf
+   -with-relative-paths-at
+   %{prefix}
+   -no-custom
+   (when
+    (and_absorb_undefined_var
+     (not %{pkg:ocaml:preinstalled})
+     (>= %{pkg:ocaml:version} 4.02.0))
+    -no-camlp4)
+   (when %{pkg:ocaml:preinstalled} -no-topfind))
+  (run %{make} all)
+  (when
+   %{pkg:ocaml:native}
+   (run %{make} opt))))
+
+(depends ocaml)
+
+(source
+ (fetch
+  (url
+   https://github.com/Leonidas-from-XIV/ocamlfind/releases/download/findlib-1.9.6%2Bdune/findlib-1.9.6+dune.tar.gz)
+  (checksum md5=3968d7506056f085e7829b227fc4b27c)))

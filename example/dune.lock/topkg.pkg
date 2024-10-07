@@ -1,0 +1,19 @@
+(version 1.0.7)
+
+(build
+ (run
+  ocaml
+  pkg/pkg.ml
+  build
+  --pkg-name
+  %{pkg-self:name}
+  --dev-pkg
+  %{pkg-self:dev}))
+
+(depends ocaml ocamlfind ocamlbuild)
+
+(source
+ (fetch
+  (url https://erratique.ch/software/topkg/releases/topkg-1.0.7.tbz)
+  (checksum
+   sha512=09e59f1759bf4db8471f02d0aefd8db602b44932a291c05c312b1423796e7a15d1598d3c62a0cec7f083eff8e410fac09363533dc4bd2120914bb9664efea535)))
